@@ -9,6 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@openzeppelin/cli": "^2.8.2"
+    "@openzeppelin/cli": "^2.8.2",
+    "@openzeppelin/contract-loader": "^0.6.2",
+    "@openzeppelin/contracts": "^3.3.0"
   }
 }
