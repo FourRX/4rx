@@ -12,7 +12,11 @@ contract FourRXFinance {
     uint lpCommission = 1000;
     uint refCommission = 1000;
 
-    uint poolCycle = 0;
+    uint poolCycle;
+    uint poolDrewAt;
+
+    uint refPoolBalance;
+    uint sponsorPoolBalance;
 
     address[] refPoolUsers;
     address[] sponsorPoolUsers;
@@ -34,6 +38,8 @@ contract FourRXFinance {
         uint deposit;
         address uplink;
         uint refCommission;
+        uint refPoolRewards;
+        uint sponsorPoolRewards;
         RefPool refPool;
         SponsorPool sponsorPool;
     }
@@ -72,10 +78,10 @@ contract FourRXFinance {
         sponsorPoolBonuses.push(200);
         sponsorPoolBonuses.push(100);
 
-        _resetPoolUsers();
+        _resetPools();
     }
 
-    function _resetPoolUsers() internal {
+    function _resetPools() internal {
         for (uint i = 0; i < refPoolBonuses.length; i++) {
             refPoolUsers[i] = address(0);
         }
@@ -83,6 +89,9 @@ contract FourRXFinance {
         for (uint i = 0; i < sponsorPoolBonuses.length; i++) {
             sponsorPoolUsers[i] = address(0);
         }
+
+        refPoolBalance = 0;
+        sponsorPoolBalance = 0;
     }
 
     function _shiftPool(uint startIndex, address shiftAddress, address[] storage pool) internal {
@@ -206,6 +215,27 @@ contract FourRXFinance {
         return amount.mul(rewardPercent).div(percentMultiplier);
     }
 
+    function drawPool() internal {
+        if (block.timestamp > poolDrewAt + 1 days) {
+            poolDrewAt = block.timestamp;
+            for (uint i = 0; i < refPoolUsers.length; i++) {
+                if (refPoolUsers[i] == address(0)) break;
+
+                User storage user = users[refPoolUsers[i]];
+                user.refPoolRewards = user.refPoolRewards.add(refPoolBalance.mul(refPoolBonuses[i]).div(percentMultiplier));
+            }
+
+            for (uint i = 0; i < sponsorPoolUsers.length; i++) {
+                if (sponsorPoolUsers[i] == address(0)) break;
+
+                User storage user = users[sponsorPoolUsers[i]];
+                user.sponsorPoolRewards = user.sponsorPoolRewards.add(sponsorPoolBalance.mul(sponsorPoolBonuses[i]).div(percentMultiplier));
+            }
+
+            _resetPools();
+        }
+    }
+
     function deposit(uint amount, address uplink) external {
         require(!users[msg.sender].registered); // User must not be registered with us
         require(users[uplink].active || uplink == address(0)); // Either uplink must be registered with us and be a active user or 0 address
@@ -223,6 +253,11 @@ contract FourRXFinance {
         _updateSponsorPoolUsers(user);
 
         _distributeReferralReward(amount, user.uplink);
+
+        refPoolBalance = refPoolBalance.add(amount.mul(50).div(percentMultiplier));
+        sponsorPoolBalance = sponsorPoolBalance.add(amount.mul(50).div(percentMultiplier));
+
+        drawPool();
     }
 
 //    function withdraw(uint amount) external {
