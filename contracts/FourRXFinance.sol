@@ -10,18 +10,35 @@ contract FourRXFinance {
     IERC20 fourRXToken;
     uint percentMultiplier = 10000;
     uint lpCommission = 1000;
+    uint refCommission = 1000;
+
+    uint poolCycle = 0;
+
+    address[] refPoolUsers;
+    address[] sponsorPoolUsers;
+
+    struct RefPool {
+        uint cycle;
+        uint amount;
+    }
+
+    struct SponsorPool {
+        uint cycle;
+        uint amount;
+    }
 
     struct User {
+        address wallet;
         bool registered;
         bool active;
         uint deposit;
         address uplink;
         uint refCommission;
+        RefPool refPool;
+        SponsorPool sponsorPool;
     }
 
-    mapping (address => User) public users;
-
-    uint[] public refCommissions;
+    mapping (address => User) users;
 
     uint[] public refPoolBonuses;
     uint[] public sponsorPoolBonuses;
@@ -31,26 +48,18 @@ contract FourRXFinance {
     constructor(IERC20 fourRXTokenAddress) {
         fourRXToken = fourRXTokenAddress;
 
-        refCommissions.push(300);
-        refCommissions.push(250);
-        refCommissions.push(200);
-        refCommissions.push(100);
-        refCommissions.push(50);
-
-        refPoolBonuses.push(2200); // @todo: fix this sum
-        refPoolBonuses.push(1900);
-        refPoolBonuses.push(1500);
-        refPoolBonuses.push(1200);
+        refPoolBonuses.push(2000);
+        refPoolBonuses.push(1700);
+        refPoolBonuses.push(1400);
+        refPoolBonuses.push(1100);
         refPoolBonuses.push(1000);
-        refPoolBonuses.push(800);
         refPoolBonuses.push(700);
         refPoolBonuses.push(600);
         refPoolBonuses.push(500);
+        refPoolBonuses.push(400);
         refPoolBonuses.push(300);
         refPoolBonuses.push(200);
         refPoolBonuses.push(100);
-        refPoolBonuses.push(75);
-        refPoolBonuses.push(25);
 
         sponsorPoolBonuses.push(3000);
         sponsorPoolBonuses.push(2000);
@@ -62,16 +71,103 @@ contract FourRXFinance {
         sponsorPoolBonuses.push(400);
         sponsorPoolBonuses.push(200);
         sponsorPoolBonuses.push(100);
+
+        _resetPoolUsers();
+    }
+
+    function _resetPoolUsers() internal {
+        for (uint i = 0; i < refPoolBonuses.length; i++) {
+            refPoolUsers[i] = address(0);
+        }
+
+        for (uint i = 0; i < sponsorPoolBonuses.length; i++) {
+            sponsorPoolUsers[i] = address(0);
+        }
+    }
+
+    function _updateSponsorPoolUsers(User memory user) internal {
+        if (sponsorPoolUsers[sponsorPoolUsers.length - 1] == address(0)
+            || user.sponsorPool.amount > users[sponsorPoolUsers[sponsorPoolUsers.length - 1]].sponsorPool.amount) { // either last user is not set or last user's sponsor balance is less then this user
+
+            address shiftAddress = address(0);
+            address nextAddress = address(0);
+
+            for (uint i = 0; i < sponsorPoolUsers.length; i++) {
+
+                if (shiftAddress != address(0)) {
+                    nextAddress = refPoolUsers[i];
+                    sponsorPoolUsers[i] = shiftAddress;
+                    shiftAddress = nextAddress;
+                    continue;
+                }
+
+                if (sponsorPoolUsers[i] == address(0)) {
+                    sponsorPoolUsers[i] = user.wallet;
+                    break;
+                }
+
+                if (user.sponsorPool.amount > users[sponsorPoolUsers[i]].sponsorPool.amount) {
+                    shiftAddress = sponsorPoolUsers[i];
+                    sponsorPoolUsers[i] = user.wallet;
+                }
+            }
+        }
+    }
+
+    function _updateUserSponsorPool(uint amount, User storage user) internal {
+        if (user.sponsorPool.cycle != poolCycle) {
+            user.sponsorPool.cycle = poolCycle;
+            user.sponsorPool.amount = 0;
+        }
+
+        user.sponsorPool.amount = user.sponsorPool.amount.add(amount);
+    }
+
+    function _updateRefPoolUsers(User memory user) internal {
+        if (refPoolUsers[refPoolUsers.length - 1] == address(0)
+            || user.refPool.amount > users[refPoolUsers[refPoolUsers.length - 1]].refPool.amount) { // either last user is not set or last user's ref balance is less then this user
+
+            address shiftAddress = address(0);
+            address nextAddress = address(0);
+
+            for (uint i = 0; i < refPoolUsers.length; i++) {
+
+                if (shiftAddress != address(0)) {
+                    nextAddress = refPoolUsers[i];
+                    refPoolUsers[i] = shiftAddress;
+                    shiftAddress = nextAddress;
+                    continue;
+                }
+
+                if (refPoolUsers[i] == address(0)) {
+                    refPoolUsers[i] = user.wallet;
+                    break;
+                }
+
+                if (user.refPool.amount > users[refPoolUsers[i]].refPool.amount) {
+                    shiftAddress = refPoolUsers[i];
+                    refPoolUsers[i] = user.wallet;
+                }
+            }
+        }
+    }
+
+    function _updateUserRefPool(uint amount, User storage user) internal {
+        if (user.refPool.cycle != poolCycle) {
+            user.refPool.cycle = poolCycle;
+            user.refPool.amount = 0;
+        }
+
+        user.refPool.amount = user.refPool.amount.add(amount);
     }
 
     function _distributeReferralReward(uint amount, address uplink) internal {
-        for (uint i = 0; i < refCommissions.length; i++) {
-            if (uplink == address(0)) break;
-
+        if (uplink != address(0)) {
             User storage uplinkUser = users[uplink];
-            uplinkUser.refCommission = uplinkUser.refCommission.add(amount.mul(refCommissions[i]).div(percentMultiplier));
-            uplink = uplinkUser.uplink;
-            // @todo: check for referral pool top 10 here
+            uint commission = uplinkUser.refCommission.add(amount.mul(refCommission).div(percentMultiplier));
+            uplinkUser.refCommission = commission;
+            _updateUserRefPool(commission, uplinkUser);
+            _updateRefPoolUsers(uplinkUser);
         }
     }
 
@@ -109,15 +205,17 @@ contract FourRXFinance {
         require(!users[msg.sender].registered); // User must not be registered with us
         require(users[uplink].active || uplink == address(0)); // Either uplink must be registered with us and be a active user or 0 address
 
-        // @todo: call transferFrom right here
+        require(fourRXToken.transferFrom(msg.sender, address(this), amount));
 
         User storage user = users[msg.sender];
 
+        user.wallet = msg.sender;
         user.registered = true;
         user.active = true;
         user.uplink = uplink;
         user.deposit = amount.sub(amount.mul(lpCommission).div(percentMultiplier)).add(_calcDepositRewards(amount)); // Deduct LP Commission + add deposit rewards
-        // @todo: check for sponsorPoolBonuses here
+        _updateUserSponsorPool(amount, user);
+        _updateSponsorPoolUsers(user);
 
         _distributeReferralReward(amount, user.uplink);
     }
