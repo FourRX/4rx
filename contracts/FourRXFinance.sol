@@ -85,21 +85,30 @@ contract FourRXFinance {
         }
     }
 
+    function _shiftPool(uint startIndex, address shiftAddress, address[] storage pool) internal {
+        if (shiftAddress != address(0)) {
+            address nextAddress = address(0);
+
+            for (uint i = startIndex; i < pool.length; i++) {
+
+                if (shiftAddress == address(0)) {
+                    break;
+                }
+
+                nextAddress = pool[i];
+                pool[i] = shiftAddress;
+                shiftAddress = nextAddress;
+            }
+        }
+    }
+
     function _updateSponsorPoolUsers(User memory user) internal {
         if (sponsorPoolUsers[sponsorPoolUsers.length - 1] == address(0)
             || user.sponsorPool.amount > users[sponsorPoolUsers[sponsorPoolUsers.length - 1]].sponsorPool.amount) { // either last user is not set or last user's sponsor balance is less then this user
 
             address shiftAddress = address(0);
-            address nextAddress = address(0);
 
             for (uint i = 0; i < sponsorPoolUsers.length; i++) {
-
-                if (shiftAddress != address(0)) {
-                    nextAddress = refPoolUsers[i];
-                    sponsorPoolUsers[i] = shiftAddress;
-                    shiftAddress = nextAddress;
-                    continue;
-                }
 
                 if (sponsorPoolUsers[i] == address(0)) {
                     sponsorPoolUsers[i] = user.wallet;
@@ -109,6 +118,8 @@ contract FourRXFinance {
                 if (user.sponsorPool.amount > users[sponsorPoolUsers[i]].sponsorPool.amount) {
                     shiftAddress = sponsorPoolUsers[i];
                     sponsorPoolUsers[i] = user.wallet;
+                    _shiftPool(i, shiftAddress, sponsorPoolUsers);
+                    break;
                 }
             }
         }
@@ -128,16 +139,8 @@ contract FourRXFinance {
             || user.refPool.amount > users[refPoolUsers[refPoolUsers.length - 1]].refPool.amount) { // either last user is not set or last user's ref balance is less then this user
 
             address shiftAddress = address(0);
-            address nextAddress = address(0);
 
             for (uint i = 0; i < refPoolUsers.length; i++) {
-
-                if (shiftAddress != address(0)) {
-                    nextAddress = refPoolUsers[i];
-                    refPoolUsers[i] = shiftAddress;
-                    shiftAddress = nextAddress;
-                    continue;
-                }
 
                 if (refPoolUsers[i] == address(0)) {
                     refPoolUsers[i] = user.wallet;
@@ -147,6 +150,8 @@ contract FourRXFinance {
                 if (user.refPool.amount > users[refPoolUsers[i]].refPool.amount) {
                     shiftAddress = refPoolUsers[i];
                     refPoolUsers[i] = user.wallet;
+                    _shiftPool(i, shiftAddress, refPoolUsers);
+                    break;
                 }
             }
         }
