@@ -1,16 +1,18 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.7.0;
+pragma solidity ^0.6.12;
 
 import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import '@openzeppelin/contracts/math/SafeMath.sol';
+import "./InterestCalculator.sol";
 
-contract FourRXFinance {
+contract FourRXFinance is InterestCalculator {
     using SafeMath for uint;
 
     IERC20 fourRXToken;
     uint percentMultiplier = 10000;
     uint lpCommission = 1000;
     uint refCommission = 1000;
+    uint logBase = 1009;
 
     uint poolCycle;
     uint poolDrewAt;
@@ -18,8 +20,8 @@ contract FourRXFinance {
     uint refPoolBalance;
     uint sponsorPoolBalance;
 
-    address[] refPoolUsers;
-    address[] sponsorPoolUsers;
+    address[] refPoolUsers = new address[](12);
+    address[] sponsorPoolUsers = new address[](10);
 
     struct RefPool {
         uint cycle;
@@ -51,8 +53,8 @@ contract FourRXFinance {
 
     uint[] public depositBonuses;
 
-    constructor(IERC20 fourRXTokenAddress) {
-        fourRXToken = fourRXTokenAddress;
+    constructor(address fourRXTokenAddress) public {
+        fourRXToken = IERC20(fourRXTokenAddress);
 
         refPoolBonuses.push(2000);
         refPoolBonuses.push(1700);
@@ -263,4 +265,5 @@ contract FourRXFinance {
 //    function withdraw(uint amount) external {
 //
 //    }
+
 }
