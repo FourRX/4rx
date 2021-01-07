@@ -11,7 +11,7 @@ contract FourRXFinance is SafePercentageCalculator, InterestCalculator, Utils {
     using SafeMath for uint;
 
     IERC20 fourRXToken;
-    uint maxRewards = 40000; // 400%
+    uint maxContractRewards = 40000; // 400%
     uint lpCommission = 1000;
     uint refCommission = 1000;
     uint logBase = 1009;
@@ -304,14 +304,14 @@ contract FourRXFinance is SafePercentageCalculator, InterestCalculator, Utils {
     }
 
     function _calcRewardsWithoutHoldBonus(User memory user) internal view returns (uint) {
-        uint poolRewards = user.refPoolRewards.add(user.sponsorPoolRewards);
-        uint refCommission = user.refCommission;
+        uint poolRewardsAmount = user.refPoolRewards.add(user.sponsorPoolRewards);
+        uint refCommissionAmount = user.refCommission;
 
         uint interest = _calcPercentage(user.deposit, getInterestTillDays(_calcDays(user.interestCountFrom, block.timestamp)));
 
         uint contractBonus = _calcHoldRewards(user);
 
-        uint totalRewardsWithoutHoldBonus = poolRewards.add(refCommission).add(interest).add(contractBonus);
+        uint totalRewardsWithoutHoldBonus = poolRewardsAmount.add(refCommissionAmount).add(interest).add(contractBonus);
 
         return totalRewardsWithoutHoldBonus;
     }
@@ -323,20 +323,20 @@ contract FourRXFinance is SafePercentageCalculator, InterestCalculator, Utils {
             rewards = rewards.add(_calcHoldRewards(user));
         }
 
-        uint maxRewards = _calcPercentage(user.deposit, maxBasisPoints);
+        uint maxRewards = _calcPercentage(user.deposit, maxContractRewards);
 
         if (rewards > maxRewards) {
-            return maxRewards;
+            rewards = maxRewards;
         }
 
-        return totalRewards;
+        return rewards;
     }
 
     function balanceOf(address _userAddress) external view returns (uint) {
         require(users[_userAddress].wallet == _userAddress);
         User memory user = users[_userAddress];
 
-        return _calculateRewards(user - user.withdrawn);
+        return _calcRewards(user).sub(user.withdrawn);
     }
 
     function withdraw(uint _amount) external {
