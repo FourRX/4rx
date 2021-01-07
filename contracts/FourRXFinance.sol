@@ -4,15 +4,28 @@ pragma solidity ^0.6.12;
 import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import '@openzeppelin/contracts/math/SafeMath.sol';
 import "./InterestCalculator.sol";
+import "./SafePercentageCalculator.sol";
+import "./utils/Utils.sol";
 
-contract FourRXFinance is InterestCalculator {
+contract FourRXFinance is SafePercentageCalculator, InterestCalculator, Utils {
     using SafeMath for uint;
 
     IERC20 fourRXToken;
-    uint percentMultiplier = 10000;
+    uint maxRewards = 40000; // 400%
     uint lpCommission = 1000;
     uint refCommission = 1000;
     uint logBase = 1009;
+    uint depositRefPoolCommission = 50;
+    uint depositSponsorPoolCommission = 50;
+
+    // Contract bonus
+    uint maxContractBonus = 300; // maximum bonus a user can get 3%
+    uint contractBonusUnit = 100; // For each 100 unit balance of contract, give
+    uint contractBonusUnitBonus = 1; // 0.01% extra interest
+
+    uint holdBonusUnitBonus = 2; // 0.02% hold bonus for each 12 hours of hold
+    uint maxHoldBonus = 100; // Maximum 1% hold bonus
+    uint holdBonusUnlocksAt = 1000; // User will only get hold bonus if his rewards are more then 10% of his deposit
 
     uint poolCycle;
     uint poolDrewAt;
@@ -34,16 +47,19 @@ contract FourRXFinance is InterestCalculator {
     }
 
     struct User {
-        address wallet;
+        address wallet; // Wallet Address
         bool registered;
         bool active;
-        uint deposit;
-        address uplink;
-        uint refCommission;
-        uint refPoolRewards;
-        uint sponsorPoolRewards;
-        RefPool refPool;
-        SponsorPool sponsorPool;
+        uint interestCountFrom; // TimeStamp from which interest should be counted
+        uint holdFrom; // Timestamp from which hold should be counted
+        uint deposit; // Initial Deposit
+        address uplink; // Referrer
+        uint refCommission; // Ref rewards
+        uint refPoolRewards; // Ref Pool Rewards
+        uint sponsorPoolRewards; // Sponsor Pool Rewards
+        RefPool refPool; // To store this user's last 24 hour RefPool entries
+        SponsorPool sponsorPool; // To store this user's last 24 hour Sponsor Pool entries
+        uint withdrawn;
     }
 
     mapping (address => User) users;
@@ -136,6 +152,7 @@ contract FourRXFinance is InterestCalculator {
         }
     }
 
+    // Update current user's sponsor pool entry
     function _updateUserSponsorPool(uint amount, User storage user) internal {
         if (user.sponsorPool.cycle != poolCycle) {
             user.sponsorPool.cycle = poolCycle;
@@ -145,6 +162,7 @@ contract FourRXFinance is InterestCalculator {
         user.sponsorPool.amount = user.sponsorPool.amount.add(amount);
     }
 
+    // Reorganise top ref-pool users to draw pool for
     function _updateRefPoolUsers(User memory user) internal {
         if (refPoolUsers[refPoolUsers.length - 1] == address(0)
             || user.refPool.amount > users[refPoolUsers[refPoolUsers.length - 1]].refPool.amount) { // either last user is not set or last user's ref balance is less then this user
@@ -180,7 +198,7 @@ contract FourRXFinance is InterestCalculator {
     function _distributeReferralReward(uint amount, address uplink) internal {
         if (uplink != address(0)) {
             User storage uplinkUser = users[uplink];
-            uint commission = uplinkUser.refCommission.add(amount.mul(refCommission).div(percentMultiplier));
+            uint commission = uplinkUser.refCommission.add(_calcPercentage(amount, refCommission));
             uplinkUser.refCommission = commission;
             _updateUserRefPool(commission, uplinkUser);
             _updateRefPoolUsers(uplinkUser);
@@ -214,7 +232,7 @@ contract FourRXFinance is InterestCalculator {
             rewardPercent = 1;
         }
 
-        return amount.mul(rewardPercent).div(percentMultiplier);
+        return _calcPercentage(amount, rewardPercent);
     }
 
     function drawPool() internal {
@@ -224,14 +242,14 @@ contract FourRXFinance is InterestCalculator {
                 if (refPoolUsers[i] == address(0)) break;
 
                 User storage user = users[refPoolUsers[i]];
-                user.refPoolRewards = user.refPoolRewards.add(refPoolBalance.mul(refPoolBonuses[i]).div(percentMultiplier));
+                user.refPoolRewards = user.refPoolRewards.add(_calcPercentage(refPoolBalance, refPoolBonuses[i]));
             }
 
             for (uint i = 0; i < sponsorPoolUsers.length; i++) {
                 if (sponsorPoolUsers[i] == address(0)) break;
 
                 User storage user = users[sponsorPoolUsers[i]];
-                user.sponsorPoolRewards = user.sponsorPoolRewards.add(sponsorPoolBalance.mul(sponsorPoolBonuses[i]).div(percentMultiplier));
+                user.sponsorPoolRewards = user.sponsorPoolRewards.add(_calcPercentage(sponsorPoolBalance, sponsorPoolBonuses[i]));
             }
 
             _resetPools();
@@ -250,17 +268,85 @@ contract FourRXFinance is InterestCalculator {
         user.registered = true;
         user.active = true;
         user.uplink = uplink;
-        user.deposit = amount.sub(amount.mul(lpCommission).div(percentMultiplier)).add(_calcDepositRewards(amount)); // Deduct LP Commission + add deposit rewards
+        user.interestCountFrom = block.timestamp;
+        user.holdFrom = block.timestamp;
+        user.deposit = amount.sub(_calcPercentage(amount, lpCommission)).add(_calcDepositRewards(amount)); // Deduct LP Commission + add deposit rewards
         _updateUserSponsorPool(amount, user);
         _updateSponsorPoolUsers(user);
 
         _distributeReferralReward(amount, user.uplink);
 
-        refPoolBalance = refPoolBalance.add(amount.mul(50).div(percentMultiplier));
-        sponsorPoolBalance = sponsorPoolBalance.add(amount.mul(50).div(percentMultiplier));
+        refPoolBalance = refPoolBalance.add(_calcPercentage(amount, depositRefPoolCommission));
+        sponsorPoolBalance = sponsorPoolBalance.add(_calcPercentage(amount, depositSponsorPoolCommission));
 
         drawPool();
     }
+
+    function _calcContractBonus(User memory user) internal view returns (uint) {
+        uint contractBonusPercent = fourRXToken.balanceOf(address(this)).div(contractBonusUnit).mul(contractBonusUnitBonus);
+
+        if (contractBonusPercent > maxContractBonus) {
+            contractBonusPercent = maxContractBonus;
+        }
+
+        return _calcPercentage(user.deposit, contractBonusPercent);
+    }
+
+    function _calcHoldRewards(User memory user) internal view returns (uint) {
+        uint holdPeriods = _calcDays(user.holdFrom, block.timestamp).mul(2);
+        uint holdBonusPercent = holdPeriods.mul(holdBonusUnitBonus);
+
+        if (holdBonusPercent > maxHoldBonus) {
+            holdBonusPercent = maxHoldBonus;
+        }
+
+        return _calcPercentage(user.deposit, holdBonusPercent);
+    }
+
+    function _calcRewardsWithoutHoldBonus(User memory user) internal view returns (uint) {
+        uint poolRewards = user.refPoolRewards.add(user.sponsorPoolRewards);
+        uint refCommission = user.refCommission;
+
+        uint interest = _calcPercentage(user.deposit, getInterestTillDays(_calcDays(user.interestCountFrom, block.timestamp)));
+
+        uint contractBonus = _calcHoldRewards(user);
+
+        uint totalRewardsWithoutHoldBonus = poolRewards.add(refCommission).add(interest).add(contractBonus);
+
+        return totalRewardsWithoutHoldBonus;
+    }
+
+    function _calcRewards(User memory user) internal view returns (uint) {
+        uint rewards = _calcRewardsWithoutHoldBonus(user);
+
+        if (_calcBasisPoints(user.deposit.sub(user.withdrawn), rewards) >= holdBonusUnlocksAt) {
+            rewards = rewards.add(_calcHoldRewards(user));
+        }
+
+        uint maxRewards = _calcPercentage(user.deposit, maxBasisPoints);
+
+        if (rewards > maxRewards) {
+            return maxRewards;
+        }
+
+        return totalRewards;
+    }
+
+    function balanceOf(address _userAddress) external view returns (uint) {
+        require(users[_userAddress].wallet == _userAddress);
+        User memory user = users[_userAddress];
+
+        return _calculateRewards(user - user.withdrawn);
+    }
+
+    function withdraw(uint _amount) external {
+
+    }
+
+    function reInvest(uint _amount) external {
+
+    }
+
 
 //    function withdraw(uint amount) external {
 //
