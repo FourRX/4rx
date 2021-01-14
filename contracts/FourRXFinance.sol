@@ -30,6 +30,8 @@ contract FourRXFinance is SafePercentageCalculator, InterestCalculator, Utils {
     uint maxHoldBonus = 100; // Maximum 1% hold bonus
     uint holdBonusUnlocksAt = 1000; // User will only get hold bonus if his rewards are more then 10% of his deposit
 
+    uint maxWithdrawalOverTenPercent = 300; // Max daily withdrawal limit if user is above 10%
+
     uint poolCycle;
     uint poolDrewAt;
 
@@ -60,6 +62,7 @@ contract FourRXFinance is SafePercentageCalculator, InterestCalculator, Utils {
         uint refCommission; // Ref rewards
         uint refPoolRewards; // Ref Pool Rewards
         uint sponsorPoolRewards; // Sponsor Pool Rewards
+        uint lastWithdrawalAt; // date time of last withdrawals so we don't allow more then 3% a day
         RefPool refPool; // To store this user's last 24 hour RefPool entries
         SponsorPool sponsorPool; // To store this user's last 24 hour Sponsor Pool entries
         uint withdrawn;
@@ -354,19 +357,32 @@ contract FourRXFinance is SafePercentageCalculator, InterestCalculator, Utils {
     }
 
     function withdraw() external {
-        User memory user = users[msg.sender];
+        User storage user = users[msg.sender];
         require(user.wallet == msg.sender);
+        require(user.lastWithdrawalAt + 1 days < block.timestamp); // we only allow one withdrawal each day
 
         uint availableAmount = _calcRewards(user).sub(user.withdrawn);
+
+        require(availableAmount > 0);
+
+        // @todo: check for insurance trigger
+
         uint penalty = _calcPenalty(user, availableAmount);
 
         if (penalty == 0) {
             availableAmount = availableAmount.sub(_calcPercentage(user.deposit, holdBonusUnlocksAt));
+
+            uint maxAllowedWithdrawal = _calcPercentage(user.deposit, maxWithdrawalOverTenPercent);
+
+            if (availableAmount > maxAllowedWithdrawal) {
+                availableAmount = maxAllowedWithdrawal;
+            }
         }
 
-        // @todo: do withdrawal to the user here
-        // @todo: update last withdrawal time in user struct
-        // @todo: check for last withdrawal timestamp + add a restriction to allow users to withdraw only once per day
+        fourRXToken.transfer(user.wallet, availableAmount.sub(penalty));
+
+        user.withdrawn = user.withdrawn.add(availableAmount);
+        user.lastWithdrawalAt = block.timestamp;
     }
 
     function getUser(address userAddress) external view returns (User memory) {
@@ -378,8 +394,7 @@ contract FourRXFinance is SafePercentageCalculator, InterestCalculator, Utils {
     }
 
 
-//    function withdraw(uint amount) external {
-//
-//    }
+    // @todo: complete reinvest
+    // @todo: complete insurance
 
 }
