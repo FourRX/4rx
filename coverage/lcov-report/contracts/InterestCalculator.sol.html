@@ -1,0 +1,1148 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for contracts/InterestCalculator.sol</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">contracts/</a> InterestCalculator.sol
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">96.6% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>313/324</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">12.5% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>1/8</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">60% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>3/5</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">96.6% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>313/324</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341
+342
+343
+344
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357
+358
+359
+360
+361
+362</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">903×</span>
+<span class="cline-any cline-yes">903×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.6.12;
+&nbsp;
+import '@openzeppelin/contracts/math/SafeMath.sol';
+&nbsp;
+contract InterestCalculator {
+    using SafeMath for uint;
+    uint private constant maxDays = 301;
+&nbsp;
+    function initInterestForDayArray() private pure returns (uint[] memory) {
+        uint[] memory interestForDays = new uint[](maxDays);
+&nbsp;
+        interestForDays[0] = 0;
+        interestForDays[1] = 1;
+        interestForDays[2] = 2;
+        interestForDays[3] = 3;
+        interestForDays[4] = 4;
+        interestForDays[5] = 5;
+        interestForDays[6] = 6;
+        interestForDays[7] = 6;
+        interestForDays[8] = 7;
+        interestForDays[9] = 8;
+        interestForDays[10] = 9;
+        interestForDays[11] = 10;
+        interestForDays[12] = 11;
+        interestForDays[13] = 12;
+        interestForDays[14] = 13;
+        interestForDays[15] = 14;
+        interestForDays[16] = 15;
+        interestForDays[17] = 16;
+        interestForDays[18] = 18;
+        interestForDays[19] = 19;
+        interestForDays[20] = 20;
+        interestForDays[21] = 21;
+        interestForDays[22] = 22;
+        interestForDays[23] = 23;
+        interestForDays[24] = 24;
+        interestForDays[25] = 25;
+        interestForDays[26] = 26;
+        interestForDays[27] = 27;
+        interestForDays[28] = 29;
+        interestForDays[29] = 30;
+        interestForDays[30] = 31;
+        interestForDays[31] = 32;
+        interestForDays[32] = 33;
+        interestForDays[33] = 34;
+        interestForDays[34] = 36;
+        interestForDays[35] = 37;
+        interestForDays[36] = 38;
+        interestForDays[37] = 39;
+        interestForDays[38] = 41;
+        interestForDays[39] = 42;
+        interestForDays[40] = 43;
+        interestForDays[41] = 44;
+        interestForDays[42] = 46;
+        interestForDays[43] = 47;
+        interestForDays[44] = 48;
+        interestForDays[45] = 50;
+        interestForDays[46] = 51;
+        interestForDays[47] = 52;
+        interestForDays[48] = 54;
+        interestForDays[49] = 55;
+        interestForDays[50] = 57;
+        interestForDays[51] = 58;
+        interestForDays[52] = 59;
+        interestForDays[53] = 61;
+        interestForDays[54] = 62;
+        interestForDays[55] = 64;
+        interestForDays[56] = 65;
+        interestForDays[57] = 67;
+        interestForDays[58] = 68;
+        interestForDays[59] = 70;
+        interestForDays[60] = 71;
+        interestForDays[61] = 73;
+        interestForDays[62] = 74;
+        interestForDays[63] = 76;
+        interestForDays[64] = 77;
+        interestForDays[65] = 79;
+        interestForDays[66] = 81;
+        interestForDays[67] = 82;
+        interestForDays[68] = 84;
+        interestForDays[69] = 86;
+        interestForDays[70] = 87;
+        interestForDays[71] = 89;
+        interestForDays[72] = 91;
+        interestForDays[73] = 92;
+        interestForDays[74] = 94;
+        interestForDays[75] = 96;
+        interestForDays[76] = 98;
+        interestForDays[77] = 99;
+        interestForDays[78] = 101;
+        interestForDays[79] = 103;
+        interestForDays[80] = 105;
+        interestForDays[81] = 107;
+        interestForDays[82] = 108;
+        interestForDays[83] = 110;
+        interestForDays[84] = 112;
+        interestForDays[85] = 114;
+        interestForDays[86] = 116;
+        interestForDays[87] = 118;
+        interestForDays[88] = 120;
+        interestForDays[89] = 122;
+        interestForDays[90] = 124;
+        interestForDays[90] = 126;
+        interestForDays[92] = 128;
+        interestForDays[93] = 130;
+        interestForDays[94] = 132;
+        interestForDays[95] = 134;
+        interestForDays[96] = 136;
+        interestForDays[97] = 138;
+        interestForDays[98] = 141;
+        interestForDays[99] = 143;
+        interestForDays[100] = 145;
+        interestForDays[101] = 147;
+        interestForDays[102] = 149;
+        interestForDays[103] = 152;
+        interestForDays[104] = 154;
+        interestForDays[105] = 156;
+        interestForDays[106] = 159;
+        interestForDays[107] = 161;
+        interestForDays[108] = 163;
+        interestForDays[109] = 166;
+        interestForDays[110] = 168;
+        interestForDays[111] = 170;
+        interestForDays[112] = 173;
+        interestForDays[113] = 175;
+        interestForDays[114] = 178;
+        interestForDays[115] = 180;
+        interestForDays[116] = 183;
+        interestForDays[117] = 185;
+        interestForDays[118] = 188;
+        interestForDays[119] = 190;
+        interestForDays[120] = 193;
+        interestForDays[121] = 196;
+        interestForDays[122] = 198;
+        interestForDays[123] = 201;
+        interestForDays[124] = 204;
+        interestForDays[125] = 206;
+        interestForDays[126] = 209;
+        interestForDays[127] = 212;
+        interestForDays[128] = 215;
+        interestForDays[129] = 218;
+        interestForDays[130] = 221;
+        interestForDays[131] = 223;
+        interestForDays[132] = 226;
+        interestForDays[133] = 229;
+        interestForDays[134] = 232;
+        interestForDays[135] = 235;
+        interestForDays[136] = 238;
+        interestForDays[137] = 241;
+        interestForDays[138] = 244;
+        interestForDays[139] = 247;
+        interestForDays[140] = 251;
+        interestForDays[141] = 254;
+        interestForDays[142] = 257;
+        interestForDays[143] = 260;
+        interestForDays[144] = 263;
+        interestForDays[145] = 267;
+        interestForDays[146] = 270;
+        interestForDays[147] = 273;
+        interestForDays[148] = 277;
+        interestForDays[149] = 280;
+        interestForDays[150] = 283;
+        interestForDays[151] = 287;
+        interestForDays[152] = 290;
+        interestForDays[153] = 294;
+        interestForDays[154] = 297;
+        interestForDays[155] = 301;
+        interestForDays[156] = 305;
+        interestForDays[157] = 308;
+        interestForDays[158] = 312;
+        interestForDays[159] = 316;
+        interestForDays[160] = 319;
+        interestForDays[161] = 323;
+        interestForDays[162] = 327;
+        interestForDays[163] = 331;
+        interestForDays[164] = 335;
+        interestForDays[165] = 339;
+        interestForDays[166] = 343;
+        interestForDays[167] = 347;
+        interestForDays[168] = 351;
+        interestForDays[169] = 355;
+        interestForDays[170] = 359;
+        interestForDays[171] = 363;
+        interestForDays[172] = 367;
+        interestForDays[173] = 371;
+        interestForDays[174] = 375;
+        interestForDays[175] = 380;
+        interestForDays[176] = 384;
+        interestForDays[177] = 388;
+        interestForDays[178] = 393;
+        interestForDays[179] = 397;
+        interestForDays[180] = 402;
+        interestForDays[181] = 406;
+        interestForDays[182] = 411;
+        interestForDays[183] = 415;
+        interestForDays[184] = 420;
+        interestForDays[185] = 425;
+        interestForDays[186] = 429;
+        interestForDays[187] = 434;
+        interestForDays[188] = 439;
+        interestForDays[189] = 444;
+        interestForDays[190] = 449;
+        interestForDays[191] = 454;
+        interestForDays[192] = 459;
+        interestForDays[193] = 464;
+        interestForDays[194] = 469;
+        interestForDays[195] = 474;
+        interestForDays[196] = 479;
+        interestForDays[197] = 484;
+        interestForDays[198] = 489;
+        interestForDays[199] = 495;
+        interestForDays[200] = 500;
+        interestForDays[201] = 506;
+        interestForDays[202] = 511;
+        interestForDays[203] = 516;
+        interestForDays[204] = 522;
+        interestForDays[205] = 528;
+        interestForDays[206] = 533;
+        interestForDays[207] = 539;
+        interestForDays[208] = 545;
+        interestForDays[209] = 551;
+        interestForDays[210] = 556;
+        interestForDays[211] = 562;
+        interestForDays[212] = 568;
+        interestForDays[213] = 574;
+        interestForDays[214] = 580;
+        interestForDays[215] = 586;
+        interestForDays[216] = 593;
+        interestForDays[217] = 599;
+        interestForDays[218] = 605;
+        interestForDays[219] = 611;
+        interestForDays[220] = 618;
+        interestForDays[221] = 624;
+        interestForDays[222] = 631;
+        interestForDays[223] = 637;
+        interestForDays[224] = 644;
+        interestForDays[225] = 651;
+        interestForDays[226] = 658;
+        interestForDays[227] = 664;
+        interestForDays[228] = 671;
+        interestForDays[229] = 678;
+        interestForDays[230] = 685;
+        interestForDays[231] = 692;
+        interestForDays[232] = 699;
+        interestForDays[233] = 707;
+        interestForDays[234] = 714;
+        interestForDays[235] = 721;
+        interestForDays[236] = 729;
+        interestForDays[237] = 736;
+        interestForDays[238] = 744;
+        interestForDays[239] = 751;
+        interestForDays[240] = 759;
+        interestForDays[241] = 767;
+        interestForDays[242] = 774;
+        interestForDays[243] = 782;
+        interestForDays[244] = 790;
+        interestForDays[245] = 798;
+        interestForDays[246] = 806;
+        interestForDays[247] = 814;
+        interestForDays[248] = 823;
+        interestForDays[249] = 831;
+        interestForDays[250] = 839;
+        interestForDays[251] = 848;
+        interestForDays[252] = 856;
+        interestForDays[253] = 865;
+        interestForDays[254] = 874;
+        interestForDays[255] = 882;
+        interestForDays[256] = 891;
+        interestForDays[257] = 900;
+        interestForDays[258] = 909;
+        interestForDays[259] = 918;
+        interestForDays[260] = 927;
+        interestForDays[261] = 937;
+        interestForDays[262] = 946;
+        interestForDays[263] = 955;
+        interestForDays[264] = 965;
+        interestForDays[265] = 974;
+        interestForDays[266] = 984;
+        interestForDays[267] = 994;
+        interestForDays[268] = 1004;
+        interestForDays[269] = 1014;
+        interestForDays[270] = 1024;
+        interestForDays[271] = 1034;
+        interestForDays[272] = 1044;
+        interestForDays[273] = 1054;
+        interestForDays[274] = 1065;
+        interestForDays[275] = 1075;
+        interestForDays[276] = 1086;
+        interestForDays[277] = 1096;
+        interestForDays[278] = 1107;
+        interestForDays[279] = 1118;
+        interestForDays[280] = 1129;
+        interestForDays[281] = 1140;
+        interestForDays[282] = 1151;
+        interestForDays[283] = 1162;
+        interestForDays[284] = 1174;
+        interestForDays[285] = 1185;
+        interestForDays[286] = 1197;
+        interestForDays[287] = 1208;
+        interestForDays[288] = 1220;
+        interestForDays[289] = 1232;
+        interestForDays[290] = 1244;
+        interestForDays[291] = 1256;
+        interestForDays[292] = 1268;
+        interestForDays[293] = 1281;
+        interestForDays[294] = 1293;
+        interestForDays[295] = 1306;
+        interestForDays[296] = 1318;
+        interestForDays[297] = 1331;
+        interestForDays[298] = 1344;
+        interestForDays[299] = 1357;
+        interestForDays[300] = 1370;
+&nbsp;
+        return interestForDays;
+    }
+&nbsp;
+    function initCumulativeInterestForDays(uint[] memory interestForDays) private pure returns (uint[] memory) {
+        uint[] memory cumulativeInterestForDays = new uint[](maxDays);
+&nbsp;
+        uint sum;
+        for(uint i = 0; i &lt; maxDays; i++) {
+            sum = sum.add(interestForDays[i]);
+            cumulativeInterestForDays[i] = sum;
+        }
+&nbsp;
+        return cumulativeInterestForDays;
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function getInterestForDay(uint _day) public pure returns(uint) {</span>
+<span class="cstat-no" title="statement not covered" >        require(_day &lt; maxDays)</span>;
+<span class="cstat-no" title="statement not covered" >        uint[] memory interestForDays = initInterestForDayArray();</span>
+<span class="cstat-no" title="statement not covered" >        return interestForDays[_day];</span>
+    }
+&nbsp;
+    function getInterestTillDays(uint _day) public pure returns(uint) {
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(_day &lt; maxDays);
+        uint[] memory interestForDays = initInterestForDayArray();
+        uint[] memory cumulativeInterestForDays = initCumulativeInterestForDays(interestForDays);
+        return cumulativeInterestForDays[_day];
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function getEstimateDaysFromInterest(uint interest) public pure returns(uint) {</span>
+<span class="cstat-no" title="statement not covered" >        uint[] memory interestForDays = initInterestForDayArray();</span>
+<span class="cstat-no" title="statement not covered" >        uint[] memory cumulativeInterestForDays = initCumulativeInterestForDays(interestForDays);</span>
+&nbsp;
+        // If interest is less then user could have gotten in 1 day, return 0;
+<span class="cstat-no" title="statement not covered" >        if (interest &lt; cumulativeInterestForDays[1]) {</span>
+<span class="cstat-no" title="statement not covered" >            return 0;</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        for(uint i = 1; i &lt; maxDays - 1; i++) {</span>
+<span class="cstat-no" title="statement not covered" >            if (cumulativeInterestForDays[i] &lt; interest &amp;&amp; cumulativeInterestForDays[i + 1] &gt; interest) {</span>
+<span class="cstat-no" title="statement not covered" >                return i;</span>
+            }
+        }
+&nbsp;
+        // If interest is more then any amount we have, return maxDays - 1 // 300
+<span class="cstat-no" title="statement not covered" >        return maxDays - 1;</span>
+    }
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Jan 14 2021 21:21:52 GMT+0530 (India Standard Time)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

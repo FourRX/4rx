@@ -11,7 +11,7 @@ contract SafePercentageCalculator {
     uint maxBasisPoints = 40000; // 400% max
 
     function _calcPercentage(uint amount, uint basisPoints) public view returns (uint) {
-        require(basisPoints > minBasisPoints);
+        require(basisPoints >= minBasisPoints);
         require(basisPoints <= maxBasisPoints);
         return amount.mul(basisPoints).div(percentMultiplier);
     }

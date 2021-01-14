@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.6.12;
+pragma experimental ABIEncoderV2;
 
 import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import '@openzeppelin/contracts/math/SafeMath.sol';
@@ -9,6 +10,8 @@ import "./utils/Utils.sol";
 
 contract FourRXFinance is SafePercentageCalculator, InterestCalculator, Utils {
     using SafeMath for uint;
+
+    event Deposit(address user, address uplink, uint amount);
 
     IERC20 fourRXToken;
     uint maxContractRewards = 40000; // 400%
@@ -20,7 +23,7 @@ contract FourRXFinance is SafePercentageCalculator, InterestCalculator, Utils {
 
     // Contract bonus
     uint maxContractBonus = 300; // maximum bonus a user can get 3%
-    uint contractBonusUnit = 100; // For each 100 unit balance of contract, give
+    uint contractBonusUnit = 100;    // For each 100 unit balance of contract, gives
     uint contractBonusUnitBonus = 1; // 0.01% extra interest
 
     uint holdBonusUnitBonus = 2; // 0.02% hold bonus for each 12 hours of hold
@@ -110,6 +113,7 @@ contract FourRXFinance is SafePercentageCalculator, InterestCalculator, Utils {
 
         refPoolBalance = 0;
         sponsorPoolBalance = 0;
+        poolDrewAt = block.timestamp;
     }
 
     function _shiftPool(uint startIndex, address shiftAddress, address[] storage pool) internal {
@@ -237,7 +241,6 @@ contract FourRXFinance is SafePercentageCalculator, InterestCalculator, Utils {
 
     function drawPool() internal {
         if (block.timestamp > poolDrewAt + 1 days) {
-            poolDrewAt = block.timestamp;
             for (uint i = 0; i < refPoolUsers.length; i++) {
                 if (refPoolUsers[i] == address(0)) break;
 
@@ -257,10 +260,10 @@ contract FourRXFinance is SafePercentageCalculator, InterestCalculator, Utils {
     }
 
     function deposit(uint amount, address uplink) external {
-        require(!users[msg.sender].registered); // User must not be registered with us
-        require(users[uplink].active || uplink == address(0)); // Either uplink must be registered with us and be a active user or 0 address
+        require(!users[msg.sender].registered, '403'); // User must not be registered with us
+        require(users[uplink].active || uplink == address(0), '401'); // Either uplink must be registered with us and be a active user or 0 address
 
-        require(fourRXToken.transferFrom(msg.sender, address(this), amount));
+        require(fourRXToken.transferFrom(msg.sender, address(this), amount), '402');
 
         User storage user = users[msg.sender];
 
@@ -280,6 +283,8 @@ contract FourRXFinance is SafePercentageCalculator, InterestCalculator, Utils {
         sponsorPoolBalance = sponsorPoolBalance.add(_calcPercentage(amount, depositSponsorPoolCommission));
 
         drawPool();
+
+        emit Deposit(msg.sender, uplink, amount);
     }
 
     function _calcContractBonus(User memory user) internal view returns (uint) {
@@ -309,7 +314,7 @@ contract FourRXFinance is SafePercentageCalculator, InterestCalculator, Utils {
 
         uint interest = _calcPercentage(user.deposit, getInterestTillDays(_calcDays(user.interestCountFrom, block.timestamp)));
 
-        uint contractBonus = _calcHoldRewards(user);
+        uint contractBonus = _calcContractBonus(user);
 
         uint totalRewardsWithoutHoldBonus = poolRewardsAmount.add(refCommissionAmount).add(interest).add(contractBonus);
 
@@ -362,6 +367,10 @@ contract FourRXFinance is SafePercentageCalculator, InterestCalculator, Utils {
         // @todo: do withdrawal to the user here
         // @todo: update last withdrawal time in user struct
         // @todo: check for last withdrawal timestamp + add a restriction to allow users to withdraw only once per day
+    }
+
+    function getUser(address userAddress) external view returns (User memory) {
+        return users[userAddress];
     }
 
     function reInvest(uint _amount) external {
