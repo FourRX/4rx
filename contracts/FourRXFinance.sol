@@ -319,7 +319,7 @@ contract FourRXFinance is SafePercentageCalculator, InterestCalculator, Utils {
     function _calcRewards(User memory user) internal view returns (uint) {
         uint rewards = _calcRewardsWithoutHoldBonus(user);
 
-        if (_calcBasisPoints(user.deposit.sub(user.withdrawn), rewards) >= holdBonusUnlocksAt) {
+        if (_calcBasisPoints(user.deposit, rewards) >= holdBonusUnlocksAt) {
             rewards = rewards.add(_calcHoldRewards(user));
         }
 
@@ -332,6 +332,15 @@ contract FourRXFinance is SafePercentageCalculator, InterestCalculator, Utils {
         return rewards;
     }
 
+    function _calcPenalty(User memory user, uint withdrawalAmount) private view returns (uint) {
+        uint basisPoints = _calcBasisPoints(user.deposit, withdrawalAmount);
+        if (basisPoints >= holdBonusUnlocksAt) {
+            return 0;
+        }
+
+        return percentMultiplier.sub(basisPoints.mul(percentMultiplier).div(holdBonusUnlocksAt));
+    }
+
     function balanceOf(address _userAddress) external view returns (uint) {
         require(users[_userAddress].wallet == _userAddress);
         User memory user = users[_userAddress];
@@ -339,8 +348,20 @@ contract FourRXFinance is SafePercentageCalculator, InterestCalculator, Utils {
         return _calcRewards(user).sub(user.withdrawn);
     }
 
-    function withdraw(uint _amount) external {
+    function withdraw() external {
+        User memory user = users[msg.sender];
+        require(user.wallet == msg.sender);
 
+        uint availableAmount = _calcRewards(user).sub(user.withdrawn);
+        uint penalty = _calcPenalty(user, availableAmount);
+
+        if (penalty == 0) {
+            availableAmount = availableAmount.sub(_calcPercentage(user.deposit, holdBonusUnlocksAt));
+        }
+
+        // @todo: do withdrawal to the user here
+        // @todo: update last withdrawal time in user struct
+        // @todo: check for last withdrawal timestamp + add a restriction to allow users to withdraw only once per day
     }
 
     function reInvest(uint _amount) external {
