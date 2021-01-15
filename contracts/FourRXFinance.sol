@@ -113,19 +113,33 @@ contract FourRXFinance is Insurance {
 
         user.withdrawn = user.withdrawn.add(availableAmount);
         user.lastWithdrawalAt = block.timestamp;
+        user.holdFrom = block.timestamp;
 
         checkForInsuranceTrigger();
+
+        emit Withdraw(user.wallet, availableAmount);
+    }
+
+    function reInvest(uint _amount) external {
+        User storage user = users[msg.sender];
+        require(user.wallet == msg.sender);
+        uint availableAmount = _calcRewards(user).sub(user.withdrawn);
+        require(_amount <= availableAmount);
+
+        uint newBase = user.deposit.add(_amount);
+
+        uint availableAmountInInterest = _calcBasisPoints(newBase, availableAmount.sub(_amount));
+
+        uint newDays = getEstimateDaysFromInterest(availableAmountInInterest);
+
+        user.deposit = newBase;
+        user.interestCountFrom = block.timestamp.sub(newDays.mul(day));
+        user.holdFrom = block.timestamp;
+
+        emit ReInvest(user.wallet, _amount);
     }
 
     function getUser(address userAddress) external view returns (User memory) {
         return users[userAddress];
     }
-
-    function reInvest(uint _amount) external {
-
-    }
-
-
-    // @todo: complete reinvest
-
 }
