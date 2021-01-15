@@ -38,10 +38,10 @@ contract FourRXFinance is Insurance {
     }
 
     function deposit(uint amount, address uplink) external {
-        require(!users[msg.sender].registered, '403'); // User must not be registered with us
-        require(users[uplink].active || uplink == address(0), '401'); // Either uplink must be registered with us and be a active user or 0 address
+        require(!users[msg.sender].registered); // User must not be registered with us
+        require(users[uplink].active || uplink == address(0)); // Either uplink must be registered with us and be a active user or 0 address
 
-        require(fourRXToken.transferFrom(msg.sender, address(this), amount), '402');
+        require(fourRXToken.transferFrom(msg.sender, address(this), amount));
 
         User storage user = users[msg.sender];
 

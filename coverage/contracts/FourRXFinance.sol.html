@@ -20,14 +20,14 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">69.57% </span>
+        <span class="strong">58.54% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>48/69</span>
+        <span class='fraction'>48/82</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">23.08% </span>
+        <span class="strong">20% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>6/26</span>
+        <span class='fraction'>6/30</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">50% </span>
@@ -35,9 +35,9 @@
         <span class='fraction'>3/6</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">69.57% </span>
+        <span class="strong">58.54% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>48/69</span>
+        <span class='fraction'>48/82</span>
       </div>
     </div>
   </div>
@@ -174,7 +174,21 @@
 129
 130
 131
-132</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -289,20 +303,34 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// SPDX-License-Identifier: MIT
@@ -345,10 +373,10 @@ contract FourRXFinance is Insurance {
     }
 &nbsp;
     function deposit(uint amount, address uplink) external {
-        <span class="missing-if-branch" title="else path not taken" >E</span>require(!users[msg.sender].registered, '403'); // User must not be registered with us
-        <span class="missing-if-branch" title="else path not taken" >E</span>require(users[uplink].active || uplink == address(0), '401'); // Either uplink must be registered with us and be a active user or 0 address
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(!users[msg.sender].registered); // User must not be registered with us
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(users[uplink].active || uplink == address(0)); // Either uplink must be registered with us and be a active user or 0 address
 &nbsp;
-        require(fourRXToken.transferFrom(msg.sender, address(this), amount), '402');
+        require(fourRXToken.transferFrom(msg.sender, address(this), amount));
 &nbsp;
         User storage user = users[msg.sender];
 &nbsp;
@@ -420,21 +448,35 @@ contract FourRXFinance is Insurance {
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        user.withdrawn = user.withdrawn.add(availableAmount)</span>;
 <span class="cstat-no" title="statement not covered" >        user.lastWithdrawalAt = block.timestamp</span>;
+<span class="cstat-no" title="statement not covered" >        user.holdFrom = block.timestamp</span>;
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        checkForInsuranceTrigger()</span>;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        emit Withdraw(user.wallet, availableAmount);</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function reInvest(uint _amount) external {</span>
+<span class="cstat-no" title="statement not covered" >        User storage user = users[msg.sender];</span>
+<span class="cstat-no" title="statement not covered" >        require(user.wallet == msg.sender)</span>;
+<span class="cstat-no" title="statement not covered" >        uint availableAmount = _calcRewards(user).sub(user.withdrawn);</span>
+<span class="cstat-no" title="statement not covered" >        require(_amount &lt;= availableAmount)</span>;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        uint newBase = user.deposit.add(_amount);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        uint availableAmountInInterest = _calcBasisPoints(newBase, availableAmount.sub(_amount));</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        uint newDays = getEstimateDaysFromInterest(availableAmountInInterest);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        user.deposit = newBase</span>;
+<span class="cstat-no" title="statement not covered" >        user.interestCountFrom = block.timestamp.sub(newDays.mul(day))</span>;
+<span class="cstat-no" title="statement not covered" >        user.holdFrom = block.timestamp</span>;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        emit ReInvest(user.wallet, _amount);</span>
     }
 &nbsp;
 <span class="fstat-no" title="function not covered" >    function getUser(address userAddress) external view returns (User memory) {</span>
 <span class="cstat-no" title="statement not covered" >        return users[userAddress];</span>
     }
-&nbsp;
-<span class="fstat-no" title="function not covered" >    function reInvest(uint _amount) external {</span>
-&nbsp;
-    }
-&nbsp;
-&nbsp;
-    // @todo: complete reinvest
-&nbsp;
 }
 &nbsp;</pre></td></tr>
 </table></pre>
@@ -442,7 +484,7 @@ contract FourRXFinance is Insurance {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri Jan 15 2021 14:10:02 GMT+0530 (India Standard Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri Jan 15 2021 18:36:25 GMT+0530 (India Standard Time)
 </div>
 </div>
 <script src="../prettify.js"></script>
