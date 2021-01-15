@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for contracts/RewardsAndPenalties.sol</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">contracts/</a> RewardsAndPenalties.sol
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">69.64% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>39/56</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">55.88% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>19/34</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">85.71% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>6/7</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">63.04% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>29/46</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line medium'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.6.12;
+&nbsp;
+import "./Pools.sol";
+&nbsp;
+contract RewardsAndPenalties is Pools {
+&nbsp;
+    function _distributeReferralReward(uint amount, address uplink) internal {
+        if (uplink != address(0)) {
+            User storage uplinkUser = users[uplink];
+            uint commission = uplinkUser.refCommission.add(_calcPercentage(amount, refCommission));
+            uplinkUser.refCommission = commission;
+            _updateUserRefPool(commission, uplinkUser);
+            _updateRefPoolUsers(uplinkUser);
+        }
+    }
+&nbsp;
+    function _calcDepositRewards(uint amount) internal view returns (uint) {
+        uint rewardPercent = 0;
+&nbsp;
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (amount &gt; 5000000) {
+<span class="cstat-no" title="statement not covered" >            rewardPercent = 50</span>;
+        } else <span class="missing-if-branch" title="if path not taken" >I</span>if (amount &gt; 1000000) {
+<span class="cstat-no" title="statement not covered" >            rewardPercent = 40</span>;
+        } else <span class="missing-if-branch" title="if path not taken" >I</span>if (amount &gt; 800000) {
+<span class="cstat-no" title="statement not covered" >            rewardPercent = 35</span>;
+        } else <span class="missing-if-branch" title="if path not taken" >I</span>if (amount &gt; 500000) {
+<span class="cstat-no" title="statement not covered" >            rewardPercent = 30</span>;
+        } else <span class="missing-if-branch" title="if path not taken" >I</span>if (amount &gt; 250000) {
+<span class="cstat-no" title="statement not covered" >            rewardPercent = 25</span>;
+        } else <span class="missing-if-branch" title="if path not taken" >I</span>if (amount &gt; 100000) {
+<span class="cstat-no" title="statement not covered" >            rewardPercent = 20</span>;
+        } else <span class="missing-if-branch" title="if path not taken" >I</span>if (amount &gt; 50000) {
+<span class="cstat-no" title="statement not covered" >            rewardPercent = 15</span>;
+        } else <span class="missing-if-branch" title="if path not taken" >I</span>if (amount &gt; 25000) {
+<span class="cstat-no" title="statement not covered" >            rewardPercent = 10</span>;
+        } else <span class="missing-if-branch" title="if path not taken" >I</span>if (amount &gt; 10000) {
+<span class="cstat-no" title="statement not covered" >            rewardPercent = 5</span>;
+        } else if (amount &gt; 5000) {
+            rewardPercent = 2;
+        } else <span class="missing-if-branch" title="if path not taken" >I</span>if (amount &gt; 2000) {
+<span class="cstat-no" title="statement not covered" >            rewardPercent = 1</span>;
+        }
+&nbsp;
+        return _calcPercentage(amount, rewardPercent);
+    }
+&nbsp;
+    function _calcContractBonus(User memory user) internal view returns (uint) {
+        uint contractBonusPercent = fourRXToken.balanceOf(address(this)).div(contractBonusUnit).mul(contractBonusUnitBonus);
+&nbsp;
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (contractBonusPercent &gt; maxContractBonus) {
+<span class="cstat-no" title="statement not covered" >            contractBonusPercent = maxContractBonus</span>;
+        }
+&nbsp;
+        return _calcPercentage(user.deposit, contractBonusPercent);
+    }
+&nbsp;
+    function _calcHoldRewards(User memory user) internal view returns (uint) {
+        uint holdPeriods = _calcDays(user.holdFrom, block.timestamp).mul(2);
+        uint holdBonusPercent = holdPeriods.mul(holdBonusUnitBonus);
+&nbsp;
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (holdBonusPercent &gt; maxHoldBonus) {
+<span class="cstat-no" title="statement not covered" >            holdBonusPercent = maxHoldBonus</span>;
+        }
+&nbsp;
+        return _calcPercentage(user.deposit, holdBonusPercent);
+    }
+&nbsp;
+    function _calcRewardsWithoutHoldBonus(User memory user) internal view returns (uint) {
+        uint poolRewardsAmount = user.refPoolRewards.add(user.sponsorPoolRewards);
+        uint refCommissionAmount = user.refCommission;
+&nbsp;
+        uint interest = _calcPercentage(user.deposit, getInterestTillDays(_calcDays(user.interestCountFrom, block.timestamp)));
+&nbsp;
+        uint contractBonus = _calcContractBonus(user);
+&nbsp;
+        uint totalRewardsWithoutHoldBonus = poolRewardsAmount.add(refCommissionAmount).add(interest).add(contractBonus);
+&nbsp;
+        return totalRewardsWithoutHoldBonus;
+    }
+&nbsp;
+    function _calcRewards(User memory user) internal view returns (uint) {
+        uint rewards = _calcRewardsWithoutHoldBonus(user);
+&nbsp;
+        if (_calcBasisPoints(user.deposit, rewards) &gt;= holdBonusUnlocksAt) {
+            rewards = rewards.add(_calcHoldRewards(user));
+        }
+&nbsp;
+        uint maxRewards = _calcPercentage(user.deposit, maxContractRewards);
+&nbsp;
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (rewards &gt; maxRewards) {
+<span class="cstat-no" title="statement not covered" >            rewards = maxRewards</span>;
+        }
+&nbsp;
+        return rewards;
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function _calcPenalty(User memory user, uint withdrawalAmount) internal view returns (uint) {</span>
+<span class="cstat-no" title="statement not covered" >        uint basisPoints = _calcBasisPoints(user.deposit, withdrawalAmount);</span>
+<span class="cstat-no" title="statement not covered" >        if (basisPoints &gt;= holdBonusUnlocksAt) {</span>
+<span class="cstat-no" title="statement not covered" >            return 0;</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        return percentMultiplier.sub(basisPoints.mul(percentMultiplier).div(holdBonusUnlocksAt));</span>
+    }
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri Jan 15 2021 14:10:02 GMT+0530 (India Standard Time)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

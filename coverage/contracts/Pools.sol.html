@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for contracts/Pools.sol</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">contracts/</a> Pools.sol
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">64% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>32/50</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">53.85% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>14/26</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">85.71% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>6/7</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">61.82% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>34/55</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line medium'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-yes">72×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-yes">60×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.6.12;
+&nbsp;
+import "./SharedVariables.sol";
+&nbsp;
+contract Pools is SharedVariables {
+&nbsp;
+    function _resetPools() internal {
+        for (uint i = 0; i &lt; refPoolBonuses.length; i++) {
+            refPoolUsers[i] = address(0);
+        }
+&nbsp;
+        for (uint i = 0; i &lt; sponsorPoolBonuses.length; i++) {
+            sponsorPoolUsers[i] = address(0);
+        }
+&nbsp;
+        refPoolBalance = 0;
+        sponsorPoolBalance = 0;
+        poolDrewAt = block.timestamp;
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function _shiftPool(uint startIndex, address shiftAddress, address[] storage pool) internal {</span>
+<span class="cstat-no" title="statement not covered" >        if (shiftAddress != address(0)) {</span>
+<span class="cstat-no" title="statement not covered" >            address nextAddress = address(0);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            for (uint i = startIndex; i &lt; pool.length; i++) {</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                if (shiftAddress == address(0)) {</span>
+                    break;
+                }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                nextAddress = pool[i]</span>;
+<span class="cstat-no" title="statement not covered" >                pool[i] = shiftAddress</span>;
+<span class="cstat-no" title="statement not covered" >                shiftAddress = nextAddress</span>;
+            }
+        }
+    }
+&nbsp;
+    function _updateSponsorPoolUsers(User memory user) internal {
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (sponsorPoolUsers[sponsorPoolUsers.length - 1] == address(0)
+            || user.sponsorPool.amount &gt; users[sponsorPoolUsers[sponsorPoolUsers.length - 1]].sponsorPool.amount) { // either last user is not set or last user's sponsor balance is less then this user
+&nbsp;
+            address shiftAddress = address(0);
+&nbsp;
+            for (uint i = 0; i &lt; sponsorPoolUsers.length; i++) {
+&nbsp;
+                if (sponsorPoolUsers[i] == address(0)) {
+                    sponsorPoolUsers[i] = user.wallet;
+                    break;
+                }
+&nbsp;
+                <span class="missing-if-branch" title="if path not taken" >I</span>if (user.sponsorPool.amount &gt; users[sponsorPoolUsers[i]].sponsorPool.amount) {
+<span class="cstat-no" title="statement not covered" >                    shiftAddress = sponsorPoolUsers[i]</span>;
+<span class="cstat-no" title="statement not covered" >                    sponsorPoolUsers[i] = user.wallet</span>;
+<span class="cstat-no" title="statement not covered" >                    _shiftPool(i, shiftAddress, sponsorPoolUsers)</span>;
+                    break;
+                }
+            }
+        }
+    }
+&nbsp;
+    // Update current user's sponsor pool entry
+    function _updateUserSponsorPool(uint amount, User storage user) internal {
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (user.sponsorPool.cycle != poolCycle) {
+<span class="cstat-no" title="statement not covered" >            user.sponsorPool.cycle = poolCycle</span>;
+<span class="cstat-no" title="statement not covered" >            user.sponsorPool.amount = 0</span>;
+        }
+&nbsp;
+        user.sponsorPool.amount = user.sponsorPool.amount.add(amount);
+    }
+&nbsp;
+    // Reorganise top ref-pool users to draw pool for
+    function _updateRefPoolUsers(User memory user) internal {
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (refPoolUsers[refPoolUsers.length - 1] == address(0)
+            || user.refPool.amount &gt; users[refPoolUsers[refPoolUsers.length - 1]].refPool.amount) { // either last user is not set or last user's ref balance is less then this user
+&nbsp;
+            address shiftAddress = address(0);
+&nbsp;
+            for (uint i = 0; i &lt; refPoolUsers.length; i++) {
+&nbsp;
+                <span class="missing-if-branch" title="else path not taken" >E</span>if (refPoolUsers[i] == address(0)) {
+                    refPoolUsers[i] = user.wallet;
+                    break;
+                }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                if (user.refPool.amount &gt; users[refPoolUsers[i]].refPool.amount) {</span>
+<span class="cstat-no" title="statement not covered" >                    shiftAddress = refPoolUsers[i]</span>;
+<span class="cstat-no" title="statement not covered" >                    refPoolUsers[i] = user.wallet</span>;
+<span class="cstat-no" title="statement not covered" >                    _shiftPool(i, shiftAddress, refPoolUsers)</span>;
+                    break;
+                }
+            }
+        }
+    }
+&nbsp;
+    function _updateUserRefPool(uint amount, User storage user) internal {
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (user.refPool.cycle != poolCycle) {
+<span class="cstat-no" title="statement not covered" >            user.refPool.cycle = poolCycle</span>;
+<span class="cstat-no" title="statement not covered" >            user.refPool.amount = 0</span>;
+        }
+&nbsp;
+        user.refPool.amount = user.refPool.amount.add(amount);
+    }
+&nbsp;
+    function drawPool() internal {
+        if (block.timestamp &gt; poolDrewAt + 1 days) {
+            for (uint i = 0; i &lt; refPoolUsers.length; i++) {
+                if (refPoolUsers[i] == address(0)) break;
+&nbsp;
+                User storage user = users[refPoolUsers[i]];
+                user.refPoolRewards = user.refPoolRewards.add(_calcPercentage(refPoolBalance, refPoolBonuses[i]));
+            }
+&nbsp;
+            for (uint i = 0; i &lt; sponsorPoolUsers.length; i++) {
+                if (sponsorPoolUsers[i] == address(0)) break;
+&nbsp;
+                User storage user = users[sponsorPoolUsers[i]];
+                user.sponsorPoolRewards = user.sponsorPoolRewards.add(_calcPercentage(sponsorPoolBalance, sponsorPoolBonuses[i]));
+            }
+&nbsp;
+            _resetPools();
+        }
+    }
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri Jan 15 2021 14:10:02 GMT+0530 (India Standard Time)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>
