@@ -10,13 +10,13 @@ contract SafePercentageCalculator {
     uint minBasisPoints = 0;
     uint maxBasisPoints = 40000; // 400% max
 
-    function _calcPercentage(uint amount, uint basisPoints) public view returns (uint) {
+    function _calcPercentage(uint amount, uint basisPoints) internal view returns (uint) {
         require(basisPoints >= minBasisPoints);
         require(basisPoints <= maxBasisPoints);
         return amount.mul(basisPoints).div(percentMultiplier);
     }
 
-    function _calcBasisPoints(uint base, uint interest) public view returns (uint) {
+    function _calcBasisPoints(uint base, uint interest) internal view returns (uint) {
         return interest.mul(percentMultiplier).div(base);
     }
 }

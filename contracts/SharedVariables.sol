@@ -13,7 +13,7 @@ contract SharedVariables is SafePercentageCalculator, InterestCalculator, Events
     IERC20 fourRXToken;
     uint maxContractRewards = 40000; // 400%
     uint lpCommission = 1000;
-    uint refCommission = 1000;
+    uint refCommission = 800;
     uint logBase = 1009;
     uint depositRefPoolCommission = 50;
     uint depositSponsorPoolCommission = 50;
