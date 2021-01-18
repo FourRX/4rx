@@ -1,0 +1,21 @@
+{
+  "contracts": {},
+  "solidityLibs": {},
+  "proxies": {
+    "4RXFinance/DummyERC20Token": [
+      {
+        "address": "0x6f32544D5990701580294764183E408650B3a909",
+        "kind": "NonProxy",
+        "bytecodeHash": "4b3bbebe8e099d86d2e7f64ccdfd8d609bc7c9ed608971212f3def4bbc9f5c6e"
+      }
+    ],
+    "4RXFinance/FourRXFinance": [
+      {
+        "address": "0x3Ca9Fa0342Bc3D915ae3ae89f2892016488773e3",
+        "kind": "NonProxy",
+        "bytecodeHash": "b8f7348ea434f3d71c054774467e710d8d24c1382be7795391f4024a80705d44"
+      }
+    ]
+  },
+  "manifestVersion": "2.2"
+}
