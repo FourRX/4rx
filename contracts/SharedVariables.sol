@@ -17,6 +17,7 @@ contract SharedVariables is SafePercentageCalculator, InterestCalculator, Events
     uint logBase = 1009;
     uint depositRefPoolCommission = 50;
     uint depositSponsorPoolCommission = 50;
+    uint exitPenalty = 5000;
 
     // Contract bonus
     uint maxContractBonus = 300; // maximum bonus a user can get 3%

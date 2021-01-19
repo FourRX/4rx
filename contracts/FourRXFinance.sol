@@ -139,6 +139,24 @@ contract FourRXFinance is Insurance {
         emit ReInvest(user.wallet, _amount);
     }
 
+    function exitProgram() external {
+        User storage user = users[msg.sender];
+        require(user.wallet == msg.sender);
+        uint availableAmount = _calcRewards(user).sub(user.withdrawn);
+        uint penaltyAmount = _calcPercentage(user.deposit, exitPenalty);
+
+        if (availableAmount < penaltyAmount) {
+            availableAmount = 0;
+        } else {
+            availableAmount = availableAmount.sub(penaltyAmount);
+            fourRXToken.transfer(user.wallet, availableAmount);
+        }
+
+        user.active = false;
+        user.withdrawn = user.withdrawn.add(availableAmount);
+        emit Exited(user.wallet);
+    }
+
     function getUser(address userAddress) external view returns (User memory) {
         return users[userAddress];
     }
