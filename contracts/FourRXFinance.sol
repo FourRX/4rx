@@ -117,15 +117,19 @@ contract FourRXFinance is Insurance {
 
         checkForInsuranceTrigger();
 
-        emit Withdraw(user.wallet, availableAmount);
+        emit Withdraw(user.wallet, availableAmount.sub(penalty));
     }
 
     function reInvest(uint _amount) external {
         User storage user = users[msg.sender];
         require(user.wallet == msg.sender);
+        uint amountEarnedFromBasicInterest = _calcPercentage(user.deposit, getInterestTillDays(_calcDays(user.interestCountFrom, block.timestamp)));
+
+        require(_amount <= amountEarnedFromBasicInterest);
         uint availableAmount = _calcRewards(user).sub(user.withdrawn);
         require(_amount <= availableAmount);
 
+        // @todo: deduce 10% as contract fee
         uint newBase = user.deposit.add(_amount);
 
         uint availableAmountInInterest = _calcBasisPoints(newBase, availableAmount.sub(_amount));

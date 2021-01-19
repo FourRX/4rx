@@ -8,8 +8,8 @@ module.exports = {
       protocol: 'http',
       host: 'localhost',
       port: 8545,
-      gas: 15000000,
-      gasPrice: 5e9,
+      gas: 10000000,
+      gasPrice: 0x01,
       networkId: '*',
     },
     coverage: {

@@ -101,6 +101,6 @@ contract RewardsAndPenalties is Pools {
             return 0;
         }
 
-        return percentMultiplier.sub(basisPoints.mul(percentMultiplier).div(holdBonusUnlocksAt));
+        return _calcPercentage(withdrawalAmount, percentMultiplier.sub(basisPoints.mul(percentMultiplier).div(holdBonusUnlocksAt)));
     }
 }

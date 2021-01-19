@@ -13,7 +13,7 @@ const [ owner, user1, user2, user3 ] = accounts;
 const FourRXFinance = contract.fromArtifact('FourRXFinance');
 const ERC20 = contract.fromArtifact('DummyERC20Token');
 
-describe('FourRXFinance Test', function () {
+describe('FourRXFinance Registration Test', function () {
     beforeEach(async function() {
         this.erc20 = await ERC20.new({ from: owner });
         this.fourRXFinance = await FourRXFinance.new(this.erc20.address, { from: owner });

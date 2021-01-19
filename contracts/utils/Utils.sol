@@ -9,8 +9,6 @@ contract Utils {
     uint day = 86400; // Seconds in a day
 
     function _calcDays(uint start, uint end) internal view returns (uint) {
-        require(end >= start);
-
         return end.sub(start).div(day);
     }
 }
