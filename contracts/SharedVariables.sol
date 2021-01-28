@@ -11,10 +11,13 @@ contract SharedVariables is SafePercentageCalculator, InterestCalculator, Events
     using SafeMath for uint;
 
     IERC20 fourRXToken;
-    uint maxContractRewards = 40000; // 400%
+    uint maxContractRewards = 200000; // 2000%
     uint lpCommission = 1000;
     uint refCommission = 800;
-    uint logBase = 1009;
+
+    uint devCommission = 5000; // 5%
+    address devAddress = 0x64B8cb4C04Ba902010856d913B4e5DF940748Bf2; // Dummy address replace it for prod/dev
+
     uint depositRefPoolCommission = 50;
     uint depositSponsorPoolCommission = 50;
     uint exitPenalty = 5000;
@@ -31,10 +34,6 @@ contract SharedVariables is SafePercentageCalculator, InterestCalculator, Events
     uint maxWithdrawalOverTenPercent = 300; // Max daily withdrawal limit if user is above 10%
 
     uint maxContractBalance;
-
-    uint insuranceTrigger = 3500; // trigger insurance with contract balance fall below 35%
-
-    bool isInInsuranceState = false; // if contract is only allowing insured money this becomes true;
 
     uint poolCycle;
     uint poolDrewAt;

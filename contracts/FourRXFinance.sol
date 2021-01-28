@@ -3,9 +3,9 @@ pragma solidity ^0.6.12;
 pragma experimental ABIEncoderV2;
 
 import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
-import "./Insurance.sol";
+import "./RewardsAndPenalties.sol";
 
-contract FourRXFinance is Insurance {
+contract FourRXFinance is RewardsAndPenalties {
 
     constructor(address fourRXTokenAddress) public {
         fourRXToken = IERC20(fourRXTokenAddress);
@@ -68,6 +68,8 @@ contract FourRXFinance is Insurance {
             maxContractBalance = currentContractBalance;
         }
 
+        fourRXToken.transfer(devAddress, _calcPercentage(amount, devCommission));
+
         emit Deposit(msg.sender, uplink, amount);
     }
 
@@ -100,47 +102,14 @@ contract FourRXFinance is Insurance {
             }
         }
 
-        if (isInInsuranceState) {
-            uint maxWithdrawalAllowedInInsurance = _calcPercentage(user.deposit, insuranceTrigger);
-            require(maxWithdrawalAllowedInInsurance < user.withdrawn); // if contract is in insurance trigger, do not allow withdrawals for the users who already have withdrawn more then 35%
-
-            if (user.withdrawn.add(availableAmount) > maxWithdrawalAllowedInInsurance) {
-                availableAmount = maxWithdrawalAllowedInInsurance - user.withdrawn;
-            }
-        }
-
         fourRXToken.transfer(user.wallet, availableAmount.sub(penalty));
 
         user.withdrawn = user.withdrawn.add(availableAmount);
         user.lastWithdrawalAt = block.timestamp;
         user.holdFrom = block.timestamp;
 
-        checkForInsuranceTrigger();
 
         emit Withdraw(user.wallet, availableAmount.sub(penalty));
-    }
-
-    function reInvest(uint _amount) external {
-        User storage user = users[msg.sender];
-        require(user.wallet == msg.sender);
-        uint amountEarnedFromBasicInterest = _calcPercentage(user.deposit, getInterestTillDays(_calcDays(user.interestCountFrom, block.timestamp)));
-
-        require(_amount <= amountEarnedFromBasicInterest);
-        uint availableAmount = _calcRewards(user).sub(user.withdrawn);
-        require(_amount <= availableAmount);
-
-        // @todo: deduce 10% as contract fee
-        uint newBase = user.deposit.add(_amount);
-
-        uint availableAmountInInterest = _calcBasisPoints(newBase, availableAmount.sub(_amount));
-
-        uint newDays = getEstimateDaysFromInterest(availableAmountInInterest);
-
-        user.deposit = newBase;
-        user.interestCountFrom = block.timestamp.sub(newDays.mul(day));
-        user.holdFrom = block.timestamp;
-
-        emit ReInvest(user.wallet, _amount);
     }
 
     function exitProgram() external {
