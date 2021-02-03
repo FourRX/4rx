@@ -20,14 +20,14 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">85.53% </span>
+        <span class="strong">81.93% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>65/76</span>
+        <span class='fraction'>68/83</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">58.33% </span>
+        <span class="strong">46.67% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>14/24</span>
+        <span class='fraction'>14/30</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">83.33% </span>
@@ -35,9 +35,9 @@
         <span class='fraction'>5/6</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">85.53% </span>
+        <span class="strong">81.93% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>65/76</span>
+        <span class='fraction'>68/83</span>
       </div>
     </div>
   </div>
@@ -177,7 +177,19 @@
 132
 133
 134
-135</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -249,6 +261,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">13×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -275,7 +289,16 @@
 <span class="cline-any cline-yes">2×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2×</span>
-<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -285,6 +308,7 @@
 <span class="cline-any cline-yes">4×</span>
 <span class="cline-any cline-yes">4×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -316,9 +340,9 @@ pragma solidity ^0.6.12;
 pragma experimental ABIEncoderV2;
 &nbsp;
 import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
-import "./RewardsAndPenalties.sol";
+import "./Insurance.sol";
 &nbsp;
-contract FourRXFinance is RewardsAndPenalties {
+contract FourRXFinance is Insurance {
 &nbsp;
     constructor(address fourRXTokenAddress) public {
         fourRXToken = IERC20(fourRXTokenAddress);
@@ -381,6 +405,8 @@ contract FourRXFinance is RewardsAndPenalties {
             maxContractBalance = currentContractBalance;
         }
 &nbsp;
+        fourRXToken.transfer(devAddress, _calcPercentage(amount, devCommission));
+&nbsp;
         emit Deposit(msg.sender, uplink, amount);
     }
 &nbsp;
@@ -408,8 +434,17 @@ contract FourRXFinance is RewardsAndPenalties {
 &nbsp;
             uint maxAllowedWithdrawal = _calcPercentage(user.deposit, maxWithdrawalOverTenPercent);
 &nbsp;
-            if (availableAmount &gt; maxAllowedWithdrawal) {
+            <span class="missing-if-branch" title="else path not taken" >E</span>if (availableAmount &gt; maxAllowedWithdrawal) {
                 availableAmount = maxAllowedWithdrawal;
+            }
+        }
+&nbsp;
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (isInInsuranceState) {
+<span class="cstat-no" title="statement not covered" >            uint maxWithdrawalAllowedInInsurance = _calcPercentage(user.deposit, insuranceTrigger);</span>
+<span class="cstat-no" title="statement not covered" >            require(maxWithdrawalAllowedInInsurance &lt; user.withdrawn)</span>; // if contract is in insurance trigger, do not allow withdrawals for the users who already have withdrawn more then 35%
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            if (user.withdrawn.add(availableAmount) &gt; maxWithdrawalAllowedInInsurance) {</span>
+<span class="cstat-no" title="statement not covered" >                availableAmount = maxWithdrawalAllowedInInsurance - user.withdrawn</span>;
             }
         }
 &nbsp;
@@ -419,6 +454,7 @@ contract FourRXFinance is RewardsAndPenalties {
         user.lastWithdrawalAt = block.timestamp;
         user.holdFrom = block.timestamp;
 &nbsp;
+        checkForInsuranceTrigger();
 &nbsp;
         emit Withdraw(user.wallet, availableAmount.sub(penalty));
     }
@@ -451,7 +487,7 @@ contract FourRXFinance is RewardsAndPenalties {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Jan 28 2021 13:34:10 GMT+0530 (India Standard Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Feb 03 2021 17:00:38 GMT+0530 (India Standard Time)
 </div>
 </div>
 <script src="../prettify.js"></script>
