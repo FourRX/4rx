@@ -3,9 +3,9 @@ pragma solidity ^0.6.12;
 pragma experimental ABIEncoderV2;
 
 import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
-import "./RewardsAndPenalties.sol";
+import "./Insurance.sol";
 
-contract FourRXFinance is RewardsAndPenalties {
+contract FourRXFinance is Insurance {
 
     constructor(address fourRXTokenAddress) public {
         fourRXToken = IERC20(fourRXTokenAddress);
@@ -102,12 +102,22 @@ contract FourRXFinance is RewardsAndPenalties {
             }
         }
 
+        if (isInInsuranceState) {
+            uint maxWithdrawalAllowedInInsurance = _calcPercentage(user.deposit, insuranceTrigger);
+            require(maxWithdrawalAllowedInInsurance < user.withdrawn); // if contract is in insurance trigger, do not allow withdrawals for the users who already have withdrawn more then 35%
+
+            if (user.withdrawn.add(availableAmount) > maxWithdrawalAllowedInInsurance) {
+                availableAmount = maxWithdrawalAllowedInInsurance - user.withdrawn;
+            }
+        }
+
         fourRXToken.transfer(user.wallet, availableAmount.sub(penalty));
 
         user.withdrawn = user.withdrawn.add(availableAmount);
         user.lastWithdrawalAt = block.timestamp;
         user.holdFrom = block.timestamp;
 
+        checkForInsuranceTrigger();
 
         emit Withdraw(user.wallet, availableAmount.sub(penalty));
     }

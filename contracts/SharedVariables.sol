@@ -13,7 +13,7 @@ contract SharedVariables is SafePercentageCalculator, InterestCalculator, Events
     IERC20 fourRXToken;
     uint maxContractRewards = 200000; // 2000%
     uint lpCommission = 1000;
-    uint refCommission = 800;
+    uint refCommission = 700;
 
     uint devCommission = 5000; // 5%
     address devAddress = 0x64B8cb4C04Ba902010856d913B4e5DF940748Bf2; // Dummy address replace it for prod/dev
@@ -29,9 +29,13 @@ contract SharedVariables is SafePercentageCalculator, InterestCalculator, Events
 
     uint holdBonusUnitBonus = 2; // 0.02% hold bonus for each 12 hours of hold
     uint maxHoldBonus = 100; // Maximum 1% hold bonus
-    uint holdBonusUnlocksAt = 1000; // User will only get hold bonus if his rewards are more then 10% of his deposit
+    uint holdBonusUnlocksAt = 300; // User will only get hold bonus if his rewards are more then 10% of his deposit
 
     uint maxWithdrawalOverTenPercent = 300; // Max daily withdrawal limit if user is above 10%
+
+    uint insuranceTrigger = 3500; // trigger insurance with contract balance fall below 35%
+
+    bool isInInsuranceState = false; // if contract is only allowing insured money this becomes true;
 
     uint maxContractBalance;
 

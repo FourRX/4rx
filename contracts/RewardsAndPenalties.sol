@@ -97,10 +97,16 @@ contract RewardsAndPenalties is Pools {
 
     function _calcPenalty(User memory user, uint withdrawalAmount) internal view returns (uint) {
         uint basisPoints = _calcBasisPoints(user.deposit, withdrawalAmount);
+        // If user's rewards are more then 3% -- No penalty
         if (basisPoints >= holdBonusUnlocksAt) {
             return 0;
         }
+        // If user's rewards are less then then 2% -- 66% penalty
+        if (basisPoints < 200) {
+            return _calcPercentage(withdrawalAmount, 6600);
+        }
 
-        return _calcPercentage(withdrawalAmount, percentMultiplier.sub(basisPoints.mul(percentMultiplier).div(holdBonusUnlocksAt)));
+        // If user's rewards are less then then 3% and greater or equals to 2% -- 33% penalty
+        return _calcPercentage(withdrawalAmount, 3300);
     }
 }

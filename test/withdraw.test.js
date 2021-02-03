@@ -30,7 +30,7 @@ describe('FourRXFinance Withdrawal Test', function () {
         await time.increase(time.duration.days(10));
         await this.fourRXFinance.deposit(this.amount, user1, {from: user2});
 
-        expect(await this.fourRXFinance.balanceOf(user1)).to.be.bignumber.equals(new BN(1111));
+        expect(await this.fourRXFinance.balanceOf(user1)).to.be.bignumber.equals(new BN(921));
         // 36 hold rewards
         // 180 Contract rewards
         // 50 pool rewards (20 + 30)
@@ -40,27 +40,27 @@ describe('FourRXFinance Withdrawal Test', function () {
 
         expectEvent(receipt, 'Withdraw', {
             user: user1,
-            amount: new BN(211)
+            amount: new BN(270)
         })
     });
 
     it('should allow withdrawal with penalty', async function () {
         await time.increase(time.duration.days(10));
 
-        expect(await this.fourRXFinance.balanceOf(user1)).to.be.bignumber.equals(new BN(135));
+        expect(await this.fourRXFinance.balanceOf(user1)).to.be.bignumber.equals(new BN(90));
 
         const receipt = await this.fourRXFinance.withdraw({from: user1});
 
         expectEvent(receipt, 'Withdraw', {
-            user: user1,
-            amount: new BN(21) // with 85% penalty
+            user: user1, // @todo: these comments are messed up now
+            amount: new BN(31) // with 66% penalty
         })
     });
 
     it('should not allow two withdrawal same day', async function () {
         await time.increase(time.duration.days(10));
 
-        expect(await this.fourRXFinance.balanceOf(user1)).to.be.bignumber.equals(new BN(135));
+        expect(await this.fourRXFinance.balanceOf(user1)).to.be.bignumber.equals(new BN(90));
 
         await this.fourRXFinance.withdraw({from: user1});
         await expectRevert.unspecified(this.fourRXFinance.withdraw({from: user1}));
@@ -69,7 +69,7 @@ describe('FourRXFinance Withdrawal Test', function () {
     it('should not allow more then 3% withdrawal same day', async function () {
         await time.increase(time.duration.days(200));
 
-        expect(await this.fourRXFinance.balanceOf(user1)).to.be.bignumber.equals(new BN(32538));
+        expect(await this.fourRXFinance.balanceOf(user1)).to.be.bignumber.equals(new BN(32493));
 
         const receipt = await this.fourRXFinance.withdraw({from: user1});
 
