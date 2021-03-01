@@ -45,8 +45,13 @@ contract SharedVariables is SafePercentageCalculator, InterestCalculator, Events
     uint refPoolBalance;
     uint sponsorPoolBalance;
 
-    address[] refPoolUsers = new address[](12);
-    address[] sponsorPoolUsers = new address[](10);
+    struct PoolUser {
+        address user;
+        uint investmentId;
+    }
+
+    PoolUser[] refPoolUsers = new PoolUser[](12);
+    PoolUser[] sponsorPoolUsers = new PoolUser[](10);
 
     struct RefPool {
         uint cycle;
@@ -58,14 +63,18 @@ contract SharedVariables is SafePercentageCalculator, InterestCalculator, Events
         uint amount;
     }
 
-    struct User {
-        address wallet; // Wallet Address
-        bool registered;
+    struct Uplink {
+        address uplinkAddress;
+        uint uplinkInvestmentId;
+    }
+
+    struct Investment {
+        uint id;
         bool active;
         uint interestCountFrom; // TimeStamp from which interest should be counted
         uint holdFrom; // Timestamp from which hold should be counted
         uint deposit; // Initial Deposit
-        address uplink; // Referrer
+        Uplink uplink; // Referrer
         uint refCommission; // Ref rewards
         uint refPoolRewards; // Ref Pool Rewards
         uint sponsorPoolRewards; // Sponsor Pool Rewards
@@ -73,6 +82,12 @@ contract SharedVariables is SafePercentageCalculator, InterestCalculator, Events
         RefPool refPool; // To store this user's last 24 hour RefPool entries
         SponsorPool sponsorPool; // To store this user's last 24 hour Sponsor Pool entries
         uint withdrawn;
+    }
+
+    struct User {
+        address wallet; // Wallet Address
+        bool registered;
+        Investment[] investments;
     }
 
     mapping (address => User) users;

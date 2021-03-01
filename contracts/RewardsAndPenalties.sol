@@ -5,13 +5,16 @@ import "./Pools.sol";
 
 contract RewardsAndPenalties is Pools {
 
-    function _distributeReferralReward(uint amount, address uplink) internal {
-        if (uplink != address(0)) {
-            User storage uplinkUser = users[uplink];
-            uint commission = uplinkUser.refCommission.add(_calcPercentage(amount, refCommission));
-            uplinkUser.refCommission = commission;
-            _updateUserRefPool(commission, uplinkUser);
-            _updateRefPoolUsers(uplinkUser);
+    function _distributeReferralReward(uint amount, Investment memory investment) internal {
+        if (investment.uplink.uplinkAddress != address(0) && users[investment.uplink.uplinkAddress].investments[investment.uplink.uplinkInvestmentId].active) {
+            User storage uplinkUser = users[investment.uplink.uplinkAddress];
+
+            uint commission = _calcPercentage(amount, refCommission);
+
+            uplinkUser.investments[investment.uplink.uplinkInvestmentId].refCommission = uplinkUser.investments[investment.uplink.uplinkInvestmentId].refCommission.add(commission);
+
+            _updateInvestmentRefPool(commission, uplinkUser.investments[investment.uplink.uplinkInvestmentId]);
+            _updateRefPoolUsers(uplinkUser, investment);
         }
     }
 
