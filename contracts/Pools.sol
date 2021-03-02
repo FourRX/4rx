@@ -21,23 +21,6 @@ contract Pools is SharedVariables {
         poolDrewAt = block.timestamp;
     }
 
-    function _shiftPool(uint startIndex, PoolUser memory shiftUser, PoolUser[] storage pool) internal {
-        if (shiftUser.user != address(0)) {
-            PoolUser memory nextUser;
-
-            for (uint i = startIndex; i < pool.length; i++) {
-
-                if (shiftUser.user == address(0)) {
-                    break;
-                }
-
-                nextUser = pool[i];
-                pool[i] = shiftUser;
-                shiftUser = nextUser;
-            }
-        }
-    }
-
     function _updateSponsorPoolUsers(User memory user, Investment memory investment) internal {
         if (sponsorPoolUsers[sponsorPoolUsers.length.sub(1)].user == address(0)
             || investment.sponsorPool.amount > users[sponsorPoolUsers[sponsorPoolUsers.length.sub(1)].user].investments[sponsorPoolUsers[sponsorPoolUsers.length.sub(1)].investmentId].sponsorPool.amount) { // either last user is not set or last user's sponsor balance is less then this user
@@ -56,22 +39,23 @@ contract Pools is SharedVariables {
                     shiftUser = sponsorPoolUsers[i];
                     sponsorPoolUsers[i].user = user.wallet;
                     sponsorPoolUsers[i].investmentId = investment.id;
-                    _shiftPool(i, shiftUser, sponsorPoolUsers);
+                    PoolUser memory nextUser;
+                    for (uint j = i; i < sponsorPoolUsers.length; j++) {
+
+                        if (shiftUser.user == address(0)) {
+                            break;
+                        }
+
+                        nextUser = sponsorPoolUsers[j];
+                        sponsorPoolUsers[j] = shiftUser;
+                        shiftUser = nextUser;
+                    }
+//                    _shiftPool(i, shiftUser, sponsorPoolUsers);
                     break;
                 }
             }
         }
     }
-
-    // Update current user's sponsor pool entry
-//    function _updateUserSponsorPool(uint amount, User storage user) internal {
-//        if (user.sponsorPool.cycle != poolCycle) {
-//            user.sponsorPool.cycle = poolCycle;
-//            user.sponsorPool.amount = 0;
-//        }
-//
-//        user.sponsorPool.amount = user.sponsorPool.amount.add(amount);
-//    }
 
     // Reorganise top ref-pool users to draw pool for
     function _updateRefPoolUsers(User memory user, Investment memory investment) internal {
@@ -92,7 +76,18 @@ contract Pools is SharedVariables {
                     shiftUser = refPoolUsers[i];
                     refPoolUsers[i].user = user.wallet;
                     refPoolUsers[i].investmentId = investment.id;
-                    _shiftPool(i, shiftUser, refPoolUsers);
+                    PoolUser memory nextUser;
+                    for (uint j = i; i < refPoolUsers.length; j++) {
+
+                        if (shiftUser.user == address(0)) {
+                            break;
+                        }
+
+                        nextUser = refPoolUsers[j];
+                        refPoolUsers[j] = shiftUser;
+                        shiftUser = nextUser;
+                    }
+//                    _shiftPool(i, shiftUser, refPoolUsers);
                     break;
                 }
             }

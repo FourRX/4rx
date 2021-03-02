@@ -48,48 +48,48 @@ contract RewardsAndPenalties is Pools {
         return _calcPercentage(amount, rewardPercent);
     }
 
-    function _calcContractBonus(User memory user) internal view returns (uint) {
+    function _calcContractBonus(Investment memory investment) internal view returns (uint) {
         uint contractBonusPercent = fourRXToken.balanceOf(address(this)).div(contractBonusUnit).mul(contractBonusUnitBonus);
 
         if (contractBonusPercent > maxContractBonus) {
             contractBonusPercent = maxContractBonus;
         }
 
-        return _calcPercentage(user.deposit, contractBonusPercent);
+        return _calcPercentage(investment.deposit, contractBonusPercent);
     }
 
-    function _calcHoldRewards(User memory user) internal view returns (uint) {
-        uint holdPeriods = _calcDays(user.holdFrom, block.timestamp).mul(2);
+    function _calcHoldRewards(Investment memory investment) internal view returns (uint) {
+        uint holdPeriods = _calcDays(investment.holdFrom, block.timestamp).mul(2);
         uint holdBonusPercent = holdPeriods.mul(holdBonusUnitBonus);
 
         if (holdBonusPercent > maxHoldBonus) {
             holdBonusPercent = maxHoldBonus;
         }
 
-        return _calcPercentage(user.deposit, holdBonusPercent);
+        return _calcPercentage(investment.deposit, holdBonusPercent);
     }
 
-    function _calcRewardsWithoutHoldBonus(User memory user) internal view returns (uint) {
-        uint poolRewardsAmount = user.refPoolRewards.add(user.sponsorPoolRewards);
-        uint refCommissionAmount = user.refCommission;
+    function _calcRewardsWithoutHoldBonus(Investment memory investment) internal view returns (uint) {
+        uint poolRewardsAmount = investment.refPoolRewards.add(investment.sponsorPoolRewards);
+        uint refCommissionAmount = investment.refCommission;
 
-        uint interest = _calcPercentage(user.deposit, getInterestTillDays(_calcDays(user.interestCountFrom, block.timestamp)));
+        uint interest = _calcPercentage(investment.deposit, getInterestTillDays(_calcDays(investment.interestCountFrom, block.timestamp)));
 
-        uint contractBonus = _calcContractBonus(user);
+        uint contractBonus = _calcContractBonus(investment);
 
         uint totalRewardsWithoutHoldBonus = poolRewardsAmount.add(refCommissionAmount).add(interest).add(contractBonus);
 
         return totalRewardsWithoutHoldBonus;
     }
 
-    function _calcRewards(User memory user) internal view returns (uint) {
-        uint rewards = _calcRewardsWithoutHoldBonus(user);
+    function _calcRewards(Investment memory investment) internal view returns (uint) {
+        uint rewards = _calcRewardsWithoutHoldBonus(investment);
 
-        if (_calcBasisPoints(user.deposit, rewards) >= holdBonusUnlocksAt) {
-            rewards = rewards.add(_calcHoldRewards(user));
+        if (_calcBasisPoints(investment.deposit, rewards) >= holdBonusUnlocksAt) {
+            rewards = rewards.add(_calcHoldRewards(investment));
         }
 
-        uint maxRewards = _calcPercentage(user.deposit, maxContractRewards);
+        uint maxRewards = _calcPercentage(investment.deposit, maxContractRewards);
 
         if (rewards > maxRewards) {
             rewards = maxRewards;
@@ -98,8 +98,8 @@ contract RewardsAndPenalties is Pools {
         return rewards;
     }
 
-    function _calcPenalty(User memory user, uint withdrawalAmount) internal view returns (uint) {
-        uint basisPoints = _calcBasisPoints(user.deposit, withdrawalAmount);
+    function _calcPenalty(Investment memory investment, uint withdrawalAmount) internal view returns (uint) {
+        uint basisPoints = _calcBasisPoints(investment.deposit, withdrawalAmount);
         // If user's rewards are more then 3% -- No penalty
         if (basisPoints >= holdBonusUnlocksAt) {
             return 0;

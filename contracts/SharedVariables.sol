@@ -50,8 +50,8 @@ contract SharedVariables is SafePercentageCalculator, InterestCalculator, Events
         uint investmentId;
     }
 
-    PoolUser[] refPoolUsers = new PoolUser[](12);
-    PoolUser[] sponsorPoolUsers = new PoolUser[](10);
+    PoolUser[12] public refPoolUsers;
+    PoolUser[10] public sponsorPoolUsers;
 
     struct RefPool {
         uint cycle;

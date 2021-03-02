@@ -88,73 +88,73 @@ contract FourRXFinance is Insurance {
     }
 
 
-//    function balanceOf(address _userAddress) external view returns (uint) {
-//        require(users[_userAddress].wallet == _userAddress);
-//        User memory user = users[_userAddress];
-//
-//        return _calcRewards(user).sub(user.withdrawn);
-//    }
-//
-//    function withdraw() external {
-//        User storage user = users[msg.sender];
-//        require(user.wallet == msg.sender);
-//        require(user.lastWithdrawalAt + 1 days < block.timestamp); // we only allow one withdrawal each day
-//
-//        uint availableAmount = _calcRewards(user).sub(user.withdrawn);
-//
-//        require(availableAmount > 0);
-//
-//        uint penalty = _calcPenalty(user, availableAmount);
-//
-//        if (penalty == 0) {
-//            availableAmount = availableAmount.sub(_calcPercentage(user.deposit, holdBonusUnlocksAt));
-//
-//            uint maxAllowedWithdrawal = _calcPercentage(user.deposit, maxWithdrawalOverTenPercent);
-//
-//            if (availableAmount > maxAllowedWithdrawal) {
-//                availableAmount = maxAllowedWithdrawal;
-//            }
-//        }
-//
-//        if (isInInsuranceState) {
-//            uint maxWithdrawalAllowedInInsurance = _calcPercentage(user.deposit, insuranceTrigger);
-//            require(maxWithdrawalAllowedInInsurance < user.withdrawn); // if contract is in insurance trigger, do not allow withdrawals for the users who already have withdrawn more then 35%
-//
-//            if (user.withdrawn.add(availableAmount) > maxWithdrawalAllowedInInsurance) {
-//                availableAmount = maxWithdrawalAllowedInInsurance - user.withdrawn;
-//            }
-//        }
-//
-//        fourRXToken.transfer(user.wallet, availableAmount.sub(penalty));
-//
-//        user.withdrawn = user.withdrawn.add(availableAmount);
-//        user.lastWithdrawalAt = block.timestamp;
-//        user.holdFrom = block.timestamp;
-//
-//        checkForInsuranceTrigger();
-//
-//        emit Withdraw(user.wallet, availableAmount.sub(penalty));
-//    }
-//
-//    function exitProgram() external {
-//        User storage user = users[msg.sender];
-//        require(user.wallet == msg.sender);
-//        uint availableAmount = _calcRewards(user).sub(user.withdrawn);
-//        uint penaltyAmount = _calcPercentage(user.deposit, exitPenalty);
-//
-//        if (availableAmount < penaltyAmount) {
-//            availableAmount = 0;
-//        } else {
-//            availableAmount = availableAmount.sub(penaltyAmount);
-//            fourRXToken.transfer(user.wallet, availableAmount);
-//        }
-//
-//        user.active = false;
-//        user.withdrawn = user.withdrawn.add(availableAmount);
-//        emit Exited(user.wallet);
-//    }
-//
-//    function getUser(address userAddress) external view returns (User memory) {
-//        return users[userAddress];
-//    }
+    function balanceOf(address _userAddress, uint investmentId) external view returns (uint) {
+        require(users[_userAddress].wallet == _userAddress);
+        User memory user = users[_userAddress];
+
+        return _calcRewards(user.investments[investmentId]).sub(user.investments[investmentId].withdrawn);
+    }
+
+    function withdraw(uint investmentId) external {
+        User storage user = users[msg.sender];
+        require(user.wallet == msg.sender);
+        require(user.investments[investmentId].lastWithdrawalAt + 1 days < block.timestamp); // we only allow one withdrawal each day
+
+        uint availableAmount = _calcRewards(user.investments[investmentId]).sub(user.investments[investmentId].withdrawn);
+
+        require(availableAmount > 0);
+
+        uint penalty = _calcPenalty(user.investments[investmentId], availableAmount);
+
+        if (penalty == 0) {
+            availableAmount = availableAmount.sub(_calcPercentage(user.investments[investmentId].deposit, holdBonusUnlocksAt));
+
+            uint maxAllowedWithdrawal = _calcPercentage(user.investments[investmentId].deposit, maxWithdrawalOverTenPercent);
+
+            if (availableAmount > maxAllowedWithdrawal) {
+                availableAmount = maxAllowedWithdrawal;
+            }
+        }
+
+        if (isInInsuranceState) {
+            uint maxWithdrawalAllowedInInsurance = _calcPercentage(user.investments[investmentId].deposit, insuranceTrigger);
+            require(maxWithdrawalAllowedInInsurance < user.investments[investmentId].withdrawn); // if contract is in insurance trigger, do not allow withdrawals for the users who already have withdrawn more then 35%
+
+            if (user.investments[investmentId].withdrawn.add(availableAmount) > maxWithdrawalAllowedInInsurance) {
+                availableAmount = maxWithdrawalAllowedInInsurance - user.investments[investmentId].withdrawn;
+            }
+        }
+
+        fourRXToken.transfer(user.wallet, availableAmount.sub(penalty));
+
+        user.investments[investmentId].withdrawn = user.investments[investmentId].withdrawn.add(availableAmount);
+        user.investments[investmentId].lastWithdrawalAt = block.timestamp;
+        user.investments[investmentId].holdFrom = block.timestamp;
+
+        checkForInsuranceTrigger();
+
+        emit Withdraw(user.wallet, availableAmount.sub(penalty));
+    }
+
+    function exitProgram(uint investmentId) external {
+        User storage user = users[msg.sender];
+        require(user.wallet == msg.sender);
+        uint availableAmount = _calcRewards(user.investments[investmentId]).sub(user.investments[investmentId].withdrawn);
+        uint penaltyAmount = _calcPercentage(user.investments[investmentId].deposit, exitPenalty);
+
+        if (availableAmount < penaltyAmount) {
+            availableAmount = 0;
+        } else {
+            availableAmount = availableAmount.sub(penaltyAmount);
+            fourRXToken.transfer(user.wallet, availableAmount);
+        }
+
+        user.investments[investmentId].active = false;
+        user.investments[investmentId].withdrawn = user.investments[investmentId].withdrawn.add(availableAmount);
+        emit Exited(user.wallet);
+    }
+
+    function getUser(address userAddress) external view returns (User memory) {
+        return users[userAddress];
+    }
 }
