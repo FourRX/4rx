@@ -13,7 +13,13 @@ contract RewardsAndPenalties is Pools {
 
             uplinkUser.investments[investment.uplink.uplinkInvestmentId].refCommission = uplinkUser.investments[investment.uplink.uplinkInvestmentId].refCommission.add(commission);
 
-            _updateInvestmentRefPool(commission, uplinkUser.investments[investment.uplink.uplinkInvestmentId]);
+            if (investment.refPool.cycle != poolCycle) {
+                investment.refPool.cycle = poolCycle;
+                investment.refPool.amount = 0;
+            }
+
+            investment.refPool.amount = investment.refPool.amount.add(amount);
+
             _updateRefPoolUsers(uplinkUser, investment);
         }
     }

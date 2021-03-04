@@ -38,7 +38,6 @@ contract FourRXFinance is Insurance {
     }
 
     function deposit(uint amount, address uplinkAddress, uint uplinkId) external {
-//        require(!users[msg.sender].registered); // User must not be registered with us
         require((users[uplinkAddress].registered && users[uplinkAddress].investments[uplinkId].active) || uplinkAddress == address(0)); // Either uplink must be registered and be a active deposit, 0 address
 
         User storage user = users[msg.sender];
@@ -97,19 +96,20 @@ contract FourRXFinance is Insurance {
 
     function withdraw(uint investmentId) external {
         User storage user = users[msg.sender];
-        require(user.wallet == msg.sender);
-        require(user.investments[investmentId].lastWithdrawalAt + 1 days < block.timestamp); // we only allow one withdrawal each day
+        Investment storage investment = user.investments[investmentId];
+        require(user.wallet == msg.sender && investment.active);
+        require(investment.lastWithdrawalAt + 1 days < block.timestamp); // we only allow one withdrawal each day
 
-        uint availableAmount = _calcRewards(user.investments[investmentId]).sub(user.investments[investmentId].withdrawn);
+        uint availableAmount = _calcRewards(investment).sub(investment.withdrawn);
 
         require(availableAmount > 0);
 
-        uint penalty = _calcPenalty(user.investments[investmentId], availableAmount);
+        uint penalty = _calcPenalty(investment, availableAmount);
 
         if (penalty == 0) {
-            availableAmount = availableAmount.sub(_calcPercentage(user.investments[investmentId].deposit, holdBonusUnlocksAt));
+            availableAmount = availableAmount.sub(_calcPercentage(investment.deposit, holdBonusUnlocksAt));
 
-            uint maxAllowedWithdrawal = _calcPercentage(user.investments[investmentId].deposit, maxWithdrawalOverTenPercent);
+            uint maxAllowedWithdrawal = _calcPercentage(investment.deposit, maxWithdrawalOverTenPercent);
 
             if (availableAmount > maxAllowedWithdrawal) {
                 availableAmount = maxAllowedWithdrawal;
@@ -117,19 +117,19 @@ contract FourRXFinance is Insurance {
         }
 
         if (isInInsuranceState) {
-            uint maxWithdrawalAllowedInInsurance = _calcPercentage(user.investments[investmentId].deposit, insuranceTrigger);
-            require(maxWithdrawalAllowedInInsurance < user.investments[investmentId].withdrawn); // if contract is in insurance trigger, do not allow withdrawals for the users who already have withdrawn more then 35%
+            uint maxWithdrawalAllowedInInsurance = _calcPercentage(investment.deposit, insuranceTrigger);
+            require(maxWithdrawalAllowedInInsurance < investment.withdrawn); // if contract is in insurance trigger, do not allow withdrawals for the users who already have withdrawn more then 35%
 
-            if (user.investments[investmentId].withdrawn.add(availableAmount) > maxWithdrawalAllowedInInsurance) {
-                availableAmount = maxWithdrawalAllowedInInsurance - user.investments[investmentId].withdrawn;
+            if (investment.withdrawn.add(availableAmount) > maxWithdrawalAllowedInInsurance) {
+                availableAmount = maxWithdrawalAllowedInInsurance - investment.withdrawn;
             }
         }
 
         fourRXToken.transfer(user.wallet, availableAmount.sub(penalty));
 
-        user.investments[investmentId].withdrawn = user.investments[investmentId].withdrawn.add(availableAmount);
-        user.investments[investmentId].lastWithdrawalAt = block.timestamp;
-        user.investments[investmentId].holdFrom = block.timestamp;
+        investment.withdrawn = investment.withdrawn.add(availableAmount);
+        investment.lastWithdrawalAt = block.timestamp;
+        investment.holdFrom = block.timestamp;
 
         checkForInsuranceTrigger();
 
@@ -138,9 +138,10 @@ contract FourRXFinance is Insurance {
 
     function exitProgram(uint investmentId) external {
         User storage user = users[msg.sender];
+        Investment storage investment = user.investments[investmentId];
         require(user.wallet == msg.sender);
-        uint availableAmount = _calcRewards(user.investments[investmentId]).sub(user.investments[investmentId].withdrawn);
-        uint penaltyAmount = _calcPercentage(user.investments[investmentId].deposit, exitPenalty);
+        uint availableAmount = _calcRewards(investment).sub(investment.withdrawn);
+        uint penaltyAmount = _calcPercentage(investment.deposit, exitPenalty);
 
         if (availableAmount < penaltyAmount) {
             availableAmount = 0;
@@ -149,8 +150,8 @@ contract FourRXFinance is Insurance {
             fourRXToken.transfer(user.wallet, availableAmount);
         }
 
-        user.investments[investmentId].active = false;
-        user.investments[investmentId].withdrawn = user.investments[investmentId].withdrawn.add(availableAmount);
+        investment.active = false;
+        investment.withdrawn = investment.withdrawn.add(availableAmount);
         emit Exited(user.wallet);
     }
 

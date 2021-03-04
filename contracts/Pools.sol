@@ -94,15 +94,6 @@ contract Pools is SharedVariables {
         }
     }
 
-    function _updateInvestmentRefPool(uint amount, Investment storage investment) internal {
-        if (investment.refPool.cycle != poolCycle) {
-            investment.refPool.cycle = poolCycle;
-            investment.refPool.amount = 0;
-        }
-
-        investment.refPool.amount = investment.refPool.amount.add(amount);
-    }
-
     function drawPool() internal {
         if (block.timestamp > poolDrewAt + 1 days) {
             for (uint i = 0; i < refPoolUsers.length; i++) {
