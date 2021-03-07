@@ -37,30 +37,48 @@ contract FourRXFinance is Insurance {
         _resetPools();
     }
 
-    function deposit(uint amount, address uplink) external {
-        require(!users[msg.sender].registered); // User must not be registered with us
-        require(users[uplink].active || uplink == address(0)); // Either uplink must be registered with us and be a active user or 0 address
-
-        require(fourRXToken.transferFrom(msg.sender, address(this), amount));
+    function deposit(uint amount, address uplinkAddress, uint uplinkId) external {
+        require((users[uplinkAddress].registered && users[uplinkAddress].investments[uplinkId].active) || uplinkAddress == address(0)); // Either uplink must be registered and be a active deposit, 0 address
 
         User storage user = users[msg.sender];
 
+        if (users[msg.sender].investments.length > 0) {
+            require(amount > users[msg.sender].investments[user.investments.length - 1].deposit.mul(2)); // deposit amount must be greater 2x then last deposit
+        }
+
+        require(fourRXToken.transferFrom(msg.sender, address(this), amount));
+
+        uint depositReward = _calcDepositRewards(amount);
+
+        Investment memory investment;
+
         user.wallet = msg.sender;
         user.registered = true;
-        user.active = true;
-        user.uplink = uplink;
-        user.interestCountFrom = block.timestamp;
-        user.holdFrom = block.timestamp;
-        user.deposit = amount.sub(_calcPercentage(amount, lpCommission)).add(_calcDepositRewards(amount)); // Deduct LP Commission + add deposit rewards
-        _updateUserSponsorPool(amount, user);
-        _updateSponsorPoolUsers(user);
 
-        _distributeReferralReward(amount, user.uplink);
+        investment.id = user.investments.length;
+        investment.active = true;
+        investment.interestCountFrom = block.timestamp;
+        investment.holdFrom = block.timestamp;
+
+        investment.deposit = amount.sub(_calcPercentage(amount, lpCommission)).add(depositReward); // Deduct LP Commission + add deposit rewards
+        investment.uplink.uplinkAddress = uplinkAddress;
+        investment.uplink.uplinkInvestmentId = uplinkId;
+
+        investment.sponsorPool.cycle = poolCycle;
+        investment.sponsorPool.amount = amount;
+
+        _updateSponsorPoolUsers(user, investment);
+
+        _distributeReferralReward(amount, investment);
+
+        user.investments.push(investment);
 
         refPoolBalance = refPoolBalance.add(_calcPercentage(amount, depositRefPoolCommission));
         sponsorPoolBalance = sponsorPoolBalance.add(_calcPercentage(amount, depositSponsorPoolCommission));
 
         drawPool();
+
+        fourRXToken.transfer(devAddress, _calcPercentage(amount, devCommission));
 
         uint currentContractBalance = fourRXToken.balanceOf(address(this));
 
@@ -68,34 +86,39 @@ contract FourRXFinance is Insurance {
             maxContractBalance = currentContractBalance;
         }
 
-        fourRXToken.transfer(devAddress, _calcPercentage(amount, devCommission));
+        totalDeposits = totalDeposits.add(amount);
+        totalInvestments = totalInvestments.add(1);
+        totalActiveInvestments = totalActiveInvestments.add(1);
+        totalDepositRewards = totalDepositRewards.add(depositReward);
 
-        emit Deposit(msg.sender, uplink, amount);
+        emit Deposit(msg.sender, uplinkAddress, amount);
     }
 
 
-    function balanceOf(address _userAddress) external view returns (uint) {
+    function balanceOf(address _userAddress, uint investmentId) external view returns (uint) {
         require(users[_userAddress].wallet == _userAddress);
         User memory user = users[_userAddress];
 
-        return _calcRewards(user).sub(user.withdrawn);
+        return _calcRewards(user.investments[investmentId]).sub(user.investments[investmentId].withdrawn);
     }
 
-    function withdraw() external {
+    function withdraw(uint investmentId) external {
         User storage user = users[msg.sender];
-        require(user.wallet == msg.sender);
-        require(user.lastWithdrawalAt + 1 days < block.timestamp); // we only allow one withdrawal each day
+        Investment storage investment = user.investments[investmentId];
+        require(user.wallet == msg.sender && investment.active); // investment should be active
 
-        uint availableAmount = _calcRewards(user).sub(user.withdrawn);
+        require(investment.lastWithdrawalAt + 1 days < block.timestamp); // we only allow one withdrawal each day
+
+        uint availableAmount = _calcRewards(investment).sub(investment.withdrawn).sub(investment.penalty);
 
         require(availableAmount > 0);
 
-        uint penalty = _calcPenalty(user, availableAmount);
+        uint penalty = _calcPenalty(investment, availableAmount);
 
         if (penalty == 0) {
-            availableAmount = availableAmount.sub(_calcPercentage(user.deposit, holdBonusUnlocksAt));
+            availableAmount = availableAmount.sub(_calcPercentage(investment.deposit, holdBonusUnlocksAt)); // Only allow withdrawal if available is more then 10% of base
 
-            uint maxAllowedWithdrawal = _calcPercentage(user.deposit, maxWithdrawalOverTenPercent);
+            uint maxAllowedWithdrawal = _calcPercentage(investment.deposit, maxWithdrawalOverTenPercent);
 
             if (availableAmount > maxAllowedWithdrawal) {
                 availableAmount = maxAllowedWithdrawal;
@@ -103,44 +126,77 @@ contract FourRXFinance is Insurance {
         }
 
         if (isInInsuranceState) {
-            uint maxWithdrawalAllowedInInsurance = _calcPercentage(user.deposit, insuranceTrigger);
-            require(maxWithdrawalAllowedInInsurance < user.withdrawn); // if contract is in insurance trigger, do not allow withdrawals for the users who already have withdrawn more then 35%
-
-            if (user.withdrawn.add(availableAmount) > maxWithdrawalAllowedInInsurance) {
-                availableAmount = maxWithdrawalAllowedInInsurance - user.withdrawn;
-            }
+            availableAmount = getInsuredAvailableAmount(investment, availableAmount);
         }
 
-        fourRXToken.transfer(user.wallet, availableAmount.sub(penalty));
+        availableAmount = availableAmount.sub(penalty);
 
-        user.withdrawn = user.withdrawn.add(availableAmount);
-        user.lastWithdrawalAt = block.timestamp;
-        user.holdFrom = block.timestamp;
+        fourRXToken.transfer(user.wallet, availableAmount);
 
-        checkForInsuranceTrigger();
+        investment.withdrawn = investment.withdrawn.add(availableAmount);
+        investment.lastWithdrawalAt = block.timestamp;
+        investment.holdFrom = block.timestamp;
 
-        emit Withdraw(user.wallet, availableAmount.sub(penalty));
+        investment.penalty = investment.penalty.add(penalty);
+
+        totalPenalty = totalPenalty.add(penalty);
+
+        if (investment.withdrawn >= _calcPercentage(investment.deposit, maxContractRewards)) {
+            investment.active = false; // if investment has withdrawn equals to or more then the max amount, then mark investment in-active
+            totalActiveInvestments = totalActiveInvestments.sub(1);
+        }
+
+        checkForBaseInsuranceTrigger();
+
+        totalWithdrawn = totalWithdrawn.add(availableAmount);
+
+        emit Withdraw(user.wallet, availableAmount);
     }
 
-    function exitProgram() external {
+    function exitProgram(uint investmentId) external {
         User storage user = users[msg.sender];
         require(user.wallet == msg.sender);
-        uint availableAmount = _calcRewards(user).sub(user.withdrawn);
-        uint penaltyAmount = _calcPercentage(user.deposit, exitPenalty);
+        Investment storage investment = user.investments[investmentId];
+        uint availableAmount = investment.deposit;
+        uint penaltyAmount = _calcPercentage(investment.deposit, exitPenalty);
 
-        if (availableAmount < penaltyAmount) {
-            availableAmount = 0;
-        } else {
-            availableAmount = availableAmount.sub(penaltyAmount);
-            fourRXToken.transfer(user.wallet, availableAmount);
-        }
+        availableAmount = availableAmount.sub(penaltyAmount);
 
-        user.active = false;
-        user.withdrawn = user.withdrawn.add(availableAmount);
+        uint withdrawn = investment.withdrawn.add(investment.penalty);
+        require(withdrawn <= availableAmount);
+        availableAmount = availableAmount.sub(withdrawn); // @todo: discuss this new implementation with Assaf
+
+        fourRXToken.transfer(user.wallet, availableAmount);
+
+        investment.active = false;
+        investment.withdrawn = investment.withdrawn.add(availableAmount);
+        investment.penalty = investment.penalty.add(penaltyAmount);
+
+        totalActiveInvestments = totalActiveInvestments.sub(1);
+        totalExited = totalExited.add(1);
+
+        totalWithdrawn = totalWithdrawn.add(availableAmount);
+        totalPenalty = totalPenalty.add(penaltyAmount);
+
         emit Exited(user.wallet);
+    }
+
+    function insureInvestment(uint investmentId) external {
+        User storage user = users[msg.sender];
+        require(user.wallet == msg.sender);
+        Investment storage investment = user.investments[investmentId];
+        _insureInvestment(investment);
     }
 
     function getUser(address userAddress) external view returns (User memory) {
         return users[userAddress];
+    }
+
+    function getPoolInfo() external view returns (uint, uint, uint, uint, PoolUser[10] memory, PoolUser[12] memory) {
+        return (poolDrewAt, poolCycle, sponsorPoolBalance, refPoolBalance, sponsorPoolUsers, refPoolUsers);
+    }
+
+    function getContractInfo() external view returns (uint, uint, uint, uint, uint, uint, uint, uint, uint, uint, uint) {
+        return (maxContractBalance, totalDeposits, totalWithdrawn, totalInvestments, totalActiveInvestments, totalRefRewards, totalRefPoolRewards, totalSponsorPoolRewards, totalDepositRewards, totalPenalty, totalExited);
     }
 }

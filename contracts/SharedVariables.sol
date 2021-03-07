@@ -11,7 +11,7 @@ contract SharedVariables is SafePercentageCalculator, InterestCalculator, Events
     using SafeMath for uint;
 
     IERC20 fourRXToken;
-    uint maxContractRewards = 200000; // 2000%
+    uint maxContractRewards = 30000; // 300%
     uint lpCommission = 1000;
     uint refCommission = 700;
 
@@ -33,10 +33,6 @@ contract SharedVariables is SafePercentageCalculator, InterestCalculator, Events
 
     uint maxWithdrawalOverTenPercent = 300; // Max daily withdrawal limit if user is above 10%
 
-    uint insuranceTrigger = 3500; // trigger insurance with contract balance fall below 35%
-
-    bool isInInsuranceState = false; // if contract is only allowing insured money this becomes true;
-
     uint maxContractBalance;
 
     uint poolCycle;
@@ -45,8 +41,13 @@ contract SharedVariables is SafePercentageCalculator, InterestCalculator, Events
     uint refPoolBalance;
     uint sponsorPoolBalance;
 
-    address[] refPoolUsers = new address[](12);
-    address[] sponsorPoolUsers = new address[](10);
+    struct PoolUser {
+        address user;
+        uint investmentId;
+    }
+
+    PoolUser[12] public refPoolUsers;
+    PoolUser[10] public sponsorPoolUsers;
 
     struct RefPool {
         uint cycle;
@@ -58,14 +59,18 @@ contract SharedVariables is SafePercentageCalculator, InterestCalculator, Events
         uint amount;
     }
 
-    struct User {
-        address wallet; // Wallet Address
-        bool registered;
+    struct Uplink {
+        address uplinkAddress;
+        uint uplinkInvestmentId;
+    }
+
+    struct Investment {
+        uint id;
         bool active;
         uint interestCountFrom; // TimeStamp from which interest should be counted
         uint holdFrom; // Timestamp from which hold should be counted
         uint deposit; // Initial Deposit
-        address uplink; // Referrer
+        Uplink uplink; // Referrer
         uint refCommission; // Ref rewards
         uint refPoolRewards; // Ref Pool Rewards
         uint sponsorPoolRewards; // Sponsor Pool Rewards
@@ -73,6 +78,14 @@ contract SharedVariables is SafePercentageCalculator, InterestCalculator, Events
         RefPool refPool; // To store this user's last 24 hour RefPool entries
         SponsorPool sponsorPool; // To store this user's last 24 hour Sponsor Pool entries
         uint withdrawn;
+        bool optInInsured; // Is insured ???
+        uint penalty;
+    }
+
+    struct User {
+        address wallet; // Wallet Address
+        bool registered;
+        Investment[] investments;
     }
 
     mapping (address => User) users;
@@ -81,4 +94,16 @@ contract SharedVariables is SafePercentageCalculator, InterestCalculator, Events
     uint[] public sponsorPoolBonuses;
 
     uint[] public depositBonuses;
+
+    // Stats
+    uint totalDeposits;
+    uint totalWithdrawn;
+    uint totalInvestments;
+    uint totalActiveInvestments;
+    uint totalRefRewards;
+    uint totalRefPoolRewards;
+    uint totalSponsorPoolRewards;
+    uint totalDepositRewards;
+    uint totalPenalty;
+    uint totalExited;
 }

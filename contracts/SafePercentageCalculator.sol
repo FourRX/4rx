@@ -8,7 +8,7 @@ contract SafePercentageCalculator {
 
     uint percentMultiplier = 10000;
     uint minBasisPoints = 0;
-    uint maxBasisPoints = 200000; // 2000% max
+    uint maxBasisPoints = 200000;
 
     function _calcPercentage(uint amount, uint basisPoints) internal view returns (uint) {
         require(basisPoints >= minBasisPoints);

@@ -22,7 +22,7 @@ describe('FourRXFinance Registration Test', function () {
 
     it('should revert since user has not approve any deposit to contract', async function () {
         await expectRevert(
-            this.fourRXFinance.deposit(1000, constants.ZERO_ADDRESS),
+            this.fourRXFinance.deposit(1000, constants.ZERO_ADDRESS, 0),
             'ERC20: transfer amount exceeds balance.'
         );
     });
@@ -37,7 +37,7 @@ describe('FourRXFinance Registration Test', function () {
             value: new BN(amount)
         })
 
-        receipt = await this.fourRXFinance.deposit(amount, constants.ZERO_ADDRESS, {from: user1});
+        receipt = await this.fourRXFinance.deposit(amount, constants.ZERO_ADDRESS, 0, {from: user1});
 
         expectEvent(receipt, 'Deposit', {
             user: user1,
