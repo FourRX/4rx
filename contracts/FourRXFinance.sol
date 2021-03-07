@@ -5,8 +5,6 @@ pragma experimental ABIEncoderV2;
 import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import "./Insurance.sol";
 
-import 'hardhat/console.sol';
-
 contract FourRXFinance is Insurance {
 
     constructor(address fourRXTokenAddress) public {
