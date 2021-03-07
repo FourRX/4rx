@@ -110,6 +110,9 @@ contract Pools is SharedVariables {
                 user.investments[sponsorPoolUsers[i].investmentId].sponsorPoolRewards = user.investments[sponsorPoolUsers[i].investmentId].sponsorPoolRewards.add(_calcPercentage(sponsorPoolBalance, sponsorPoolBonuses[i]));
             }
 
+            totalRefPoolRewards = totalRefPoolRewards.add(refPoolBalance);
+            totalSponsorPoolRewards = totalSponsorPoolRewards.add(sponsorPoolBalance);
+
             _resetPools();
         }
     }

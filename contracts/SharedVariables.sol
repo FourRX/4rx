@@ -11,7 +11,7 @@ contract SharedVariables is SafePercentageCalculator, InterestCalculator, Events
     using SafeMath for uint;
 
     IERC20 fourRXToken;
-    uint maxContractRewards = 200000; // 2000%
+    uint maxContractRewards = 30000; // 300%
     uint lpCommission = 1000;
     uint refCommission = 700;
 
@@ -32,10 +32,6 @@ contract SharedVariables is SafePercentageCalculator, InterestCalculator, Events
     uint holdBonusUnlocksAt = 300; // User will only get hold bonus if his rewards are more then 10% of his deposit
 
     uint maxWithdrawalOverTenPercent = 300; // Max daily withdrawal limit if user is above 10%
-
-    uint insuranceTrigger = 3500; // trigger insurance with contract balance fall below 35%
-
-    bool isInInsuranceState = false; // if contract is only allowing insured money this becomes true;
 
     uint maxContractBalance;
 
@@ -82,6 +78,8 @@ contract SharedVariables is SafePercentageCalculator, InterestCalculator, Events
         RefPool refPool; // To store this user's last 24 hour RefPool entries
         SponsorPool sponsorPool; // To store this user's last 24 hour Sponsor Pool entries
         uint withdrawn;
+        bool optInInsured; // Is insured ???
+        uint penalty;
     }
 
     struct User {
@@ -96,4 +94,16 @@ contract SharedVariables is SafePercentageCalculator, InterestCalculator, Events
     uint[] public sponsorPoolBonuses;
 
     uint[] public depositBonuses;
+
+    // Stats
+    uint totalDeposits;
+    uint totalWithdrawn;
+    uint totalInvestments;
+    uint totalActiveInvestments;
+    uint totalRefRewards;
+    uint totalRefPoolRewards;
+    uint totalSponsorPoolRewards;
+    uint totalDepositRewards;
+    uint totalPenalty;
+    uint totalExited;
 }
