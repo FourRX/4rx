@@ -5,6 +5,8 @@ pragma experimental ABIEncoderV2;
 import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import "./Insurance.sol";
 
+import 'hardhat/console.sol';
+
 contract FourRXFinance is Insurance {
 
     constructor(address fourRXTokenAddress) public {
@@ -50,7 +52,7 @@ contract FourRXFinance is Insurance {
 
         uint depositReward = _calcDepositRewards(amount);
 
-        Investment storage investment;
+        Investment memory investment;
 
         user.wallet = msg.sender;
         user.registered = true;
@@ -78,13 +80,13 @@ contract FourRXFinance is Insurance {
 
         drawPool();
 
+        fourRXToken.transfer(devAddress, _calcPercentage(amount, devCommission));
+
         uint currentContractBalance = fourRXToken.balanceOf(address(this));
 
         if (currentContractBalance > maxContractBalance) {
             maxContractBalance = currentContractBalance;
         }
-
-        fourRXToken.transfer(devAddress, _calcPercentage(amount, devCommission));
 
         totalDeposits = totalDeposits.add(amount);
         totalInvestments = totalInvestments.add(1);

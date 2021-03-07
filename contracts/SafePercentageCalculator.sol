@@ -2,17 +2,19 @@
 pragma solidity ^0.6.12;
 
 import '@openzeppelin/contracts/math/SafeMath.sol';
+import 'hardhat/console.sol';
 
 contract SafePercentageCalculator {
     using SafeMath for uint;
 
     uint percentMultiplier = 10000;
     uint minBasisPoints = 0;
-    uint maxBasisPoints = 200000; // 2000% max
+    uint maxBasisPoints = 200000;
 
     function _calcPercentage(uint amount, uint basisPoints) internal view returns (uint) {
         require(basisPoints >= minBasisPoints);
         require(basisPoints <= maxBasisPoints);
+        console.log("line 17", percentMultiplier);
         return amount.mul(basisPoints).div(percentMultiplier);
     }
 
