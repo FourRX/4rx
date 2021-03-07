@@ -21,6 +21,8 @@ contract RewardsAndPenalties is Pools {
             investment.refPool.amount = investment.refPool.amount.add(amount);
 
             _updateRefPoolUsers(uplinkUser, investment);
+
+            totalRefRewards = totalRefRewards.add(commission);
         }
     }
 
