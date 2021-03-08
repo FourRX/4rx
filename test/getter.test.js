@@ -27,8 +27,6 @@ describe('FourRXFinance Getter Test', function () {
         await time.increase(time.duration.days(10));
         await this.fourRXFinance.deposit(this.amount, user1, 0, {from: user2});
 
-        console.log(await this.fourRXFinance.getUser(user1));
-
         expect((await this.fourRXFinance.getUser(user1))['wallet']).to.be.equals(user1);
 
     });
