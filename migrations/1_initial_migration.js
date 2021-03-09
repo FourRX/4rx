@@ -1,7 +1,7 @@
-const dummyERC20Token = artifacts.require("DummyERC20Token");
+const frxToken = artifacts.require("FRX");
 const fourRXFinance = artifacts.require("FourRXFinance");
 
 module.exports = async function (deployer) {
-  await deployer.deploy(dummyERC20Token);
-  await deployer.deploy(fourRXFinance, dummyERC20Token.address);
+  await deployer.deploy(frxToken);
+  await deployer.deploy(fourRXFinance, frxToken.address);
 };
