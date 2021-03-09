@@ -1,6 +1,8 @@
 {
   "manifestVersion": "2.2",
-  "contracts": {},
+  "contracts": {
+    "DummyERC20Token": "DummyERC20Token"
+  },
   "dependencies": {},
   "name": "4RXFinance",
   "version": "1.0.0",

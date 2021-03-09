@@ -7,6 +7,11 @@
         "address": "0x6f32544D5990701580294764183E408650B3a909",
         "kind": "NonProxy",
         "bytecodeHash": "4b3bbebe8e099d86d2e7f64ccdfd8d609bc7c9ed608971212f3def4bbc9f5c6e"
+      },
+      {
+        "address": "0x381D522Bdaa3E39E6f7Ebf529cAD0Db3fD867441",
+        "kind": "NonProxy",
+        "bytecodeHash": "9fdf66e7e8731c9d69edb3219104d121a6bf4f0ebd0798ca9be937c672e531f3"
       }
     ],
     "4RXFinance/FourRXFinance": [
@@ -19,6 +24,23 @@
         "address": "0xF2E4a52b9729dA1B5343aD5FB046FdB733404245",
         "kind": "NonProxy",
         "bytecodeHash": "dc7005979137f1c40dbae3b00decc7533c6c871bec71575148e012d0e092b9ed"
+      },
+      {
+        "address": "0x4b02Cb38A6763B3b660Fb349aE7915a8ADBD9D5a",
+        "kind": "NonProxy",
+        "bytecodeHash": "3f3398505771351e794c0e7b3002138bdab44cf0955feb4a5a6d29676835d959"
+      },
+      {
+        "address": "0xA0261d39B45Af8A8948dAC8a70DDF9227412Cd64",
+        "kind": "NonProxy",
+        "bytecodeHash": "52dba7d80d8203d6da6fea37d60b9613161147488385f2d3b3664731560f3375"
+      }
+    ],
+    "4RXFinance/FRX": [
+      {
+        "address": "0xC4671Cc3A4cC89c9F5040cfE20eC0e10f895d728",
+        "kind": "NonProxy",
+        "bytecodeHash": "5922512bf6c36d4eaac6e9b5a47843b25ecd3ed4febcc8a28900cca05ff5b88c"
       }
     ]
   },

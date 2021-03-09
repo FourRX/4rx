@@ -11,7 +11,7 @@ const { expect } = require('chai');
 const [ owner, user1, user2, user3 ] = accounts;
 
 const FourRXFinance = contract.fromArtifact('FourRXFinance');
-const ERC20 = contract.fromArtifact('DummyERC20Token');
+const ERC20 = contract.fromArtifact('FRX');
 
 describe('FourRXFinance Registration Test', function () {
     beforeEach(async function() {
