@@ -2,7 +2,7 @@
 pragma solidity ^0.6.12;
 pragma experimental ABIEncoderV2;
 
-import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./Insurance.sol";
 
 contract FourRXFinance is Insurance {
@@ -38,7 +38,10 @@ contract FourRXFinance is Insurance {
     }
 
     function deposit(uint amount, address uplinkAddress, uint uplinkId) external {
-        require((users[uplinkAddress].registered && users[uplinkAddress].investments[uplinkId].active) || uplinkAddress == address(0)); // Either uplink must be registered and be a active deposit, 0 address
+        require(
+            (users[uplinkAddress].registered && users[uplinkAddress].investments[uplinkId].active) ||
+            uplinkAddress == address(0)
+        ); // Either uplink must be registered and be a active deposit, 0 address
 
         User storage user = users[msg.sender];
 

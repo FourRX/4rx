@@ -4,13 +4,13 @@ pragma solidity ^0.6.12;
 import "./RewardsAndPenalties.sol";
 
 contract Insurance is RewardsAndPenalties {
-    uint baseInsuranceForBP = 3500; // trigger insurance with contract balance fall below 35%
+    uint private baseInsuranceForBP = 3500; // trigger insurance with contract balance fall below 35%
 
 
-    bool isInInsuranceState = false; // if contract is only allowing insured money this becomes true;
+    bool public isInInsuranceState = false; // if contract is only allowing insured money this becomes true;
 
-    uint optInInsuranceFeeBP = 1000; // 10%
-    uint optInInsuranceForBP = 10000; // 100%
+    uint private optInInsuranceFeeBP = 1000; // 10%
+    uint private optInInsuranceForBP = 10000; // 100%
 
     function checkForBaseInsuranceTrigger() internal {
         if (fourRXToken.balanceOf(address(this)) <= _calcPercentage(maxContractBalance, baseInsuranceForBP)) {
@@ -20,8 +20,9 @@ contract Insurance is RewardsAndPenalties {
         }
     }
 
-    function getInsuredAvailableAmount(Investment memory investment, uint availableAmount) internal view returns (uint)
+    function getInsuredAvailableAmount(Investment memory investment, uint withdrawalAmount) internal view returns (uint)
     {
+        uint availableAmount = withdrawalAmount;
         // Calc correct insured value by checking which insurance should be applied
         uint insuredFor = baseInsuranceForBP;
         if (investment.optInInsured) {

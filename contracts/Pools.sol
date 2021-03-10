@@ -22,8 +22,10 @@ contract Pools is SharedVariables {
     }
 
     function _updateSponsorPoolUsers(User memory user, Investment memory investment) internal {
-        if (sponsorPoolUsers[sponsorPoolUsers.length.sub(1)].user == address(0)
-            || investment.sponsorPool.amount > users[sponsorPoolUsers[sponsorPoolUsers.length.sub(1)].user].investments[sponsorPoolUsers[sponsorPoolUsers.length.sub(1)].investmentId].sponsorPool.amount) { // either last user is not set or last user's sponsor balance is less then this user
+        if (
+            sponsorPoolUsers[sponsorPoolUsers.length.sub(1)].user == address(0) ||
+            investment.sponsorPool.amount > users[sponsorPoolUsers[sponsorPoolUsers.length.sub(1)].user].investments[sponsorPoolUsers[sponsorPoolUsers.length.sub(1)].investmentId].sponsorPool.amount
+        ) { // either last user is not set or last user's sponsor balance is less then this user
 
             PoolUser memory shiftUser;
 
@@ -59,8 +61,10 @@ contract Pools is SharedVariables {
 
     // Reorganise top ref-pool users to draw pool for
     function _updateRefPoolUsers(User memory user, Investment memory investment) internal {
-        if (refPoolUsers[refPoolUsers.length - 1].user == address(0)
-            || investment.refPool.amount > users[refPoolUsers[refPoolUsers.length - 1].user].investments[refPoolUsers[refPoolUsers.length - 1].investmentId].refPool.amount) { // either last user is not set or last user's ref balance is less then this user
+        if (
+            refPoolUsers[refPoolUsers.length - 1].user == address(0) ||
+            investment.refPool.amount > users[refPoolUsers[refPoolUsers.length - 1].user].investments[refPoolUsers[refPoolUsers.length - 1].investmentId].refPool.amount
+        ) { // either last user is not set or last user's ref balance is less then this user
 
             PoolUser memory shiftUser;
 

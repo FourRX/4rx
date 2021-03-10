@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.6.12;
 
-import '@openzeppelin/contracts/math/SafeMath.sol';
+import "@openzeppelin/contracts/math/SafeMath.sol";
 
 contract InterestCalculator {
     using SafeMath for uint;
-    uint private constant maxDays = 301;
+    uint private constant MAX_DAYS = 301;
 
     function initInterestForDayArray() private pure returns (uint[] memory) {
-        uint[] memory interestForDays = new uint[](maxDays);
+        uint[] memory interestForDays = new uint[](MAX_DAYS);
 
         interestForDays[0] = 0;
         interestForDays[1] = 1;
@@ -316,10 +316,10 @@ contract InterestCalculator {
     }
 
     function initCumulativeInterestForDays(uint[] memory interestForDays) private pure returns (uint[] memory) {
-        uint[] memory cumulativeInterestForDays = new uint[](maxDays);
+        uint[] memory cumulativeInterestForDays = new uint[](MAX_DAYS);
 
         uint sum;
-        for(uint i = 0; i < maxDays; i++) {
+        for(uint i = 0; i < MAX_DAYS; i++) {
             sum = sum.add(interestForDays[i]);
             cumulativeInterestForDays[i] = sum;
         }
@@ -328,7 +328,7 @@ contract InterestCalculator {
     }
 
     function getInterestTillDays(uint _day) internal pure returns(uint) {
-        require(_day < maxDays);
+        require(_day < MAX_DAYS);
         uint[] memory interestForDays = initInterestForDayArray();
         uint[] memory cumulativeInterestForDays = initCumulativeInterestForDays(interestForDays);
         return cumulativeInterestForDays[_day];
@@ -343,13 +343,13 @@ contract InterestCalculator {
             return 0;
         }
 
-        for(uint i = 1; i < maxDays - 1; i++) {
+        for(uint i = 1; i < MAX_DAYS - 1; i++) {
             if (cumulativeInterestForDays[i] < interest && cumulativeInterestForDays[i + 1] > interest) {
                 return i;
             }
         }
 
-        // If interest is more then any amount we have, return maxDays - 1 // 300
-        return maxDays - 1;
+        // If interest is more then any amount we have, return MAX_DAYS - 1 // 300
+        return MAX_DAYS - 1;
     }
 }

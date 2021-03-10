@@ -1,10 +1,10 @@
 {
   "fileName": "Insurance.sol",
   "contractName": "Insurance",
-  "source": "// SPDX-License-Identifier: MIT\npragma solidity ^0.6.12;\n\nimport \"./RewardsAndPenalties.sol\";\n\ncontract Insurance is RewardsAndPenalties {\n    uint baseInsuranceForBP = 3500; // trigger insurance with contract balance fall below 35%\n\n\n    bool isInInsuranceState = false; // if contract is only allowing insured money this becomes true;\n\n    uint optInInsuranceFeeBP = 1000; // 10%\n    uint optInInsuranceForBP = 10000; // 100%\n\n    function checkForBaseInsuranceTrigger() internal {\n        if (fourRXToken.balanceOf(address(this)) <= _calcPercentage(maxContractBalance, baseInsuranceForBP)) {\n            isInInsuranceState = true;\n        } else {\n            isInInsuranceState = false;\n        }\n    }\n\n    function getInsuredAvailableAmount(Investment memory investment, uint availableAmount) internal view returns (uint)\n    {\n        // Calc correct insured value by checking which insurance should be applied\n        uint insuredFor = baseInsuranceForBP;\n        if (investment.optInInsured) {\n            insuredFor = optInInsuranceForBP;\n        }\n\n        uint maxWithdrawalAllowed = _calcPercentage(investment.deposit, insuredFor);\n        require(maxWithdrawalAllowed < investment.withdrawn); // if contract is in insurance trigger, do not allow withdrawals for the users who already have withdrawn more then 35%\n\n        if (investment.withdrawn.add(availableAmount) > maxWithdrawalAllowed) {\n            availableAmount = maxWithdrawalAllowed - investment.withdrawn;\n        }\n\n        return availableAmount;\n    }\n\n    function _insureInvestment(Investment storage investment) internal {\n        require(!investment.optInInsured && investment.active);\n\n        investment.deposit = investment.deposit.sub(_calcPercentage(investment.deposit, optInInsuranceFeeBP));\n        investment.optInInsured = true;\n    }\n\n\n}\n",
+  "source": "// SPDX-License-Identifier: MIT\npragma solidity ^0.6.12;\n\nimport \"./RewardsAndPenalties.sol\";\n\ncontract Insurance is RewardsAndPenalties {\n    uint private baseInsuranceForBP = 3500; // trigger insurance with contract balance fall below 35%\n\n\n    bool public isInInsuranceState = false; // if contract is only allowing insured money this becomes true;\n\n    uint private optInInsuranceFeeBP = 1000; // 10%\n    uint private optInInsuranceForBP = 10000; // 100%\n\n    function checkForBaseInsuranceTrigger() internal {\n        if (fourRXToken.balanceOf(address(this)) <= _calcPercentage(maxContractBalance, baseInsuranceForBP)) {\n            isInInsuranceState = true;\n        } else {\n            isInInsuranceState = false;\n        }\n    }\n\n    function getInsuredAvailableAmount(Investment memory investment, uint withdrawalAmount) internal view returns (uint)\n    {\n        uint availableAmount = withdrawalAmount;\n        // Calc correct insured value by checking which insurance should be applied\n        uint insuredFor = baseInsuranceForBP;\n        if (investment.optInInsured) {\n            insuredFor = optInInsuranceForBP;\n        }\n\n        uint maxWithdrawalAllowed = _calcPercentage(investment.deposit, insuredFor);\n        require(maxWithdrawalAllowed < investment.withdrawn); // if contract is in insurance trigger, do not allow withdrawals for the users who already have withdrawn more then 35%\n\n        if (investment.withdrawn.add(availableAmount) > maxWithdrawalAllowed) {\n            availableAmount = maxWithdrawalAllowed - investment.withdrawn;\n        }\n\n        return availableAmount;\n    }\n\n    function _insureInvestment(Investment storage investment) internal {\n        require(!investment.optInInsured && investment.active);\n\n        investment.deposit = investment.deposit.sub(_calcPercentage(investment.deposit, optInInsuranceFeeBP));\n        investment.optInInsured = true;\n    }\n\n\n}\n",
   "sourcePath": "contracts/Insurance.sol",
-  "sourceMap": "95:1736:12:-:0;;;206:5:16;181:30;;;;217:23;;;;268:6;246:28;;;;173:5:18;162:16;;417:5:17;391:31;;456:4;436:24;;;;487:3;466:24;;518:4;497:25;;;;534:63;;;-1:-1:-1;;;;;;534:63:17;555:42;534:63;;;677:2;645:34;;;;685:38;;729:23;;805:3;781:27;;;;874:3;849:28;;;;934:31;;;;;996:27;;;;;1075:23;;;;;1129:29;;;;1246:38;;169:4:12;143:30;;239:31;;;-1:-1:-1;;239:31:12;;;342;;386:32;;95:1736;;;;;;;;;;;;;;;;",
-  "deployedSourceMap": "95:1736:12:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2906:28:17;;;;;;;;;;;;;;;;-1:-1:-1;2906:28:17;;:::i;:::-;;;;;;;;;;;;;;;;1585:36;;;;;;;;;;;;;;;;-1:-1:-1;1585:36:17;;:::i;:::-;;;;-1:-1:-1;;;;;1585:36:17;;;;;;;;;;;;;;;;;;;;;2833:28;;;;;;;;;;;;;;;;-1:-1:-1;2833:28:17;;:::i;2867:32::-;;;;;;;;;;;;;;;;-1:-1:-1;2867:32:17;;:::i;1547:::-;;;;;;;;;;;;;;;;-1:-1:-1;1547:32:17;;:::i;2906:28::-;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;2906:28:17;:::o;1585:36::-;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;1585:36:17;;;;-1:-1:-1;1585:36:17;:::o;2833:28::-;;;;;;;;;;2867:32;;;;;;;;;;1547;;;;;;;;",
+  "sourceMap": "95:1817:12:-:0;;;214:5:16;181:38;;;;225:31;;;;292:6;262:36;;;;181:5:18;162:24;;431:5:17;398:38;;477:4;450:31;;;;515:3;487:31;;553:4;525:32;;;;569:70;;;-1:-1:-1;;;;;;569:70:17;597:42;569:70;;;726:2;687:41;;;;734:45;;785:30;;875:3;844:34;;;;951:3;919:35;;;;1011:38;;;;;1080:34;;;;;1166:30;;;;;1227:36;;;;1351:45;;177:4:12;143:38;;247;;;-1:-1:-1;;247:38:12;;;357:39;;409:40;;95:1817;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "95:1817:12:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;525:32:17;;;:::i;:::-;;;;;;;;;;;;;;;;844:34;;;:::i;3205:::-;;;:::i;785:30::-;;;:::i;3278:31::-;;;:::i;1351:45::-;;;:::i;734:::-;;;:::i;569:70::-;;;:::i;:::-;;;;-1:-1:-1;;;;;569:70:17;;;;;;;;;;;;;;1579:30;;;:::i;247:38:12:-;;;:::i;:::-;;;;;;;;;;;;;;;;;;3060:28:17;;;;;;;;;;;;;;;;-1:-1:-1;3060:28:17;;:::i;3139:26::-;;;:::i;919:35::-;;;:::i;1080:34::-;;;:::i;1454:30::-;;;:::i;1227:36::-;;;:::i;3171:28::-;;;:::i;3356:31::-;;;:::i;3108:25::-;;;:::i;3315:35::-;;;:::i;1166:30::-;;;:::i;3423:23::-;;;:::i;1732:36::-;;;;;;;;;;;;;;;;-1:-1:-1;1732:36:17;;:::i;:::-;;;;-1:-1:-1;;;;;1732:36:17;;;;;;;;;;;;;;;;;;;;;398:38;;;:::i;2942:::-;;;;;;;;;;;;;;;;-1:-1:-1;2942:38:17;-1:-1:-1;;;;;2942:38:17;;:::i;:::-;;;;-1:-1:-1;;;;;2942:38:17;;;;;;;;;;;;;;;;;;;;;367:25;;;:::i;687:41::-;;;:::i;3245:27::-;;;:::i;1011:38::-;;;:::i;1491:21::-;;;:::i;2987:28::-;;;;;;;;;;;;;;;;-1:-1:-1;2987:28:17;;:::i;1547:26::-;;;:::i;3021:32::-;;;;;;;;;;;;;;;;-1:-1:-1;3021:32:17;;:::i;3393:24::-;;;:::i;450:31::-;;;:::i;1694:32::-;;;;;;;;;;;;;;;;-1:-1:-1;1694:32:17;;:::i;487:31::-;;;:::i;1518:22::-;;;:::i;525:32::-;;;;:::o;844:34::-;;;;:::o;3205:::-;;;;:::o;785:30::-;;;;:::o;3278:31::-;;;;:::o;1351:45::-;;;;:::o;734:::-;;;;:::o;569:70::-;;;-1:-1:-1;;;;;569:70:17;;:::o;1579:30::-;;;;:::o;247:38:12:-;;;;;;:::o;3060:28:17:-;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;3060:28:17;:::o;3139:26::-;;;;:::o;919:35::-;;;;:::o;1080:34::-;;;;:::o;1454:30::-;;;;:::o;1227:36::-;;;;:::o;3171:28::-;;;;:::o;3356:31::-;;;;:::o;3108:25::-;;;;:::o;3315:35::-;;;;:::o;1166:30::-;;;;:::o;3423:23::-;;;;:::o;1732:36::-;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;1732:36:17;;;;-1:-1:-1;1732:36:17;:::o;398:38::-;;;;:::o;2942:::-;;;;;;;;;;;;-1:-1:-1;;;;;2942:38:17;;;-1:-1:-1;;;2942:38:17;;;;;:::o;367:25::-;;;-1:-1:-1;;;;;367:25:17;;:::o;687:41::-;;;;:::o;3245:27::-;;;;:::o;1011:38::-;;;;:::o;1491:21::-;;;;:::o;2987:28::-;;;;;;;;;;1547:26;;;;:::o;3021:32::-;;;;;;;;;;3393:24;;;;:::o;450:31::-;;;;:::o;1694:32::-;;;;;;;;;487:31;;;;:::o;1518:22::-;;;;:::o",
   "abi": [
     {
       "anonymous": false,
@@ -83,6 +83,32 @@
       "type": "event"
     },
     {
+      "inputs": [],
+      "name": "contractBonusUnit",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "contractBonusUnitBonus",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
       "inputs": [
         {
           "internalType": "uint256",
@@ -91,6 +117,253 @@
         }
       ],
       "name": "depositBonuses",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "depositRefPoolCommission",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "depositSponsorPoolCommission",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "devAddress",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "devCommission",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "exitPenalty",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "fourRXToken",
+      "outputs": [
+        {
+          "internalType": "contract IERC20",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "holdBonusUnitBonus",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "holdBonusUnlocksAt",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "isInInsuranceState",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "lpCommission",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "maxContractBalance",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "maxContractBonus",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "maxContractRewards",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "maxHoldBonus",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "maxWithdrawalOverTenPercent",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "poolCycle",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "poolDrewAt",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "refCommission",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "refPoolBalance",
       "outputs": [
         {
           "internalType": "uint256",
@@ -145,6 +418,19 @@
       "type": "function"
     },
     {
+      "inputs": [],
+      "name": "sponsorPoolBalance",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
       "inputs": [
         {
           "internalType": "uint256",
@@ -186,16 +472,170 @@
       ],
       "stateMutability": "view",
       "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "totalActiveInvestments",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "totalDepositRewards",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "totalDeposits",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "totalExited",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "totalInvestments",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "totalPenalty",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "totalRefPoolRewards",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "totalRefRewards",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "totalSponsorPoolRewards",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "totalWithdrawn",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "users",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "wallet",
+          "type": "address"
+        },
+        {
+          "internalType": "bool",
+          "name": "registered",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
     }
   ],
   "ast": {
     "absolutePath": "contracts/Insurance.sol",
     "exportedSymbols": {
       "Insurance": [
-        3876
+        3880
       ]
     },
-    "id": 3877,
+    "id": 3881,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
@@ -215,8 +655,8 @@
         "file": "./RewardsAndPenalties.sol",
         "id": 3744,
         "nodeType": "ImportDirective",
-        "scope": 3877,
-        "sourceUnit": 6922,
+        "scope": 3881,
+        "sourceUnit": 6926,
         "src": "58:35:12",
         "symbolAliases": [],
         "unitAlias": ""
@@ -231,10 +671,10 @@
               "id": 3745,
               "name": "RewardsAndPenalties",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 6921,
+              "referencedDeclaration": 6925,
               "src": "117:19:12",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_RewardsAndPenalties_$6921",
+                "typeIdentifier": "t_contract$_RewardsAndPenalties_$6925",
                 "typeString": "contract RewardsAndPenalties"
               }
             },
@@ -245,26 +685,26 @@
         ],
         "contractDependencies": [
           1901,
-          5869,
-          6456,
-          6921,
-          6985,
-          7161,
-          7189
+          5873,
+          6460,
+          6925,
+          6989,
+          7165,
+          7193
         ],
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 3876,
+        "id": 3880,
         "linearizedBaseContracts": [
-          3876,
-          6921,
-          6456,
-          7161,
-          7189,
+          3880,
+          6925,
+          6460,
+          7165,
+          7193,
           1901,
-          5869,
-          6985
+          5873,
+          6989
         ],
         "name": "Insurance",
         "nodeType": "ContractDefinition",
@@ -276,8 +716,8 @@
             "name": "baseInsuranceForBP",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 3876,
-            "src": "143:30:12",
+            "scope": 3880,
+            "src": "143:38:12",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -304,7 +744,7 @@
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "169:4:12",
+              "src": "177:4:12",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_rational_3500_by_1",
@@ -312,17 +752,18 @@
               },
               "value": "3500"
             },
-            "visibility": "internal"
+            "visibility": "private"
           },
           {
             "constant": false,
+            "functionSelector": "46c27f65",
             "id": 3752,
             "mutability": "mutable",
             "name": "isInInsuranceState",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 3876,
-            "src": "239:31:12",
+            "scope": 3880,
+            "src": "247:38:12",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -333,7 +774,7 @@
               "id": 3750,
               "name": "bool",
               "nodeType": "ElementaryTypeName",
-              "src": "239:4:12",
+              "src": "247:4:12",
               "typeDescriptions": {
                 "typeIdentifier": "t_bool",
                 "typeString": "bool"
@@ -349,7 +790,7 @@
               "kind": "bool",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "265:5:12",
+              "src": "280:5:12",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_bool",
@@ -357,7 +798,7 @@
               },
               "value": "false"
             },
-            "visibility": "internal"
+            "visibility": "public"
           },
           {
             "constant": false,
@@ -366,8 +807,8 @@
             "name": "optInInsuranceFeeBP",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 3876,
-            "src": "342:31:12",
+            "scope": 3880,
+            "src": "357:39:12",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -378,7 +819,7 @@
               "id": 3753,
               "name": "uint",
               "nodeType": "ElementaryTypeName",
-              "src": "342:4:12",
+              "src": "357:4:12",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -394,7 +835,7 @@
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "369:4:12",
+              "src": "392:4:12",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_rational_1000_by_1",
@@ -402,7 +843,7 @@
               },
               "value": "1000"
             },
-            "visibility": "internal"
+            "visibility": "private"
           },
           {
             "constant": false,
@@ -411,8 +852,8 @@
             "name": "optInInsuranceForBP",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 3876,
-            "src": "386:32:12",
+            "scope": 3880,
+            "src": "409:40:12",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -423,7 +864,7 @@
               "id": 3756,
               "name": "uint",
               "nodeType": "ElementaryTypeName",
-              "src": "386:4:12",
+              "src": "409:4:12",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -439,7 +880,7 @@
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "413:5:12",
+              "src": "444:5:12",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_rational_10000_by_1",
@@ -447,13 +888,13 @@
               },
               "value": "10000"
             },
-            "visibility": "internal"
+            "visibility": "private"
           },
           {
             "body": {
               "id": 3784,
               "nodeType": "Block",
-              "src": "482:224:12",
+              "src": "513:224:12",
               "statements": [
                 {
                   "condition": {
@@ -480,9 +921,9 @@
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
                               "referencedDeclaration": -28,
-                              "src": "526:4:12",
+                              "src": "557:4:12",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_contract$_Insurance_$3876",
+                                "typeIdentifier": "t_contract$_Insurance_$3880",
                                 "typeString": "contract Insurance"
                               }
                             }
@@ -490,7 +931,7 @@
                           "expression": {
                             "argumentTypes": [
                               {
-                                "typeIdentifier": "t_contract$_Insurance_$3876",
+                                "typeIdentifier": "t_contract$_Insurance_$3880",
                                 "typeString": "contract Insurance"
                               }
                             ],
@@ -500,7 +941,7 @@
                             "isPure": true,
                             "lValueRequested": false,
                             "nodeType": "ElementaryTypeNameExpression",
-                            "src": "518:7:12",
+                            "src": "549:7:12",
                             "typeDescriptions": {
                               "typeIdentifier": "t_type$_t_address_$",
                               "typeString": "type(address)"
@@ -509,7 +950,7 @@
                               "id": 3763,
                               "name": "address",
                               "nodeType": "ElementaryTypeName",
-                              "src": "518:7:12",
+                              "src": "549:7:12",
                               "typeDescriptions": {
                                 "typeIdentifier": null,
                                 "typeString": null
@@ -524,7 +965,7 @@
                           "lValueRequested": false,
                           "names": [],
                           "nodeType": "FunctionCall",
-                          "src": "518:13:12",
+                          "src": "549:13:12",
                           "tryCall": false,
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
@@ -545,8 +986,8 @@
                           "name": "fourRXToken",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 7005,
-                          "src": "496:11:12",
+                          "referencedDeclaration": 7009,
+                          "src": "527:11:12",
                           "typeDescriptions": {
                             "typeIdentifier": "t_contract$_IERC20_$908",
                             "typeString": "contract IERC20"
@@ -560,7 +1001,7 @@
                         "memberName": "balanceOf",
                         "nodeType": "MemberAccess",
                         "referencedDeclaration": 847,
-                        "src": "496:21:12",
+                        "src": "527:21:12",
                         "typeDescriptions": {
                           "typeIdentifier": "t_function_external_view$_t_address_$returns$_t_uint256_$",
                           "typeString": "function (address) view external returns (uint256)"
@@ -574,7 +1015,7 @@
                       "lValueRequested": false,
                       "names": [],
                       "nodeType": "FunctionCall",
-                      "src": "496:36:12",
+                      "src": "527:36:12",
                       "tryCall": false,
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
@@ -592,8 +1033,8 @@
                           "name": "maxContractBalance",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 7052,
-                          "src": "552:18:12",
+                          "referencedDeclaration": 7056,
+                          "src": "583:18:12",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
                             "typeString": "uint256"
@@ -606,7 +1047,7 @@
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
                           "referencedDeclaration": 3749,
-                          "src": "572:18:12",
+                          "src": "603:18:12",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
                             "typeString": "uint256"
@@ -628,8 +1069,8 @@
                         "name": "_calcPercentage",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 6966,
-                        "src": "536:15:12",
+                        "referencedDeclaration": 6970,
+                        "src": "567:15:12",
                         "typeDescriptions": {
                           "typeIdentifier": "t_function_internal_view$_t_uint256_$_t_uint256_$returns$_t_uint256_$",
                           "typeString": "function (uint256,uint256) view returns (uint256)"
@@ -643,14 +1084,14 @@
                       "lValueRequested": false,
                       "names": [],
                       "nodeType": "FunctionCall",
-                      "src": "536:55:12",
+                      "src": "567:55:12",
                       "tryCall": false,
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
                       }
                     },
-                    "src": "496:95:12",
+                    "src": "527:95:12",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -659,7 +1100,7 @@
                   "falseBody": {
                     "id": 3782,
                     "nodeType": "Block",
-                    "src": "649:51:12",
+                    "src": "680:51:12",
                     "statements": [
                       {
                         "expression": {
@@ -676,7 +1117,7 @@
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
                             "referencedDeclaration": 3752,
-                            "src": "663:18:12",
+                            "src": "694:18:12",
                             "typeDescriptions": {
                               "typeIdentifier": "t_bool",
                               "typeString": "bool"
@@ -694,7 +1135,7 @@
                             "kind": "bool",
                             "lValueRequested": false,
                             "nodeType": "Literal",
-                            "src": "684:5:12",
+                            "src": "715:5:12",
                             "subdenomination": null,
                             "typeDescriptions": {
                               "typeIdentifier": "t_bool",
@@ -702,7 +1143,7 @@
                             },
                             "value": "false"
                           },
-                          "src": "663:26:12",
+                          "src": "694:26:12",
                           "typeDescriptions": {
                             "typeIdentifier": "t_bool",
                             "typeString": "bool"
@@ -710,17 +1151,17 @@
                         },
                         "id": 3781,
                         "nodeType": "ExpressionStatement",
-                        "src": "663:26:12"
+                        "src": "694:26:12"
                       }
                     ]
                   },
                   "id": 3783,
                   "nodeType": "IfStatement",
-                  "src": "492:208:12",
+                  "src": "523:208:12",
                   "trueBody": {
                     "id": 3777,
                     "nodeType": "Block",
-                    "src": "593:50:12",
+                    "src": "624:50:12",
                     "statements": [
                       {
                         "expression": {
@@ -737,7 +1178,7 @@
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
                             "referencedDeclaration": 3752,
-                            "src": "607:18:12",
+                            "src": "638:18:12",
                             "typeDescriptions": {
                               "typeIdentifier": "t_bool",
                               "typeString": "bool"
@@ -755,7 +1196,7 @@
                             "kind": "bool",
                             "lValueRequested": false,
                             "nodeType": "Literal",
-                            "src": "628:4:12",
+                            "src": "659:4:12",
                             "subdenomination": null,
                             "typeDescriptions": {
                               "typeIdentifier": "t_bool",
@@ -763,7 +1204,7 @@
                             },
                             "value": "true"
                           },
-                          "src": "607:25:12",
+                          "src": "638:25:12",
                           "typeDescriptions": {
                             "typeIdentifier": "t_bool",
                             "typeString": "bool"
@@ -771,7 +1212,7 @@
                         },
                         "id": 3776,
                         "nodeType": "ExpressionStatement",
-                        "src": "607:25:12"
+                        "src": "638:25:12"
                       }
                     ]
                   }
@@ -790,25 +1231,25 @@
               "id": 3759,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "470:2:12"
+              "src": "501:2:12"
             },
             "returnParameters": {
               "id": 3760,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "482:0:12"
+              "src": "513:0:12"
             },
-            "scope": 3876,
-            "src": "433:273:12",
+            "scope": 3880,
+            "src": "464:273:12",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 3839,
+              "id": 3843,
               "nodeType": "Block",
-              "src": "832:699:12",
+              "src": "864:748:12",
               "statements": [
                 {
                   "assignments": [
@@ -819,11 +1260,11 @@
                       "constant": false,
                       "id": 3795,
                       "mutability": "mutable",
-                      "name": "insuredFor",
+                      "name": "availableAmount",
                       "nodeType": "VariableDeclaration",
                       "overrides": null,
-                      "scope": 3839,
-                      "src": "926:15:12",
+                      "scope": 3843,
+                      "src": "874:20:12",
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
@@ -834,7 +1275,7 @@
                         "id": 3794,
                         "name": "uint",
                         "nodeType": "ElementaryTypeName",
-                        "src": "926:4:12",
+                        "src": "874:4:12",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -848,121 +1289,33 @@
                   "initialValue": {
                     "argumentTypes": null,
                     "id": 3796,
-                    "name": "baseInsuranceForBP",
+                    "name": "withdrawalAmount",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 3749,
-                    "src": "944:18:12",
+                    "referencedDeclaration": 3789,
+                    "src": "897:16:12",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
-                  "src": "926:36:12"
-                },
-                {
-                  "condition": {
-                    "argumentTypes": null,
-                    "expression": {
-                      "argumentTypes": null,
-                      "id": 3798,
-                      "name": "investment",
-                      "nodeType": "Identifier",
-                      "overloadedDeclarations": [],
-                      "referencedDeclaration": 3787,
-                      "src": "976:10:12",
-                      "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Investment_$7119_memory_ptr",
-                        "typeString": "struct SharedVariables.Investment memory"
-                      }
-                    },
-                    "id": 3799,
-                    "isConstant": false,
-                    "isLValue": true,
-                    "isPure": false,
-                    "lValueRequested": false,
-                    "memberName": "optInInsured",
-                    "nodeType": "MemberAccess",
-                    "referencedDeclaration": 7116,
-                    "src": "976:23:12",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_bool",
-                      "typeString": "bool"
-                    }
-                  },
-                  "falseBody": null,
-                  "id": 3805,
-                  "nodeType": "IfStatement",
-                  "src": "972:86:12",
-                  "trueBody": {
-                    "id": 3804,
-                    "nodeType": "Block",
-                    "src": "1001:57:12",
-                    "statements": [
-                      {
-                        "expression": {
-                          "argumentTypes": null,
-                          "id": 3802,
-                          "isConstant": false,
-                          "isLValue": false,
-                          "isPure": false,
-                          "lValueRequested": false,
-                          "leftHandSide": {
-                            "argumentTypes": null,
-                            "id": 3800,
-                            "name": "insuredFor",
-                            "nodeType": "Identifier",
-                            "overloadedDeclarations": [],
-                            "referencedDeclaration": 3795,
-                            "src": "1015:10:12",
-                            "typeDescriptions": {
-                              "typeIdentifier": "t_uint256",
-                              "typeString": "uint256"
-                            }
-                          },
-                          "nodeType": "Assignment",
-                          "operator": "=",
-                          "rightHandSide": {
-                            "argumentTypes": null,
-                            "id": 3801,
-                            "name": "optInInsuranceForBP",
-                            "nodeType": "Identifier",
-                            "overloadedDeclarations": [],
-                            "referencedDeclaration": 3758,
-                            "src": "1028:19:12",
-                            "typeDescriptions": {
-                              "typeIdentifier": "t_uint256",
-                              "typeString": "uint256"
-                            }
-                          },
-                          "src": "1015:32:12",
-                          "typeDescriptions": {
-                            "typeIdentifier": "t_uint256",
-                            "typeString": "uint256"
-                          }
-                        },
-                        "id": 3803,
-                        "nodeType": "ExpressionStatement",
-                        "src": "1015:32:12"
-                      }
-                    ]
-                  }
+                  "src": "874:39:12"
                 },
                 {
                   "assignments": [
-                    3807
+                    3799
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 3807,
+                      "id": 3799,
                       "mutability": "mutable",
-                      "name": "maxWithdrawalAllowed",
+                      "name": "insuredFor",
                       "nodeType": "VariableDeclaration",
                       "overrides": null,
-                      "scope": 3839,
-                      "src": "1068:25:12",
+                      "scope": 3843,
+                      "src": "1007:15:12",
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
@@ -970,10 +1323,10 @@
                         "typeString": "uint256"
                       },
                       "typeName": {
-                        "id": 3806,
+                        "id": 3798,
                         "name": "uint",
                         "nodeType": "ElementaryTypeName",
-                        "src": "1068:4:12",
+                        "src": "1007:4:12",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -983,7 +1336,146 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 3813,
+                  "id": 3801,
+                  "initialValue": {
+                    "argumentTypes": null,
+                    "id": 3800,
+                    "name": "baseInsuranceForBP",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 3749,
+                    "src": "1025:18:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "1007:36:12"
+                },
+                {
+                  "condition": {
+                    "argumentTypes": null,
+                    "expression": {
+                      "argumentTypes": null,
+                      "id": 3802,
+                      "name": "investment",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 3787,
+                      "src": "1057:10:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_Investment_$7123_memory_ptr",
+                        "typeString": "struct SharedVariables.Investment memory"
+                      }
+                    },
+                    "id": 3803,
+                    "isConstant": false,
+                    "isLValue": true,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "memberName": "optInInsured",
+                    "nodeType": "MemberAccess",
+                    "referencedDeclaration": 7120,
+                    "src": "1057:23:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "falseBody": null,
+                  "id": 3809,
+                  "nodeType": "IfStatement",
+                  "src": "1053:86:12",
+                  "trueBody": {
+                    "id": 3808,
+                    "nodeType": "Block",
+                    "src": "1082:57:12",
+                    "statements": [
+                      {
+                        "expression": {
+                          "argumentTypes": null,
+                          "id": 3806,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "leftHandSide": {
+                            "argumentTypes": null,
+                            "id": 3804,
+                            "name": "insuredFor",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 3799,
+                            "src": "1096:10:12",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          },
+                          "nodeType": "Assignment",
+                          "operator": "=",
+                          "rightHandSide": {
+                            "argumentTypes": null,
+                            "id": 3805,
+                            "name": "optInInsuranceForBP",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 3758,
+                            "src": "1109:19:12",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          },
+                          "src": "1096:32:12",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        },
+                        "id": 3807,
+                        "nodeType": "ExpressionStatement",
+                        "src": "1096:32:12"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "assignments": [
+                    3811
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 3811,
+                      "mutability": "mutable",
+                      "name": "maxWithdrawalAllowed",
+                      "nodeType": "VariableDeclaration",
+                      "overrides": null,
+                      "scope": 3843,
+                      "src": "1149:25:12",
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      },
+                      "typeName": {
+                        "id": 3810,
+                        "name": "uint",
+                        "nodeType": "ElementaryTypeName",
+                        "src": "1149:4:12",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      "value": null,
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 3817,
                   "initialValue": {
                     "argumentTypes": null,
                     "arguments": [
@@ -991,26 +1483,26 @@
                         "argumentTypes": null,
                         "expression": {
                           "argumentTypes": null,
-                          "id": 3809,
+                          "id": 3813,
                           "name": "investment",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
                           "referencedDeclaration": 3787,
-                          "src": "1112:10:12",
+                          "src": "1193:10:12",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_struct$_Investment_$7119_memory_ptr",
+                            "typeIdentifier": "t_struct$_Investment_$7123_memory_ptr",
                             "typeString": "struct SharedVariables.Investment memory"
                           }
                         },
-                        "id": 3810,
+                        "id": 3814,
                         "isConstant": false,
                         "isLValue": true,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "deposit",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 7098,
-                        "src": "1112:18:12",
+                        "referencedDeclaration": 7102,
+                        "src": "1193:18:12",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -1018,12 +1510,12 @@
                       },
                       {
                         "argumentTypes": null,
-                        "id": 3811,
+                        "id": 3815,
                         "name": "insuredFor",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3795,
-                        "src": "1132:10:12",
+                        "referencedDeclaration": 3799,
+                        "src": "1213:10:12",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -1041,18 +1533,18 @@
                           "typeString": "uint256"
                         }
                       ],
-                      "id": 3808,
+                      "id": 3812,
                       "name": "_calcPercentage",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 6966,
-                      "src": "1096:15:12",
+                      "referencedDeclaration": 6970,
+                      "src": "1177:15:12",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_view$_t_uint256_$_t_uint256_$returns$_t_uint256_$",
                         "typeString": "function (uint256,uint256) view returns (uint256)"
                       }
                     },
-                    "id": 3812,
+                    "id": 3816,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1060,7 +1552,7 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1096:47:12",
+                    "src": "1177:47:12",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
@@ -1068,7 +1560,7 @@
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
-                  "src": "1068:75:12"
+                  "src": "1149:75:12"
                 },
                 {
                   "expression": {
@@ -1080,19 +1572,19 @@
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
                         },
-                        "id": 3818,
+                        "id": 3822,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "leftExpression": {
                           "argumentTypes": null,
-                          "id": 3815,
+                          "id": 3819,
                           "name": "maxWithdrawalAllowed",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3807,
-                          "src": "1161:20:12",
+                          "referencedDeclaration": 3811,
+                          "src": "1242:20:12",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
                             "typeString": "uint256"
@@ -1104,32 +1596,32 @@
                           "argumentTypes": null,
                           "expression": {
                             "argumentTypes": null,
-                            "id": 3816,
+                            "id": 3820,
                             "name": "investment",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
                             "referencedDeclaration": 3787,
-                            "src": "1184:10:12",
+                            "src": "1265:10:12",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_Investment_$7119_memory_ptr",
+                              "typeIdentifier": "t_struct$_Investment_$7123_memory_ptr",
                               "typeString": "struct SharedVariables.Investment memory"
                             }
                           },
-                          "id": 3817,
+                          "id": 3821,
                           "isConstant": false,
                           "isLValue": true,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "withdrawn",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 7114,
-                          "src": "1184:20:12",
+                          "referencedDeclaration": 7118,
+                          "src": "1265:20:12",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
                             "typeString": "uint256"
                           }
                         },
-                        "src": "1161:43:12",
+                        "src": "1242:43:12",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bool",
                           "typeString": "bool"
@@ -1143,7 +1635,7 @@
                           "typeString": "bool"
                         }
                       ],
-                      "id": 3814,
+                      "id": 3818,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -1151,13 +1643,13 @@
                         -18
                       ],
                       "referencedDeclaration": -18,
-                      "src": "1153:7:12",
+                      "src": "1234:7:12",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
                         "typeString": "function (bool) pure"
                       }
                     },
-                    "id": 3819,
+                    "id": 3823,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1165,16 +1657,16 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1153:52:12",
+                    "src": "1234:52:12",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 3820,
+                  "id": 3824,
                   "nodeType": "ExpressionStatement",
-                  "src": "1153:52:12"
+                  "src": "1234:52:12"
                 },
                 {
                   "condition": {
@@ -1183,7 +1675,7 @@
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     },
-                    "id": 3827,
+                    "id": 3831,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1193,12 +1685,12 @@
                       "arguments": [
                         {
                           "argumentTypes": null,
-                          "id": 3824,
+                          "id": 3828,
                           "name": "availableAmount",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3789,
-                          "src": "1365:15:12",
+                          "referencedDeclaration": 3795,
+                          "src": "1446:15:12",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
                             "typeString": "uint256"
@@ -1216,32 +1708,32 @@
                           "argumentTypes": null,
                           "expression": {
                             "argumentTypes": null,
-                            "id": 3821,
+                            "id": 3825,
                             "name": "investment",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
                             "referencedDeclaration": 3787,
-                            "src": "1340:10:12",
+                            "src": "1421:10:12",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_Investment_$7119_memory_ptr",
+                              "typeIdentifier": "t_struct$_Investment_$7123_memory_ptr",
                               "typeString": "struct SharedVariables.Investment memory"
                             }
                           },
-                          "id": 3822,
+                          "id": 3826,
                           "isConstant": false,
                           "isLValue": true,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "withdrawn",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 7114,
-                          "src": "1340:20:12",
+                          "referencedDeclaration": 7118,
+                          "src": "1421:20:12",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
                             "typeString": "uint256"
                           }
                         },
-                        "id": 3823,
+                        "id": 3827,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -1249,13 +1741,13 @@
                         "memberName": "add",
                         "nodeType": "MemberAccess",
                         "referencedDeclaration": 160,
-                        "src": "1340:24:12",
+                        "src": "1421:24:12",
                         "typeDescriptions": {
                           "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
                           "typeString": "function (uint256,uint256) pure returns (uint256)"
                         }
                       },
-                      "id": 3825,
+                      "id": 3829,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -1263,7 +1755,7 @@
                       "lValueRequested": false,
                       "names": [],
                       "nodeType": "FunctionCall",
-                      "src": "1340:41:12",
+                      "src": "1421:41:12",
                       "tryCall": false,
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
@@ -1274,48 +1766,48 @@
                     "operator": ">",
                     "rightExpression": {
                       "argumentTypes": null,
-                      "id": 3826,
+                      "id": 3830,
                       "name": "maxWithdrawalAllowed",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 3807,
-                      "src": "1384:20:12",
+                      "referencedDeclaration": 3811,
+                      "src": "1465:20:12",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
                       }
                     },
-                    "src": "1340:64:12",
+                    "src": "1421:64:12",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
                     }
                   },
                   "falseBody": null,
-                  "id": 3836,
+                  "id": 3840,
                   "nodeType": "IfStatement",
-                  "src": "1336:156:12",
+                  "src": "1417:156:12",
                   "trueBody": {
-                    "id": 3835,
+                    "id": 3839,
                     "nodeType": "Block",
-                    "src": "1406:86:12",
+                    "src": "1487:86:12",
                     "statements": [
                       {
                         "expression": {
                           "argumentTypes": null,
-                          "id": 3833,
+                          "id": 3837,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "leftHandSide": {
                             "argumentTypes": null,
-                            "id": 3828,
+                            "id": 3832,
                             "name": "availableAmount",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 3789,
-                            "src": "1420:15:12",
+                            "referencedDeclaration": 3795,
+                            "src": "1501:15:12",
                             "typeDescriptions": {
                               "typeIdentifier": "t_uint256",
                               "typeString": "uint256"
@@ -1329,19 +1821,19 @@
                               "typeIdentifier": "t_uint256",
                               "typeString": "uint256"
                             },
-                            "id": 3832,
+                            "id": 3836,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": false,
                             "lValueRequested": false,
                             "leftExpression": {
                               "argumentTypes": null,
-                              "id": 3829,
+                              "id": 3833,
                               "name": "maxWithdrawalAllowed",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 3807,
-                              "src": "1438:20:12",
+                              "referencedDeclaration": 3811,
+                              "src": "1519:20:12",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_uint256",
                                 "typeString": "uint256"
@@ -1353,46 +1845,46 @@
                               "argumentTypes": null,
                               "expression": {
                                 "argumentTypes": null,
-                                "id": 3830,
+                                "id": 3834,
                                 "name": "investment",
                                 "nodeType": "Identifier",
                                 "overloadedDeclarations": [],
                                 "referencedDeclaration": 3787,
-                                "src": "1461:10:12",
+                                "src": "1542:10:12",
                                 "typeDescriptions": {
-                                  "typeIdentifier": "t_struct$_Investment_$7119_memory_ptr",
+                                  "typeIdentifier": "t_struct$_Investment_$7123_memory_ptr",
                                   "typeString": "struct SharedVariables.Investment memory"
                                 }
                               },
-                              "id": 3831,
+                              "id": 3835,
                               "isConstant": false,
                               "isLValue": true,
                               "isPure": false,
                               "lValueRequested": false,
                               "memberName": "withdrawn",
                               "nodeType": "MemberAccess",
-                              "referencedDeclaration": 7114,
-                              "src": "1461:20:12",
+                              "referencedDeclaration": 7118,
+                              "src": "1542:20:12",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_uint256",
                                 "typeString": "uint256"
                               }
                             },
-                            "src": "1438:43:12",
+                            "src": "1519:43:12",
                             "typeDescriptions": {
                               "typeIdentifier": "t_uint256",
                               "typeString": "uint256"
                             }
                           },
-                          "src": "1420:61:12",
+                          "src": "1501:61:12",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
                             "typeString": "uint256"
                           }
                         },
-                        "id": 3834,
+                        "id": 3838,
                         "nodeType": "ExpressionStatement",
-                        "src": "1420:61:12"
+                        "src": "1501:61:12"
                       }
                     ]
                   }
@@ -1400,26 +1892,26 @@
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 3837,
+                    "id": 3841,
                     "name": "availableAmount",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 3789,
-                    "src": "1509:15:12",
+                    "referencedDeclaration": 3795,
+                    "src": "1590:15:12",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
                   "functionReturnParameters": 3793,
-                  "id": 3838,
+                  "id": 3842,
                   "nodeType": "Return",
-                  "src": "1502:22:12"
+                  "src": "1583:22:12"
                 }
               ]
             },
             "documentation": null,
-            "id": 3840,
+            "id": 3844,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -1437,12 +1929,12 @@
                   "name": "investment",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 3840,
-                  "src": "747:28:12",
+                  "scope": 3844,
+                  "src": "778:28:12",
                   "stateVariable": false,
                   "storageLocation": "memory",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_Investment_$7119_memory_ptr",
+                    "typeIdentifier": "t_struct$_Investment_$7123_memory_ptr",
                     "typeString": "struct SharedVariables.Investment"
                   },
                   "typeName": {
@@ -1450,10 +1942,10 @@
                     "id": 3786,
                     "name": "Investment",
                     "nodeType": "UserDefinedTypeName",
-                    "referencedDeclaration": 7119,
-                    "src": "747:10:12",
+                    "referencedDeclaration": 7123,
+                    "src": "778:10:12",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Investment_$7119_storage_ptr",
+                      "typeIdentifier": "t_struct$_Investment_$7123_storage_ptr",
                       "typeString": "struct SharedVariables.Investment"
                     }
                   },
@@ -1464,11 +1956,11 @@
                   "constant": false,
                   "id": 3789,
                   "mutability": "mutable",
-                  "name": "availableAmount",
+                  "name": "withdrawalAmount",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 3840,
-                  "src": "777:20:12",
+                  "scope": 3844,
+                  "src": "808:21:12",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1479,7 +1971,7 @@
                     "id": 3788,
                     "name": "uint",
                     "nodeType": "ElementaryTypeName",
-                    "src": "777:4:12",
+                    "src": "808:4:12",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -1489,7 +1981,7 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "746:52:12"
+              "src": "777:53:12"
             },
             "returnParameters": {
               "id": 3793,
@@ -1502,8 +1994,8 @@
                   "name": "",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 3840,
-                  "src": "822:4:12",
+                  "scope": 3844,
+                  "src": "854:4:12",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1514,7 +2006,7 @@
                     "id": 3791,
                     "name": "uint",
                     "nodeType": "ElementaryTypeName",
-                    "src": "822:4:12",
+                    "src": "854:4:12",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -1524,19 +2016,19 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "821:6:12"
+              "src": "853:6:12"
             },
-            "scope": 3876,
-            "src": "712:819:12",
+            "scope": 3880,
+            "src": "743:869:12",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 3874,
+              "id": 3878,
               "nodeType": "Block",
-              "src": "1604:223:12",
+              "src": "1685:223:12",
               "statements": [
                 {
                   "expression": {
@@ -1548,14 +2040,14 @@
                           "typeIdentifier": "t_bool",
                           "typeString": "bool"
                         },
-                        "id": 3851,
+                        "id": 3855,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "leftExpression": {
                           "argumentTypes": null,
-                          "id": 3848,
+                          "id": 3852,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
@@ -1563,31 +2055,31 @@
                           "nodeType": "UnaryOperation",
                           "operator": "!",
                           "prefix": true,
-                          "src": "1622:24:12",
+                          "src": "1703:24:12",
                           "subExpression": {
                             "argumentTypes": null,
                             "expression": {
                               "argumentTypes": null,
-                              "id": 3846,
+                              "id": 3850,
                               "name": "investment",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 3842,
-                              "src": "1623:10:12",
+                              "referencedDeclaration": 3846,
+                              "src": "1704:10:12",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_struct$_Investment_$7119_storage_ptr",
+                                "typeIdentifier": "t_struct$_Investment_$7123_storage_ptr",
                                 "typeString": "struct SharedVariables.Investment storage pointer"
                               }
                             },
-                            "id": 3847,
+                            "id": 3851,
                             "isConstant": false,
                             "isLValue": true,
                             "isPure": false,
                             "lValueRequested": false,
                             "memberName": "optInInsured",
                             "nodeType": "MemberAccess",
-                            "referencedDeclaration": 7116,
-                            "src": "1623:23:12",
+                            "referencedDeclaration": 7120,
+                            "src": "1704:23:12",
                             "typeDescriptions": {
                               "typeIdentifier": "t_bool",
                               "typeString": "bool"
@@ -1604,32 +2096,32 @@
                           "argumentTypes": null,
                           "expression": {
                             "argumentTypes": null,
-                            "id": 3849,
+                            "id": 3853,
                             "name": "investment",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 3842,
-                            "src": "1650:10:12",
+                            "referencedDeclaration": 3846,
+                            "src": "1731:10:12",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_Investment_$7119_storage_ptr",
+                              "typeIdentifier": "t_struct$_Investment_$7123_storage_ptr",
                               "typeString": "struct SharedVariables.Investment storage pointer"
                             }
                           },
-                          "id": 3850,
+                          "id": 3854,
                           "isConstant": false,
                           "isLValue": true,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "active",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 7092,
-                          "src": "1650:17:12",
+                          "referencedDeclaration": 7096,
+                          "src": "1731:17:12",
                           "typeDescriptions": {
                             "typeIdentifier": "t_bool",
                             "typeString": "bool"
                           }
                         },
-                        "src": "1622:45:12",
+                        "src": "1703:45:12",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bool",
                           "typeString": "bool"
@@ -1643,7 +2135,7 @@
                           "typeString": "bool"
                         }
                       ],
-                      "id": 3845,
+                      "id": 3849,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -1651,13 +2143,13 @@
                         -18
                       ],
                       "referencedDeclaration": -18,
-                      "src": "1614:7:12",
+                      "src": "1695:7:12",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
                         "typeString": "function (bool) pure"
                       }
                     },
-                    "id": 3852,
+                    "id": 3856,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1665,21 +2157,21 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1614:54:12",
+                    "src": "1695:54:12",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 3853,
+                  "id": 3857,
                   "nodeType": "ExpressionStatement",
-                  "src": "1614:54:12"
+                  "src": "1695:54:12"
                 },
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 3866,
+                    "id": 3870,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1688,26 +2180,26 @@
                       "argumentTypes": null,
                       "expression": {
                         "argumentTypes": null,
-                        "id": 3854,
+                        "id": 3858,
                         "name": "investment",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3842,
-                        "src": "1679:10:12",
+                        "referencedDeclaration": 3846,
+                        "src": "1760:10:12",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Investment_$7119_storage_ptr",
+                          "typeIdentifier": "t_struct$_Investment_$7123_storage_ptr",
                           "typeString": "struct SharedVariables.Investment storage pointer"
                         }
                       },
-                      "id": 3856,
+                      "id": 3860,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "deposit",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 7098,
-                      "src": "1679:18:12",
+                      "referencedDeclaration": 7102,
+                      "src": "1760:18:12",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
@@ -1725,26 +2217,26 @@
                               "argumentTypes": null,
                               "expression": {
                                 "argumentTypes": null,
-                                "id": 3861,
+                                "id": 3865,
                                 "name": "investment",
                                 "nodeType": "Identifier",
                                 "overloadedDeclarations": [],
-                                "referencedDeclaration": 3842,
-                                "src": "1739:10:12",
+                                "referencedDeclaration": 3846,
+                                "src": "1820:10:12",
                                 "typeDescriptions": {
-                                  "typeIdentifier": "t_struct$_Investment_$7119_storage_ptr",
+                                  "typeIdentifier": "t_struct$_Investment_$7123_storage_ptr",
                                   "typeString": "struct SharedVariables.Investment storage pointer"
                                 }
                               },
-                              "id": 3862,
+                              "id": 3866,
                               "isConstant": false,
                               "isLValue": true,
                               "isPure": false,
                               "lValueRequested": false,
                               "memberName": "deposit",
                               "nodeType": "MemberAccess",
-                              "referencedDeclaration": 7098,
-                              "src": "1739:18:12",
+                              "referencedDeclaration": 7102,
+                              "src": "1820:18:12",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_uint256",
                                 "typeString": "uint256"
@@ -1752,12 +2244,12 @@
                             },
                             {
                               "argumentTypes": null,
-                              "id": 3863,
+                              "id": 3867,
                               "name": "optInInsuranceFeeBP",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
                               "referencedDeclaration": 3755,
-                              "src": "1759:19:12",
+                              "src": "1840:19:12",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_uint256",
                                 "typeString": "uint256"
@@ -1775,18 +2267,18 @@
                                 "typeString": "uint256"
                               }
                             ],
-                            "id": 3860,
+                            "id": 3864,
                             "name": "_calcPercentage",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 6966,
-                            "src": "1723:15:12",
+                            "referencedDeclaration": 6970,
+                            "src": "1804:15:12",
                             "typeDescriptions": {
                               "typeIdentifier": "t_function_internal_view$_t_uint256_$_t_uint256_$returns$_t_uint256_$",
                               "typeString": "function (uint256,uint256) view returns (uint256)"
                             }
                           },
-                          "id": 3864,
+                          "id": 3868,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
@@ -1794,7 +2286,7 @@
                           "lValueRequested": false,
                           "names": [],
                           "nodeType": "FunctionCall",
-                          "src": "1723:56:12",
+                          "src": "1804:56:12",
                           "tryCall": false,
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
@@ -1813,32 +2305,32 @@
                           "argumentTypes": null,
                           "expression": {
                             "argumentTypes": null,
-                            "id": 3857,
+                            "id": 3861,
                             "name": "investment",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 3842,
-                            "src": "1700:10:12",
+                            "referencedDeclaration": 3846,
+                            "src": "1781:10:12",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_Investment_$7119_storage_ptr",
+                              "typeIdentifier": "t_struct$_Investment_$7123_storage_ptr",
                               "typeString": "struct SharedVariables.Investment storage pointer"
                             }
                           },
-                          "id": 3858,
+                          "id": 3862,
                           "isConstant": false,
                           "isLValue": true,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "deposit",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 7098,
-                          "src": "1700:18:12",
+                          "referencedDeclaration": 7102,
+                          "src": "1781:18:12",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
                             "typeString": "uint256"
                           }
                         },
-                        "id": 3859,
+                        "id": 3863,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -1846,13 +2338,13 @@
                         "memberName": "sub",
                         "nodeType": "MemberAccess",
                         "referencedDeclaration": 177,
-                        "src": "1700:22:12",
+                        "src": "1781:22:12",
                         "typeDescriptions": {
                           "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
                           "typeString": "function (uint256,uint256) pure returns (uint256)"
                         }
                       },
-                      "id": 3865,
+                      "id": 3869,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -1860,27 +2352,27 @@
                       "lValueRequested": false,
                       "names": [],
                       "nodeType": "FunctionCall",
-                      "src": "1700:80:12",
+                      "src": "1781:80:12",
                       "tryCall": false,
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
                       }
                     },
-                    "src": "1679:101:12",
+                    "src": "1760:101:12",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
-                  "id": 3867,
+                  "id": 3871,
                   "nodeType": "ExpressionStatement",
-                  "src": "1679:101:12"
+                  "src": "1760:101:12"
                 },
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 3872,
+                    "id": 3876,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1889,26 +2381,26 @@
                       "argumentTypes": null,
                       "expression": {
                         "argumentTypes": null,
-                        "id": 3868,
+                        "id": 3872,
                         "name": "investment",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3842,
-                        "src": "1790:10:12",
+                        "referencedDeclaration": 3846,
+                        "src": "1871:10:12",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Investment_$7119_storage_ptr",
+                          "typeIdentifier": "t_struct$_Investment_$7123_storage_ptr",
                           "typeString": "struct SharedVariables.Investment storage pointer"
                         }
                       },
-                      "id": 3870,
+                      "id": 3874,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "optInInsured",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 7116,
-                      "src": "1790:23:12",
+                      "referencedDeclaration": 7120,
+                      "src": "1871:23:12",
                       "typeDescriptions": {
                         "typeIdentifier": "t_bool",
                         "typeString": "bool"
@@ -1919,14 +2411,14 @@
                     "rightHandSide": {
                       "argumentTypes": null,
                       "hexValue": "74727565",
-                      "id": 3871,
+                      "id": 3875,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
                       "kind": "bool",
                       "lValueRequested": false,
                       "nodeType": "Literal",
-                      "src": "1816:4:12",
+                      "src": "1897:4:12",
                       "subdenomination": null,
                       "typeDescriptions": {
                         "typeIdentifier": "t_bool",
@@ -1934,20 +2426,20 @@
                       },
                       "value": "true"
                     },
-                    "src": "1790:30:12",
+                    "src": "1871:30:12",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
                     }
                   },
-                  "id": 3873,
+                  "id": 3877,
                   "nodeType": "ExpressionStatement",
-                  "src": "1790:30:12"
+                  "src": "1871:30:12"
                 }
               ]
             },
             "documentation": null,
-            "id": 3875,
+            "id": 3879,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -1955,33 +2447,33 @@
             "nodeType": "FunctionDefinition",
             "overrides": null,
             "parameters": {
-              "id": 3843,
+              "id": 3847,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3842,
+                  "id": 3846,
                   "mutability": "mutable",
                   "name": "investment",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 3875,
-                  "src": "1564:29:12",
+                  "scope": 3879,
+                  "src": "1645:29:12",
                   "stateVariable": false,
                   "storageLocation": "storage",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_Investment_$7119_storage_ptr",
+                    "typeIdentifier": "t_struct$_Investment_$7123_storage_ptr",
                     "typeString": "struct SharedVariables.Investment"
                   },
                   "typeName": {
                     "contractScope": null,
-                    "id": 3841,
+                    "id": 3845,
                     "name": "Investment",
                     "nodeType": "UserDefinedTypeName",
-                    "referencedDeclaration": 7119,
-                    "src": "1564:10:12",
+                    "referencedDeclaration": 7123,
+                    "src": "1645:10:12",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Investment_$7119_storage_ptr",
+                      "typeIdentifier": "t_struct$_Investment_$7123_storage_ptr",
                       "typeString": "struct SharedVariables.Investment"
                     }
                   },
@@ -1989,29 +2481,29 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1563:31:12"
+              "src": "1644:31:12"
             },
             "returnParameters": {
-              "id": 3844,
+              "id": 3848,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1604:0:12"
+              "src": "1685:0:12"
             },
-            "scope": 3876,
-            "src": "1537:290:12",
+            "scope": 3880,
+            "src": "1618:290:12",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "internal"
           }
         ],
-        "scope": 3877,
-        "src": "95:1736:12"
+        "scope": 3881,
+        "src": "95:1817:12"
       }
     ],
-    "src": "32:1800:12"
+    "src": "32:1881:12"
   },
-  "bytecode": "0x60806040526127106000818155600190815562030d406002908155620151806003556175306005556103e860068190556102bc6007556113886008819055600980546001600160a01b0319167364b8cb4c04ba902010856d913b4e5df940748bf21790556032600a819055600b55600c5561012c600d8190556064600e819055600f949094556010929092556011929092556012819055601355610dac6053556054805460ff191690556055556056553480156100bb57600080fd5b506101c6806100cb6000396000f3fe608060405234801561001057600080fd5b50600436106100575760003560e01c806348a91a241461005c5780639c236aa81461008b578063d5766ebd146100cb578063df5a75ef146100e8578063ed56f6a114610105575b600080fd5b6100796004803603602081101561007257600080fd5b5035610122565b60408051918252519081900360200190f35b6100a8600480360360208110156100a157600080fd5b5035610140565b604080516001600160a01b03909316835260208301919091528051918290030190f35b610079600480360360208110156100e157600080fd5b5035610169565b610079600480360360208110156100fe57600080fd5b5035610176565b6100a86004803603602081101561011b57600080fd5b5035610183565b6048818154811061012f57fe5b600091825260209091200154905081565b603181600a811061014d57fe5b6002020180546001909101546001600160a01b03909116915082565b6046818154811061012f57fe5b6047818154811061012f57fe5b601981600c811061014d57fefea26469706673582212204debe356ac6fe3ebf8e276a2e8dc59a59d466f3d76c659bc62580f7bdbdc6f4764736f6c634300060c0033",
-  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100575760003560e01c806348a91a241461005c5780639c236aa81461008b578063d5766ebd146100cb578063df5a75ef146100e8578063ed56f6a114610105575b600080fd5b6100796004803603602081101561007257600080fd5b5035610122565b60408051918252519081900360200190f35b6100a8600480360360208110156100a157600080fd5b5035610140565b604080516001600160a01b03909316835260208301919091528051918290030190f35b610079600480360360208110156100e157600080fd5b5035610169565b610079600480360360208110156100fe57600080fd5b5035610176565b6100a86004803603602081101561011b57600080fd5b5035610183565b6048818154811061012f57fe5b600091825260209091200154905081565b603181600a811061014d57fe5b6002020180546001909101546001600160a01b03909116915082565b6046818154811061012f57fe5b6047818154811061012f57fe5b601981600c811061014d57fefea26469706673582212204debe356ac6fe3ebf8e276a2e8dc59a59d466f3d76c659bc62580f7bdbdc6f4764736f6c634300060c0033",
+  "bytecode": "0x60806040526127106000818155600190815562030d406002908155620151806003556175306005556103e860068190556102bc6007556113886008819055600980546001600160a01b0319167364b8cb4c04ba902010856d913b4e5df940748bf21790556032600a819055600b55600c5561012c600d8190556064600e819055600f949094556010929092556011929092556012819055601355610dac6053556054805460ff191690556055556056553480156100bb57600080fd5b506105a6806100cb6000396000f3fe608060405234801561001057600080fd5b50600436106101c25760003560e01c80630a32e91e146101c757806316768ffc146101e157806324cf3682146101e95780632669e8ea146101f15780632673ebf7146101f95780632eed84831461020157806335ccbdbe146102095780633ad10ef6146102115780633df936c91461023557806346c27f651461023d57806348a91a24146102595780634b319713146102765780634c1705521461027e578063648441b61461028657806365fcb49e1461028e57806369cde4c01461029657806370fd37cf1461029e5780637247b2b9146102a65780637d882097146102ae5780638876bb3e146102b65780638b7e1a35146102be57806391994b2c146102c65780639c236aa8146102ce578063a63f4bdb1461030e578063a87430ba14610316578063a9122af71461035f578063acd2e1c014610367578063bfe0e0201461036f578063c572e26714610377578063cabea10d1461037f578063d5766ebd14610387578063d82daec7146103a4578063df5a75ef146103ac578063e6af61c8146103c9578063ebb7f586146103d1578063ed56f6a1146103d9578063ee8a4498146103f6578063fd0b8252146103fe575b600080fd5b6101cf610406565b60408051918252519081900360200190f35b6101cf61040c565b6101cf610412565b6101cf610418565b6101cf61041e565b6101cf610424565b6101cf61042a565b610219610430565b604080516001600160a01b039092168252519081900360200190f35b6101cf61043f565b610245610445565b604080519115158252519081900360200190f35b6101cf6004803603602081101561026f57600080fd5b503561044e565b6101cf61046c565b6101cf610472565b6101cf610478565b6101cf61047e565b6101cf610484565b6101cf61048a565b6101cf610490565b6101cf610496565b6101cf61049c565b6101cf6104a2565b6101cf6104a8565b6102eb600480360360208110156102e457600080fd5b50356104ae565b604080516001600160a01b03909316835260208301919091528051918290030190f35b6101cf6104d7565b61033c6004803603602081101561032c57600080fd5b50356001600160a01b03166104dd565b604080516001600160a01b03909316835290151560208301528051918290030190f35b610219610504565b6101cf610513565b6101cf610519565b6101cf61051f565b6101cf610525565b6101cf6004803603602081101561039d57600080fd5b503561052b565b6101cf610538565b6101cf600480360360208110156103c257600080fd5b503561053e565b6101cf61054b565b6101cf610551565b6102eb600480360360208110156103ef57600080fd5b5035610557565b6101cf610564565b6101cf61056a565b60085481565b600d5481565b604c5481565b600c5481565b604e5481565b60135481565b600b5481565b6009546001600160a01b031681565b60185481565b60545460ff1681565b6048818154811061045b57fe5b600091825260209091200154905081565b604a5481565b600e5481565b60105481565b60145481565b60125481565b604b5481565b60505481565b60495481565b604f5481565b60115481565b60525481565b603181600a81106104bb57fe5b6002020180546001909101546001600160a01b03909116915082565b60055481565b6045602052600090815260409020546001600160a01b03811690600160a01b900460ff1682565b6004546001600160a01b031681565b600a5481565b604d5481565b600f5481565b60155481565b6046818154811061045b57fe5b60175481565b6047818154811061045b57fe5b60515481565b60065481565b601981600c81106104bb57fe5b60075481565b6016548156fea2646970667358221220bf9bc16438d8a61d707a7e6b438198d2e040f35498f6ef4301bc607b0aea5b5364736f6c634300060c0033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106101c25760003560e01c80630a32e91e146101c757806316768ffc146101e157806324cf3682146101e95780632669e8ea146101f15780632673ebf7146101f95780632eed84831461020157806335ccbdbe146102095780633ad10ef6146102115780633df936c91461023557806346c27f651461023d57806348a91a24146102595780634b319713146102765780634c1705521461027e578063648441b61461028657806365fcb49e1461028e57806369cde4c01461029657806370fd37cf1461029e5780637247b2b9146102a65780637d882097146102ae5780638876bb3e146102b65780638b7e1a35146102be57806391994b2c146102c65780639c236aa8146102ce578063a63f4bdb1461030e578063a87430ba14610316578063a9122af71461035f578063acd2e1c014610367578063bfe0e0201461036f578063c572e26714610377578063cabea10d1461037f578063d5766ebd14610387578063d82daec7146103a4578063df5a75ef146103ac578063e6af61c8146103c9578063ebb7f586146103d1578063ed56f6a1146103d9578063ee8a4498146103f6578063fd0b8252146103fe575b600080fd5b6101cf610406565b60408051918252519081900360200190f35b6101cf61040c565b6101cf610412565b6101cf610418565b6101cf61041e565b6101cf610424565b6101cf61042a565b610219610430565b604080516001600160a01b039092168252519081900360200190f35b6101cf61043f565b610245610445565b604080519115158252519081900360200190f35b6101cf6004803603602081101561026f57600080fd5b503561044e565b6101cf61046c565b6101cf610472565b6101cf610478565b6101cf61047e565b6101cf610484565b6101cf61048a565b6101cf610490565b6101cf610496565b6101cf61049c565b6101cf6104a2565b6101cf6104a8565b6102eb600480360360208110156102e457600080fd5b50356104ae565b604080516001600160a01b03909316835260208301919091528051918290030190f35b6101cf6104d7565b61033c6004803603602081101561032c57600080fd5b50356001600160a01b03166104dd565b604080516001600160a01b03909316835290151560208301528051918290030190f35b610219610504565b6101cf610513565b6101cf610519565b6101cf61051f565b6101cf610525565b6101cf6004803603602081101561039d57600080fd5b503561052b565b6101cf610538565b6101cf600480360360208110156103c257600080fd5b503561053e565b6101cf61054b565b6101cf610551565b6102eb600480360360208110156103ef57600080fd5b5035610557565b6101cf610564565b6101cf61056a565b60085481565b600d5481565b604c5481565b600c5481565b604e5481565b60135481565b600b5481565b6009546001600160a01b031681565b60185481565b60545460ff1681565b6048818154811061045b57fe5b600091825260209091200154905081565b604a5481565b600e5481565b60105481565b60145481565b60125481565b604b5481565b60505481565b60495481565b604f5481565b60115481565b60525481565b603181600a81106104bb57fe5b6002020180546001909101546001600160a01b03909116915082565b60055481565b6045602052600090815260409020546001600160a01b03811690600160a01b900460ff1682565b6004546001600160a01b031681565b600a5481565b604d5481565b600f5481565b60155481565b6046818154811061045b57fe5b60175481565b6047818154811061045b57fe5b60515481565b60065481565b601981600c81106104bb57fe5b60075481565b6016548156fea2646970667358221220bf9bc16438d8a61d707a7e6b438198d2e040f35498f6ef4301bc607b0aea5b5364736f6c634300060c0033",
   "compiler": {
     "name": "solc",
     "version": "0.6.12+commit.27d51765.Emscripten.clang",

@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.6.12;
 
-import '@openzeppelin/contracts/math/SafeMath.sol';
+import "@openzeppelin/contracts/math/SafeMath.sol";
 
 contract SafePercentageCalculator {
     using SafeMath for uint;
 
-    uint percentMultiplier = 10000;
-    uint minBasisPoints = 0;
-    uint maxBasisPoints = 200000;
+    uint private percentMultiplier = 10000;
+    uint private minBasisPoints = 0;
+    uint private maxBasisPoints = 200000;
 
     function _calcPercentage(uint amount, uint basisPoints) internal view returns (uint) {
         require(basisPoints >= minBasisPoints);

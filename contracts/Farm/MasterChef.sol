@@ -9,6 +9,7 @@ import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "./../ERC20/FRX.sol";
 
+
 interface IMigratorChef {
     // Perform LP token migration from legacy UniswapV2 to SushiSwap.
     // Take the current LP token address and return the new LP token address.
@@ -28,6 +29,8 @@ interface IMigratorChef {
 // distributed and the community can show to govern itself.
 //
 // Have fun reading it. Hopefully it's bug-free. God bless.
+
+
 contract MasterChef is Ownable {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
@@ -73,7 +76,7 @@ contract MasterChef is Ownable {
     // Info of each pool.
     PoolInfo[] public poolInfo;
     // Info of each user that stakes LP tokens.
-    mapping (uint256 => mapping (address => UserInfo)) public userInfo;
+    mapping(uint256 => mapping(address => UserInfo)) public userInfo;
     // Total allocation points. Must be the sum of all allocation points in all pools.
     uint256 public totalAllocPoint = 0;
     // The block number when FRX mining starts.
@@ -110,10 +113,10 @@ contract MasterChef is Ownable {
         uint256 lastRewardBlock = block.number > startBlock ? block.number : startBlock;
         totalAllocPoint = totalAllocPoint.add(_allocPoint);
         poolInfo.push(PoolInfo({
-        lpToken: _lpToken,
-        allocPoint: _allocPoint,
-        lastRewardBlock: lastRewardBlock,
-        accFRXPerShare: 0
+            lpToken : _lpToken,
+            allocPoint : _allocPoint,
+            lastRewardBlock : lastRewardBlock,
+            accFRXPerShare : 0
         }));
     }
 
@@ -207,11 +210,11 @@ contract MasterChef is Ownable {
         updatePool(_pid);
         if (user.amount > 0) {
             uint256 pending = user.amount.mul(pool.accFRXPerShare).div(1e12).sub(user.rewardDebt);
-            if(pending > 0) {
+            if (pending > 0) {
                 safeFrxTransfer(msg.sender, pending);
             }
         }
-        if(_amount > 0) {
+        if (_amount > 0) {
             pool.lpToken.safeTransferFrom(address(msg.sender), address(this), _amount);
             user.amount = user.amount.add(_amount);
         }
@@ -226,10 +229,10 @@ contract MasterChef is Ownable {
         require(user.amount >= _amount, "withdraw: not good");
         updatePool(_pid);
         uint256 pending = user.amount.mul(pool.accFRXPerShare).div(1e12).sub(user.rewardDebt);
-        if(pending > 0) {
+        if (pending > 0) {
             safeFrxTransfer(msg.sender, pending);
         }
-        if(_amount > 0) {
+        if (_amount > 0) {
             user.amount = user.amount.sub(_amount);
             pool.lpToken.safeTransfer(address(msg.sender), _amount);
         }

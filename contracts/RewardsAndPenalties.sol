@@ -6,7 +6,10 @@ import "./Pools.sol";
 contract RewardsAndPenalties is Pools {
 
     function _distributeReferralReward(uint amount, Investment memory investment) internal {
-        if (investment.uplink.uplinkAddress != address(0) && users[investment.uplink.uplinkAddress].investments[investment.uplink.uplinkInvestmentId].active) {
+        if (
+            investment.uplink.uplinkAddress != address(0) &&
+            users[investment.uplink.uplinkAddress].investments[investment.uplink.uplinkInvestmentId].active
+        ) {
             User storage uplinkUser = users[investment.uplink.uplinkAddress];
 
             uint commission = _calcPercentage(amount, refCommission);
