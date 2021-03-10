@@ -9,6 +9,7 @@ import "./utils/Utils.sol";
 import "./Constants.sol";
 import "./StatsVars.sol";
 
+
 contract SharedVariables is Constants, StatsVars, PercentageCalculator, InterestCalculator, Events, Utils {
     using SafeMath for uint;
 

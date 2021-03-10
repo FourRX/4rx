@@ -14,7 +14,7 @@ describe('FourRXFinance Registration Test', function () {
         /*this.erc20 = await ERC20.new({ from: owner });
         this.fourRXFinance = await FourRXFinance.new(this.erc20.address, { from: owner });
         await this.erc20.transfer(user1, 1000000, { from: owner });*/
-        const Token = await ethers.getContractFactory("DummyERC20Token");
+        const Token = await ethers.getContractFactory("FRX");
         this.erc20 = await Token.deploy();
         const FourRX = await ethers.getContractFactory("FourRXFinance");
 

@@ -3,10 +3,11 @@ pragma solidity ^0.6.12;
 
 import "@openzeppelin/contracts/math/SafeMath.sol";
 
+
 contract PercentageCalculator {
     using SafeMath for uint;
 
-    uint private constant PERCENT_MULTIPLIER = 10000;
+    uint public constant PERCENT_MULTIPLIER = 10000;
 
     function _calcPercentage(uint amount, uint basisPoints) internal pure returns (uint) {
         require(basisPoints >= 0);

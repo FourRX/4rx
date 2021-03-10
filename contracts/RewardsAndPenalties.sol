@@ -1,9 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.6.12;
 
+import "@openzeppelin/contracts/math/SafeMath.sol";
 import "./Pools.sol";
 
+
 contract RewardsAndPenalties is Pools {
+    using SafeMath for uint;
 
     function _distributeReferralReward(uint amount, Stake memory stake) internal {
         if (
@@ -115,12 +118,7 @@ contract RewardsAndPenalties is Pools {
         if (basisPoints >= REWARD_THRESHOLD_BP) {
             return 0;
         }
-        // If user's rewards are less then then 2% -- 66% penalty
-        if (basisPoints < 200) {
-            return _calcPercentage(withdrawalAmount, 6600);
-        }
 
-        // If user's rewards are less then then 3% and greater or equals to 2% -- 33% penalty
-        return _calcPercentage(withdrawalAmount, 3300);
+        return _calcPercentage(withdrawalAmount, PERCENT_MULTIPLIER.sub(basisPoints.mul(PERCENT_MULTIPLIER).div(REWARD_THRESHOLD_BP)));
     }
 }

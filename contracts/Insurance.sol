@@ -3,6 +3,7 @@ pragma solidity ^0.6.12;
 
 import "./RewardsAndPenalties.sol";
 
+
 contract Insurance is RewardsAndPenalties {
     uint private constant BASE_INSURANCE_FOR_BP = 3500; // trigger insurance with contract balance fall below 35%
     uint private constant OPT_IN_INSURANCE_FEE_BP = 1000; // 10%

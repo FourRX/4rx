@@ -3,6 +3,7 @@ pragma solidity ^0.6.12;
 
 import "./SharedVariables.sol";
 
+
 contract Pools is SharedVariables {
 
     function _resetPools() internal {

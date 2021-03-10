@@ -5,6 +5,7 @@ pragma experimental ABIEncoderV2;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./Insurance.sol";
 
+
 contract FourRXFinance is Insurance {
 
     constructor(address fourRXTokenAddress) public {
@@ -41,7 +42,7 @@ contract FourRXFinance is Insurance {
 
     function deposit(uint amount, address uplinkAddress, uint uplinkId) external {
         require(
-            (users[uplinkAddress].wallet == uplinkAddress && users[uplinkAddress].stakes[uplinkId].active) ||
+            (users[uplinkAddress].wallet != address(0) && users[uplinkAddress].stakes[uplinkId].active) ||
             uplinkAddress == address(0)
         ); // Either uplink must be registered and be a active deposit, 0 address
 

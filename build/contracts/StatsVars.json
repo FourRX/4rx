@@ -141,15 +141,15 @@
     "absolutePath": "contracts/StatsVars.sol",
     "exportedSymbols": {
       "StatsVars": [
-        7164
+        7170
       ]
     },
-    "id": 7165,
+    "id": 7171,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 7143,
+        "id": 7149,
         "literals": [
           "solidity",
           "^",
@@ -166,9 +166,9 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 7164,
+        "id": 7170,
         "linearizedBaseContracts": [
-          7164
+          7170
         ],
         "name": "StatsVars",
         "nodeType": "ContractDefinition",
@@ -176,12 +176,12 @@
           {
             "constant": false,
             "functionSelector": "7d882097",
-            "id": 7145,
+            "id": 7151,
             "mutability": "mutable",
             "name": "totalDeposits",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 7164,
+            "scope": 7170,
             "src": "97:25:19",
             "stateVariable": true,
             "storageLocation": "default",
@@ -190,7 +190,7 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 7144,
+              "id": 7150,
               "name": "uint",
               "nodeType": "ElementaryTypeName",
               "src": "97:4:19",
@@ -205,12 +205,12 @@
           {
             "constant": false,
             "functionSelector": "4b319713",
-            "id": 7147,
+            "id": 7153,
             "mutability": "mutable",
             "name": "totalWithdrawn",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 7164,
+            "scope": 7170,
             "src": "128:26:19",
             "stateVariable": true,
             "storageLocation": "default",
@@ -219,7 +219,7 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 7146,
+              "id": 7152,
               "name": "uint",
               "nodeType": "ElementaryTypeName",
               "src": "128:4:19",
@@ -234,12 +234,12 @@
           {
             "constant": false,
             "functionSelector": "70fd37cf",
-            "id": 7149,
+            "id": 7155,
             "mutability": "mutable",
             "name": "totalInvestments",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 7164,
+            "scope": 7170,
             "src": "160:28:19",
             "stateVariable": true,
             "storageLocation": "default",
@@ -248,7 +248,7 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 7148,
+              "id": 7154,
               "name": "uint",
               "nodeType": "ElementaryTypeName",
               "src": "160:4:19",
@@ -263,12 +263,12 @@
           {
             "constant": false,
             "functionSelector": "24cf3682",
-            "id": 7151,
+            "id": 7157,
             "mutability": "mutable",
             "name": "totalActiveInvestments",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 7164,
+            "scope": 7170,
             "src": "194:34:19",
             "stateVariable": true,
             "storageLocation": "default",
@@ -277,7 +277,7 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 7150,
+              "id": 7156,
               "name": "uint",
               "nodeType": "ElementaryTypeName",
               "src": "194:4:19",
@@ -292,12 +292,12 @@
           {
             "constant": false,
             "functionSelector": "bfe0e020",
-            "id": 7153,
+            "id": 7159,
             "mutability": "mutable",
             "name": "totalRefRewards",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 7164,
+            "scope": 7170,
             "src": "234:27:19",
             "stateVariable": true,
             "storageLocation": "default",
@@ -306,7 +306,7 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 7152,
+              "id": 7158,
               "name": "uint",
               "nodeType": "ElementaryTypeName",
               "src": "234:4:19",
@@ -321,12 +321,12 @@
           {
             "constant": false,
             "functionSelector": "2673ebf7",
-            "id": 7155,
+            "id": 7161,
             "mutability": "mutable",
             "name": "totalRefPoolRewards",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 7164,
+            "scope": 7170,
             "src": "267:31:19",
             "stateVariable": true,
             "storageLocation": "default",
@@ -335,7 +335,7 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 7154,
+              "id": 7160,
               "name": "uint",
               "nodeType": "ElementaryTypeName",
               "src": "267:4:19",
@@ -350,12 +350,12 @@
           {
             "constant": false,
             "functionSelector": "8876bb3e",
-            "id": 7157,
+            "id": 7163,
             "mutability": "mutable",
             "name": "totalSponsorPoolRewards",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 7164,
+            "scope": 7170,
             "src": "304:35:19",
             "stateVariable": true,
             "storageLocation": "default",
@@ -364,7 +364,7 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 7156,
+              "id": 7162,
               "name": "uint",
               "nodeType": "ElementaryTypeName",
               "src": "304:4:19",
@@ -379,12 +379,12 @@
           {
             "constant": false,
             "functionSelector": "7247b2b9",
-            "id": 7159,
+            "id": 7165,
             "mutability": "mutable",
             "name": "totalDepositRewards",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 7164,
+            "scope": 7170,
             "src": "345:31:19",
             "stateVariable": true,
             "storageLocation": "default",
@@ -393,7 +393,7 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 7158,
+              "id": 7164,
               "name": "uint",
               "nodeType": "ElementaryTypeName",
               "src": "345:4:19",
@@ -408,12 +408,12 @@
           {
             "constant": false,
             "functionSelector": "e6af61c8",
-            "id": 7161,
+            "id": 7167,
             "mutability": "mutable",
             "name": "totalPenalty",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 7164,
+            "scope": 7170,
             "src": "382:24:19",
             "stateVariable": true,
             "storageLocation": "default",
@@ -422,7 +422,7 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 7160,
+              "id": 7166,
               "name": "uint",
               "nodeType": "ElementaryTypeName",
               "src": "382:4:19",
@@ -437,12 +437,12 @@
           {
             "constant": false,
             "functionSelector": "91994b2c",
-            "id": 7163,
+            "id": 7169,
             "mutability": "mutable",
             "name": "totalExited",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 7164,
+            "scope": 7170,
             "src": "412:23:19",
             "stateVariable": true,
             "storageLocation": "default",
@@ -451,7 +451,7 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 7162,
+              "id": 7168,
               "name": "uint",
               "nodeType": "ElementaryTypeName",
               "src": "412:4:19",
@@ -464,7 +464,7 @@
             "visibility": "public"
           }
         ],
-        "scope": 7165,
+        "scope": 7171,
         "src": "59:379:19"
       }
     ],

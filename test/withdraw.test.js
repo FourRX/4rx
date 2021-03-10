@@ -53,7 +53,7 @@ describe('FourRXFinance Withdrawal Test', function () {
 
         expectEvent(receipt, 'Withdraw', {
             user: user1, // @todo: these comments are messed up now
-            amount: new BN(31) // with 66% penalty
+            amount: new BN(30) // with about 66% penalty
         })
     });
 
