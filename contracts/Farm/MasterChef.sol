@@ -160,7 +160,7 @@ contract MasterChef is Ownable {
     }
 
     // View function to see pending FRXs on frontend.
-    function pendingSushi(uint256 _pid, address _user) external view returns (uint256) {
+    function pendingFRX(uint256 _pid, address _user) external view returns (uint256) {
         PoolInfo storage pool = poolInfo[_pid];
         UserInfo storage user = userInfo[_pid][_user];
         uint256 accFRXPerShare = pool.accFRXPerShare;
@@ -197,8 +197,8 @@ contract MasterChef is Ownable {
         // @todo: This is where it needs to change, In our case pool should already have sufficient tokens,
         // @todo: if not then call the parent contract distribute functions to receive tokens accordingly
         // @todo: minting doesn't look good
-        frx.mint(devaddr, frxReward.div(10));
-        frx.mint(address(this), frxReward);
+//        frx.mint(devaddr, frxReward.div(10));
+//        frx.mint(address(this), frxReward);
         pool.accFRXPerShare = pool.accFRXPerShare.add(frxReward.mul(1e12).div(lpSupply));
         pool.lastRewardBlock = block.number;
     }

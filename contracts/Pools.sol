@@ -8,12 +8,12 @@ contract Pools is SharedVariables {
     function _resetPools() internal {
         for (uint i = 0; i < refPoolBonuses.length; i++) {
             refPoolUsers[i].user = address(0);
-            refPoolUsers[i].investmentId = 0;
+            refPoolUsers[i].stakeId = 0;
         }
 
         for (uint i = 0; i < sponsorPoolBonuses.length; i++) {
             sponsorPoolUsers[i].user = address(0);
-            refPoolUsers[i].investmentId = 0;
+            refPoolUsers[i].stakeId = 0;
         }
 
         refPoolBalance = 0;
@@ -21,10 +21,10 @@ contract Pools is SharedVariables {
         poolDrewAt = block.timestamp;
     }
 
-    function _updateSponsorPoolUsers(User memory user, Investment memory investment) internal {
+    function _updateSponsorPoolUsers(User memory user, Stake memory stake) internal {
         if (
             sponsorPoolUsers[sponsorPoolUsers.length.sub(1)].user == address(0) ||
-            investment.sponsorPool.amount > users[sponsorPoolUsers[sponsorPoolUsers.length.sub(1)].user].investments[sponsorPoolUsers[sponsorPoolUsers.length.sub(1)].investmentId].sponsorPool.amount
+            stake.sponsorPool.amount > users[sponsorPoolUsers[sponsorPoolUsers.length.sub(1)].user].stakes[sponsorPoolUsers[sponsorPoolUsers.length.sub(1)].stakeId].sponsorPool.amount
         ) { // either last user is not set or last user's sponsor balance is less then this user
 
             PoolUser memory shiftUser;
@@ -33,14 +33,14 @@ contract Pools is SharedVariables {
 
                 if (sponsorPoolUsers[i].user == address(0)) {
                     sponsorPoolUsers[i].user = user.wallet;
-                    sponsorPoolUsers[i].investmentId = investment.id;
+                    sponsorPoolUsers[i].stakeId = stake.id;
                     break;
                 }
 
-                if (investment.sponsorPool.amount > users[sponsorPoolUsers[i].user].investments[sponsorPoolUsers[i].investmentId].sponsorPool.amount) {
+                if (stake.sponsorPool.amount > users[sponsorPoolUsers[i].user].stakes[sponsorPoolUsers[i].stakeId].sponsorPool.amount) {
                     shiftUser = sponsorPoolUsers[i];
                     sponsorPoolUsers[i].user = user.wallet;
-                    sponsorPoolUsers[i].investmentId = investment.id;
+                    sponsorPoolUsers[i].stakeId = stake.id;
                     PoolUser memory nextUser;
                     for (uint j = i; i < sponsorPoolUsers.length; j++) {
 
@@ -60,10 +60,10 @@ contract Pools is SharedVariables {
     }
 
     // Reorganise top ref-pool users to draw pool for
-    function _updateRefPoolUsers(User memory user, Investment memory investment) internal {
+    function _updateRefPoolUsers(User memory user, Stake memory stake) internal {
         if (
             refPoolUsers[refPoolUsers.length - 1].user == address(0) ||
-            investment.refPool.amount > users[refPoolUsers[refPoolUsers.length - 1].user].investments[refPoolUsers[refPoolUsers.length - 1].investmentId].refPool.amount
+            stake.refPool.amount > users[refPoolUsers[refPoolUsers.length - 1].user].stakes[refPoolUsers[refPoolUsers.length - 1].stakeId].refPool.amount
         ) { // either last user is not set or last user's ref balance is less then this user
 
             PoolUser memory shiftUser;
@@ -72,14 +72,14 @@ contract Pools is SharedVariables {
 
                 if (refPoolUsers[i].user == address(0)) {
                     refPoolUsers[i].user = user.wallet;
-                    refPoolUsers[i].investmentId = investment.id;
+                    refPoolUsers[i].stakeId = stake.id;
                     break;
                 }
 
-                if (investment.refPool.amount > users[refPoolUsers[i].user].investments[refPoolUsers[i].investmentId].refPool.amount) {
+                if (stake.refPool.amount > users[refPoolUsers[i].user].stakes[refPoolUsers[i].stakeId].refPool.amount) {
                     shiftUser = refPoolUsers[i];
                     refPoolUsers[i].user = user.wallet;
-                    refPoolUsers[i].investmentId = investment.id;
+                    refPoolUsers[i].stakeId = stake.id;
                     PoolUser memory nextUser;
                     for (uint j = i; i < refPoolUsers.length; j++) {
 
@@ -104,14 +104,14 @@ contract Pools is SharedVariables {
                 if (refPoolUsers[i].user == address(0)) break;
 
                 User storage user = users[refPoolUsers[i].user];
-                user.investments[refPoolUsers[i].investmentId].refPoolRewards = user.investments[refPoolUsers[i].investmentId].refPoolRewards.add(_calcPercentage(refPoolBalance, refPoolBonuses[i]));
+                user.stakes[refPoolUsers[i].stakeId].refPoolRewards = user.stakes[refPoolUsers[i].stakeId].refPoolRewards.add(_calcPercentage(refPoolBalance, refPoolBonuses[i]));
             }
 
             for (uint i = 0; i < sponsorPoolUsers.length; i++) {
                 if (sponsorPoolUsers[i].user == address(0)) break;
 
                 User storage user = users[sponsorPoolUsers[i].user];
-                user.investments[sponsorPoolUsers[i].investmentId].sponsorPoolRewards = user.investments[sponsorPoolUsers[i].investmentId].sponsorPoolRewards.add(_calcPercentage(sponsorPoolBalance, sponsorPoolBonuses[i]));
+                user.stakes[sponsorPoolUsers[i].stakeId].sponsorPoolRewards = user.stakes[sponsorPoolUsers[i].stakeId].sponsorPoolRewards.add(_calcPercentage(sponsorPoolBalance, sponsorPoolBonuses[i]));
             }
 
             totalRefPoolRewards = totalRefPoolRewards.add(refPoolBalance);

@@ -1,0 +1,484 @@
+{
+  "fileName": "StatsVars.sol",
+  "contractName": "StatsVars",
+  "source": "// SPDX-License-Identifier: MIT\npragma solidity ^0.6.12;\n\n\ncontract StatsVars {\n    // Stats\n    uint public totalDeposits;\n    uint public totalWithdrawn;\n    uint public totalInvestments;\n    uint public totalActiveInvestments;\n    uint public totalRefRewards;\n    uint public totalRefPoolRewards;\n    uint public totalSponsorPoolRewards;\n    uint public totalDepositRewards;\n    uint public totalPenalty;\n    uint public totalExited;\n}\n",
+  "sourcePath": "contracts/StatsVars.sol",
+  "sourceMap": "59:379:19:-:0;;;;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "59:379:19:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;194:34;;;:::i;:::-;;;;;;;;;;;;;;;;267:31;;;:::i;128:26::-;;;:::i;160:28::-;;;:::i;345:31::-;;;:::i;97:25::-;;;:::i;304:35::-;;;:::i;412:23::-;;;:::i;234:27::-;;;:::i;382:24::-;;;:::i;194:34::-;;;;:::o;267:31::-;;;;:::o;128:26::-;;;;:::o;160:28::-;;;;:::o;345:31::-;;;;:::o;97:25::-;;;;:::o;304:35::-;;;;:::o;412:23::-;;;;:::o;234:27::-;;;;:::o;382:24::-;;;;:::o",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "totalActiveInvestments",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "totalDepositRewards",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "totalDeposits",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "totalExited",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "totalInvestments",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "totalPenalty",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "totalRefPoolRewards",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "totalRefRewards",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "totalSponsorPoolRewards",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "totalWithdrawn",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "ast": {
+    "absolutePath": "contracts/StatsVars.sol",
+    "exportedSymbols": {
+      "StatsVars": [
+        7164
+      ]
+    },
+    "id": 7165,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 7143,
+        "literals": [
+          "solidity",
+          "^",
+          "0.6",
+          ".12"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "32:24:19"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 7164,
+        "linearizedBaseContracts": [
+          7164
+        ],
+        "name": "StatsVars",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "functionSelector": "7d882097",
+            "id": 7145,
+            "mutability": "mutable",
+            "name": "totalDeposits",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 7164,
+            "src": "97:25:19",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 7144,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "97:4:19",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "functionSelector": "4b319713",
+            "id": 7147,
+            "mutability": "mutable",
+            "name": "totalWithdrawn",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 7164,
+            "src": "128:26:19",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 7146,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "128:4:19",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "functionSelector": "70fd37cf",
+            "id": 7149,
+            "mutability": "mutable",
+            "name": "totalInvestments",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 7164,
+            "src": "160:28:19",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 7148,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "160:4:19",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "functionSelector": "24cf3682",
+            "id": 7151,
+            "mutability": "mutable",
+            "name": "totalActiveInvestments",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 7164,
+            "src": "194:34:19",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 7150,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "194:4:19",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "functionSelector": "bfe0e020",
+            "id": 7153,
+            "mutability": "mutable",
+            "name": "totalRefRewards",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 7164,
+            "src": "234:27:19",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 7152,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "234:4:19",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "functionSelector": "2673ebf7",
+            "id": 7155,
+            "mutability": "mutable",
+            "name": "totalRefPoolRewards",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 7164,
+            "src": "267:31:19",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 7154,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "267:4:19",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "functionSelector": "8876bb3e",
+            "id": 7157,
+            "mutability": "mutable",
+            "name": "totalSponsorPoolRewards",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 7164,
+            "src": "304:35:19",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 7156,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "304:4:19",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "functionSelector": "7247b2b9",
+            "id": 7159,
+            "mutability": "mutable",
+            "name": "totalDepositRewards",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 7164,
+            "src": "345:31:19",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 7158,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "345:4:19",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "functionSelector": "e6af61c8",
+            "id": 7161,
+            "mutability": "mutable",
+            "name": "totalPenalty",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 7164,
+            "src": "382:24:19",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 7160,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "382:4:19",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "functionSelector": "91994b2c",
+            "id": 7163,
+            "mutability": "mutable",
+            "name": "totalExited",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 7164,
+            "src": "412:23:19",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 7162,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "412:4:19",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 7165,
+        "src": "59:379:19"
+      }
+    ],
+    "src": "32:407:19"
+  },
+  "bytecode": "0x608060405234801561001057600080fd5b50610167806100206000396000f3fe608060405234801561001057600080fd5b506004361061008e5760003560e01c806324cf3682146100935780632673ebf7146100ad5780634b319713146100b557806370fd37cf146100bd5780637247b2b9146100c55780637d882097146100cd5780638876bb3e146100d557806391994b2c146100dd578063bfe0e020146100e5578063e6af61c8146100ed575b600080fd5b61009b6100f5565b60408051918252519081900360200190f35b61009b6100fb565b61009b610101565b61009b610107565b61009b61010d565b61009b610113565b61009b610119565b61009b61011f565b61009b610125565b61009b61012b565b60035481565b60055481565b60015481565b60025481565b60075481565b60005481565b60065481565b60095481565b60045481565b6008548156fea2646970667358221220fd04f18b1d4fdcbea00ca04689e6496daf059f13cc80cfbb04a88cc2c1850c5364736f6c634300060c0033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b506004361061008e5760003560e01c806324cf3682146100935780632673ebf7146100ad5780634b319713146100b557806370fd37cf146100bd5780637247b2b9146100c55780637d882097146100cd5780638876bb3e146100d557806391994b2c146100dd578063bfe0e020146100e5578063e6af61c8146100ed575b600080fd5b61009b6100f5565b60408051918252519081900360200190f35b61009b6100fb565b61009b610101565b61009b610107565b61009b61010d565b61009b610113565b61009b610119565b61009b61011f565b61009b610125565b61009b61012b565b60035481565b60055481565b60015481565b60025481565b60075481565b60005481565b60065481565b60095481565b60045481565b6008548156fea2646970667358221220fd04f18b1d4fdcbea00ca04689e6496daf059f13cc80cfbb04a88cc2c1850c5364736f6c634300060c0033",
+  "compiler": {
+    "name": "solc",
+    "version": "0.6.12+commit.27d51765.Emscripten.clang",
+    "optimizer": {
+      "enabled": true,
+      "runs": 1
+    },
+    "evmVersion": "petersburg"
+  }
+}

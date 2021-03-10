@@ -1139,6 +1139,5 @@
       "runs": 1
     },
     "evmVersion": "petersburg"
-  },
-  "networks": {}
+  }
 }

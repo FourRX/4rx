@@ -4,47 +4,43 @@ pragma solidity ^0.6.12;
 import "./RewardsAndPenalties.sol";
 
 contract Insurance is RewardsAndPenalties {
-    uint private baseInsuranceForBP = 3500; // trigger insurance with contract balance fall below 35%
-
+    uint private constant BASE_INSURANCE_FOR_BP = 3500; // trigger insurance with contract balance fall below 35%
+    uint private constant OPT_IN_INSURANCE_FEE_BP = 1000; // 10%
+    uint private constant OPT_IN_INSURANCE_FOR_BP = 10000; // 100%
 
     bool public isInInsuranceState = false; // if contract is only allowing insured money this becomes true;
 
-    uint private optInInsuranceFeeBP = 1000; // 10%
-    uint private optInInsuranceForBP = 10000; // 100%
-
     function checkForBaseInsuranceTrigger() internal {
-        if (fourRXToken.balanceOf(address(this)) <= _calcPercentage(maxContractBalance, baseInsuranceForBP)) {
+        if (fourRXToken.balanceOf(address(this)) <= _calcPercentage(maxContractBalance, BASE_INSURANCE_FOR_BP)) {
             isInInsuranceState = true;
         } else {
             isInInsuranceState = false;
         }
     }
 
-    function getInsuredAvailableAmount(Investment memory investment, uint withdrawalAmount) internal view returns (uint)
+    function getInsuredAvailableAmount(Stake memory stake, uint withdrawalAmount) internal pure returns (uint)
     {
         uint availableAmount = withdrawalAmount;
         // Calc correct insured value by checking which insurance should be applied
-        uint insuredFor = baseInsuranceForBP;
-        if (investment.optInInsured) {
-            insuredFor = optInInsuranceForBP;
+        uint insuredFor = BASE_INSURANCE_FOR_BP;
+        if (stake.optInInsured) {
+            insuredFor = OPT_IN_INSURANCE_FOR_BP;
         }
 
-        uint maxWithdrawalAllowed = _calcPercentage(investment.deposit, insuredFor);
-        require(maxWithdrawalAllowed < investment.withdrawn); // if contract is in insurance trigger, do not allow withdrawals for the users who already have withdrawn more then 35%
+        uint maxWithdrawalAllowed = _calcPercentage(stake.deposit, insuredFor);
+        require(maxWithdrawalAllowed < stake.withdrawn); // if contract is in insurance trigger, do not allow withdrawals for the users who already have withdrawn more then 35%
 
-        if (investment.withdrawn.add(availableAmount) > maxWithdrawalAllowed) {
-            availableAmount = maxWithdrawalAllowed - investment.withdrawn;
+        if (stake.withdrawn.add(availableAmount) > maxWithdrawalAllowed) {
+            availableAmount = maxWithdrawalAllowed - stake.withdrawn;
         }
 
         return availableAmount;
     }
 
-    function _insureInvestment(Investment storage investment) internal {
-        require(!investment.optInInsured && investment.active);
+    function _insureInvestment(Stake storage stake) internal {
+        require(!stake.optInInsured && stake.active);
 
-        investment.deposit = investment.deposit.sub(_calcPercentage(investment.deposit, optInInsuranceFeeBP));
-        investment.optInInsured = true;
+        stake.deposit = stake.deposit.sub(_calcPercentage(stake.deposit, OPT_IN_INSURANCE_FEE_BP));
+        stake.optInInsured = true;
     }
-
-
 }
