@@ -39,13 +39,13 @@ describe('FourRXFinance Deposit Tests', function () {
             amount: new BN(this.amount)
         })
 
-        expect(await this.fourRXFinance.balanceOf(user1, 0)).to.be.bignumber.equals(new BN(790)); // Ref Bonus 700 + 90 Contract Rewards (1% of user's balance after removing lp commissions)
+        expect(await this.fourRXFinance.balanceOf(user1, 0)).to.be.bignumber.equals(new BN(871)); // Ref Bonus 700 + 90 Contract Rewards (1% of user's balance after removing lp commissions)
     });
 
     it('should give user rewards in 10 days', async function () {
         await time.increase(time.duration.days(10));
 
-        expect(await this.fourRXFinance.balanceOf(user1, 0)).to.be.bignumber.equals(new BN(90));
+        expect(await this.fourRXFinance.balanceOf(user1, 0)).to.be.bignumber.equals(new BN(130));
         // @todo: these comments are messed up now
         // 90 contract rewards
         // 45 percentage rewards
@@ -55,7 +55,7 @@ describe('FourRXFinance Deposit Tests', function () {
         await time.increase(time.duration.days(10));
         await this.fourRXFinance.deposit(this.amount, user1, 0, {from: user2});
 
-        expect(await this.fourRXFinance.balanceOf(user1, 0)).to.be.bignumber.equals(new BN(921));
+        expect(await this.fourRXFinance.balanceOf(user1, 0)).to.be.bignumber.equals(new BN(967));
         // @todo: these comments are messed up now
         // 36 hold rewards
         // 180 Contract rewards

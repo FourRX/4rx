@@ -1,7 +1,8 @@
 {
   "manifestVersion": "2.2",
   "contracts": {
-    "DummyERC20Token": "DummyERC20Token"
+    "FRX": "FRX",
+    "FourRxFinance": "FourRxFinance"
   },
   "dependencies": {},
   "name": "4RXFinance",
@@ -9,7 +10,7 @@
   "compiler": {
     "compilerSettings": {
       "optimizer": {
-        "enabled": true,
+        "enabled": false,
         "runs": "1"
       }
     },

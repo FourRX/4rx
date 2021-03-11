@@ -20,28 +20,28 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">93.33% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>0/14</span>
+        <span class='fraction'>14/15</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">60% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/10</span>
+        <span class='fraction'>6/10</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/3</span>
+        <span class='fraction'>3/3</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">93.33% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>0/14</span>
+        <span class='fraction'>14/15</span>
       </div>
     </div>
   </div>
-  <div class='status-line low'></div>
+  <div class='status-line high'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet">1
 2
@@ -91,8 +91,7 @@
 46
 47
 48
-49
-50</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+49</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -106,39 +105,38 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">62×</span>
+<span class="cline-any cline-yes">2×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">60×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// SPDX-License-Identifier: MIT
@@ -146,49 +144,48 @@ pragma solidity ^0.6.12;
 &nbsp;
 import "./RewardsAndPenalties.sol";
 &nbsp;
+&nbsp;
 contract Insurance is RewardsAndPenalties {
-    uint baseInsuranceForBP = 3500; // trigger insurance with contract balance fall below 35%
+    uint private constant BASE_INSURANCE_FOR_BP = 3500; // trigger insurance with contract balance fall below 35%
+    uint private constant OPT_IN_INSURANCE_FEE_BP = 1000; // 10%
+    uint private constant OPT_IN_INSURANCE_FOR_BP = 10000; // 100%
 &nbsp;
+    bool public isInInsuranceState = false; // if contract is only allowing insured money this becomes true;
 &nbsp;
-    bool isInInsuranceState = false; // if contract is only allowing insured money this becomes true;
-&nbsp;
-    uint optInInsuranceFeeBP = 1000; // 10%
-    uint optInInsuranceForBP = 10000; // 100%
-&nbsp;
-<span class="fstat-no" title="function not covered" >    function checkForBaseInsuranceTrigger() internal {</span>
-<span class="cstat-no" title="statement not covered" >        if (fourRXToken.balanceOf(address(this)) &lt;= _calcPercentage(maxContractBalance, baseInsuranceForBP)) {</span>
-<span class="cstat-no" title="statement not covered" >            isInInsuranceState = true</span>;
+    function _checkForBaseInsuranceTrigger() internal {
+        if (fourRXToken.balanceOf(address(this)) &lt;= _calcPercentage(maxContractBalance, BASE_INSURANCE_FOR_BP)) {
+            isInInsuranceState = true;
         } else {
-<span class="cstat-no" title="statement not covered" >            isInInsuranceState = false</span>;
+            isInInsuranceState = false;
         }
     }
 &nbsp;
-<span class="fstat-no" title="function not covered" >    function getInsuredAvailableAmount(Investment memory investment, uint availableAmount) internal view returns (uint)</span>
+    function _getInsuredAvailableAmount(Stake memory stake, uint withdrawalAmount) internal pure returns (uint)
     {
+        uint availableAmount = withdrawalAmount;
         // Calc correct insured value by checking which insurance should be applied
-<span class="cstat-no" title="statement not covered" >        uint insuredFor = baseInsuranceForBP;</span>
-<span class="cstat-no" title="statement not covered" >        if (investment.optInInsured) {</span>
-<span class="cstat-no" title="statement not covered" >            insuredFor = optInInsuranceForBP</span>;
+        uint insuredFor = BASE_INSURANCE_FOR_BP;
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (stake.optInInsured) {
+            insuredFor = OPT_IN_INSURANCE_FOR_BP;
         }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        uint maxWithdrawalAllowed = _calcPercentage(investment.deposit, insuredFor);</span>
-<span class="cstat-no" title="statement not covered" >        require(maxWithdrawalAllowed &lt; investment.withdrawn)</span>; // if contract is in insurance trigger, do not allow withdrawals for the users who already have withdrawn more then 35%
+        uint maxWithdrawalAllowed = _calcPercentage(stake.deposit, insuredFor);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        if (investment.withdrawn.add(availableAmount) &gt; maxWithdrawalAllowed) {</span>
-<span class="cstat-no" title="statement not covered" >            availableAmount = maxWithdrawalAllowed - investment.withdrawn</span>;
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(maxWithdrawalAllowed &gt;= stake.withdrawn.add(stake.penalty)); // if contract is in insurance trigger, do not allow withdrawals for the users who already have withdrawn more then 35%
+&nbsp;
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (stake.withdrawn.add(availableAmount).add(stake.penalty) &gt; maxWithdrawalAllowed) {
+<span class="cstat-no" title="statement not covered" >            availableAmount = maxWithdrawalAllowed.sub(stake.withdrawn).sub(stake.penalty)</span>;
         }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        return availableAmount;</span>
+        return availableAmount;
     }
 &nbsp;
-<span class="fstat-no" title="function not covered" >    function _insureInvestment(Investment storage investment) internal {</span>
-<span class="cstat-no" title="statement not covered" >        require(!investment.optInInsured &amp;&amp; investment.active)</span>;
+    function _insureStake(Stake storage stake) internal {
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(!stake.optInInsured &amp;&amp; stake.active);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        investment.deposit = investment.deposit.sub(_calcPercentage(investment.deposit, optInInsuranceFeeBP))</span>;
-<span class="cstat-no" title="statement not covered" >        investment.optInInsured = true</span>;
+        stake.deposit = stake.deposit.sub(_calcPercentage(stake.deposit, OPT_IN_INSURANCE_FEE_BP));
+        stake.optInInsured = true;
     }
-&nbsp;
-&nbsp;
 }
 &nbsp;</pre></td></tr>
 </table></pre>
@@ -196,7 +193,7 @@ contract Insurance is RewardsAndPenalties {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Mar 08 2021 12:28:09 GMT+0530 (India Standard Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri Mar 12 2021 00:30:51 GMT+0530 (India Standard Time)
 </div>
 </div>
 <script src="../prettify.js"></script>

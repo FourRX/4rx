@@ -8,6 +8,12 @@ const privateKeys = process.env.PRIVATE_KEYS || ""
  */
 module.exports = {
   solidity: "0.6.12",
+  settings: {
+    optimizer: {
+      enabled: true,
+      runs: 1
+    }
+  },
   networks: {
     hardhat: {
       gas: 12000000,

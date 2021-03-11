@@ -2,7 +2,6 @@
 
 .idea
 node_modules
-build
 .env
 cache
 artifacts

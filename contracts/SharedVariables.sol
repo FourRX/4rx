@@ -1,109 +1,80 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.6.12;
 
-import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./InterestCalculator.sol";
 import "./Events.sol";
-import "./SafePercentageCalculator.sol";
+import "./PercentageCalculator.sol";
 import "./utils/Utils.sol";
+import "./Constants.sol";
+import "./StatsVars.sol";
 
-contract SharedVariables is SafePercentageCalculator, InterestCalculator, Events, Utils {
+
+contract SharedVariables is Constants, StatsVars, PercentageCalculator, InterestCalculator, Events, Utils {
     using SafeMath for uint;
 
-    IERC20 fourRXToken;
-    uint maxContractRewards = 30000; // 300%
-    uint lpCommission = 1000;
-    uint refCommission = 700;
+    IERC20 public fourRXToken;
 
-    uint devCommission = 5000; // 5%
-    address devAddress = 0x64B8cb4C04Ba902010856d913B4e5DF940748Bf2; // Dummy address replace it for prod/dev
-
-    uint depositRefPoolCommission = 50;
-    uint depositSponsorPoolCommission = 50;
-    uint exitPenalty = 5000;
-
-    // Contract bonus
-    uint maxContractBonus = 300; // maximum bonus a user can get 3%
-    uint contractBonusUnit = 100;    // For each 100 unit balance of contract, gives
-    uint contractBonusUnitBonus = 1; // 0.01% extra interest
-
-    uint holdBonusUnitBonus = 2; // 0.02% hold bonus for each 12 hours of hold
-    uint maxHoldBonus = 100; // Maximum 1% hold bonus
-    uint holdBonusUnlocksAt = 300; // User will only get hold bonus if his rewards are more then 10% of his deposit
-
-    uint maxWithdrawalOverTenPercent = 300; // Max daily withdrawal limit if user is above 10%
-
-    uint maxContractBalance;
-
-    uint poolCycle;
-    uint poolDrewAt;
-
-    uint refPoolBalance;
-    uint sponsorPoolBalance;
+    address public devAddress = 0x64B8cb4C04Ba902010856d913B4e5DF940748Bf2; // Dummy address replace it for prod/dev
 
     struct PoolUser {
-        address user;
-        uint investmentId;
+        address user; // user's address
+        uint stakeId;
     }
 
-    PoolUser[12] public refPoolUsers;
-    PoolUser[10] public sponsorPoolUsers;
-
-    struct RefPool {
-        uint cycle;
-        uint amount;
-    }
-
-    struct SponsorPool {
+    struct Pool {
         uint cycle;
         uint amount;
     }
 
     struct Uplink {
         address uplinkAddress;
-        uint uplinkInvestmentId;
+        uint uplinkStakeId;
     }
 
-    struct Investment {
+    struct Stake {
         uint id;
         bool active;
-        uint interestCountFrom; // TimeStamp from which interest should be counted
+        bool optInInsured; // Is insured ???
+
         uint holdFrom; // Timestamp from which hold should be counted
         uint deposit; // Initial Deposit
-        Uplink uplink; // Referrer
+        uint withdrawn; // Total withdrawn from this stake
+        uint penalty; // Total penalty on this stale
+
+        // Rewards
         uint refCommission; // Ref rewards
         uint refPoolRewards; // Ref Pool Rewards
         uint sponsorPoolRewards; // Sponsor Pool Rewards
+
+        uint interestCountFrom; // TimeStamp from which interest should be counted, from the beginning
         uint lastWithdrawalAt; // date time of last withdrawals so we don't allow more then 3% a day
-        RefPool refPool; // To store this user's last 24 hour RefPool entries
-        SponsorPool sponsorPool; // To store this user's last 24 hour Sponsor Pool entries
-        uint withdrawn;
-        bool optInInsured; // Is insured ???
-        uint penalty;
+
+        Uplink uplink; // Referrer
+        Pool refPool; // To store this user's last 24 hour RefPool entries
+        Pool sponsorPool; // To store this user's last 24 hour Sponsor Pool entries
     }
 
     struct User {
         address wallet; // Wallet Address
-        bool registered;
-        Investment[] investments;
+        Stake[] stakes;
     }
 
-    mapping (address => User) users;
+    mapping (address => User) public users;
+
+    PoolUser[12] public refPoolUsers;
+    PoolUser[10] public sponsorPoolUsers;
 
     uint[] public refPoolBonuses;
     uint[] public sponsorPoolBonuses;
 
     uint[] public depositBonuses;
 
-    // Stats
-    uint totalDeposits;
-    uint totalWithdrawn;
-    uint totalInvestments;
-    uint totalActiveInvestments;
-    uint totalRefRewards;
-    uint totalRefPoolRewards;
-    uint totalSponsorPoolRewards;
-    uint totalDepositRewards;
-    uint totalPenalty;
-    uint totalExited;
+    uint public maxContractBalance;
+
+    uint public poolCycle;
+    uint public poolDrewAt;
+
+    uint public refPoolBalance;
+    uint public sponsorPoolBalance;
 }

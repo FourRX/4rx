@@ -123,65 +123,7 @@
 78
 79
 80
-81
-82
-83
-84
-85
-86
-87
-88
-89
-90
-91
-92
-93
-94
-95
-96
-97
-98
-99
-100
-101
-102
-103
-104
-105
-106
-107
-108
-109
-110</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+81</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -264,111 +206,82 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// SPDX-License-Identifier: MIT
 pragma solidity ^0.6.12;
 &nbsp;
-import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./InterestCalculator.sol";
 import "./Events.sol";
-import "./SafePercentageCalculator.sol";
+import "./PercentageCalculator.sol";
 import "./utils/Utils.sol";
+import "./Constants.sol";
+import "./StatsVars.sol";
 &nbsp;
-contract SharedVariables is SafePercentageCalculator, InterestCalculator, Events, Utils {
+&nbsp;
+contract SharedVariables is Constants, StatsVars, PercentageCalculator, InterestCalculator, Events, Utils {
     using SafeMath for uint;
 &nbsp;
-    IERC20 fourRXToken;
-    uint maxContractRewards = 30000; // 300%
-    uint lpCommission = 1000;
-    uint refCommission = 700;
+    IERC20 public fourRXToken;
 &nbsp;
-    uint devCommission = 5000; // 5%
-    address devAddress = 0x64B8cb4C04Ba902010856d913B4e5DF940748Bf2; // Dummy address replace it for prod/dev
-&nbsp;
-    uint depositRefPoolCommission = 50;
-    uint depositSponsorPoolCommission = 50;
-    uint exitPenalty = 5000;
-&nbsp;
-    // Contract bonus
-    uint maxContractBonus = 300; // maximum bonus a user can get 3%
-    uint contractBonusUnit = 100;    // For each 100 unit balance of contract, gives
-    uint contractBonusUnitBonus = 1; // 0.01% extra interest
-&nbsp;
-    uint holdBonusUnitBonus = 2; // 0.02% hold bonus for each 12 hours of hold
-    uint maxHoldBonus = 100; // Maximum 1% hold bonus
-    uint holdBonusUnlocksAt = 300; // User will only get hold bonus if his rewards are more then 10% of his deposit
-&nbsp;
-    uint maxWithdrawalOverTenPercent = 300; // Max daily withdrawal limit if user is above 10%
-&nbsp;
-    uint maxContractBalance;
-&nbsp;
-    uint poolCycle;
-    uint poolDrewAt;
-&nbsp;
-    uint refPoolBalance;
-    uint sponsorPoolBalance;
+    address public devAddress = 0x64B8cb4C04Ba902010856d913B4e5DF940748Bf2; // Dummy address replace it for prod/dev
 &nbsp;
     struct PoolUser {
-        address user;
-        uint investmentId;
+        address user; // user's address
+        uint stakeId;
     }
 &nbsp;
-    PoolUser[12] public refPoolUsers;
-    PoolUser[10] public sponsorPoolUsers;
-&nbsp;
-    struct RefPool {
-        uint cycle;
-        uint amount;
-    }
-&nbsp;
-    struct SponsorPool {
+    struct Pool {
         uint cycle;
         uint amount;
     }
 &nbsp;
     struct Uplink {
         address uplinkAddress;
-        uint uplinkInvestmentId;
+        uint uplinkStakeId;
     }
 &nbsp;
-    struct Investment {
+    struct Stake {
         uint id;
         bool active;
-        uint interestCountFrom; // TimeStamp from which interest should be counted
+        bool optInInsured; // Is insured ???
+&nbsp;
         uint holdFrom; // Timestamp from which hold should be counted
         uint deposit; // Initial Deposit
-        Uplink uplink; // Referrer
+        uint withdrawn; // Total withdrawn from this stake
+        uint penalty; // Total penalty on this stale
+&nbsp;
+        // Rewards
         uint refCommission; // Ref rewards
         uint refPoolRewards; // Ref Pool Rewards
         uint sponsorPoolRewards; // Sponsor Pool Rewards
+&nbsp;
+        uint interestCountFrom; // TimeStamp from which interest should be counted, from the beginning
         uint lastWithdrawalAt; // date time of last withdrawals so we don't allow more then 3% a day
-        RefPool refPool; // To store this user's last 24 hour RefPool entries
-        SponsorPool sponsorPool; // To store this user's last 24 hour Sponsor Pool entries
-        uint withdrawn;
-        bool optInInsured; // Is insured ???
-        uint penalty;
+&nbsp;
+        Uplink uplink; // Referrer
+        Pool refPool; // To store this user's last 24 hour RefPool entries
+        Pool sponsorPool; // To store this user's last 24 hour Sponsor Pool entries
     }
 &nbsp;
     struct User {
         address wallet; // Wallet Address
-        bool registered;
-        Investment[] investments;
+        Stake[] stakes;
     }
 &nbsp;
-    mapping (address =&gt; User) users;
+    mapping (address =&gt; User) public users;
+&nbsp;
+    PoolUser[12] public refPoolUsers;
+    PoolUser[10] public sponsorPoolUsers;
 &nbsp;
     uint[] public refPoolBonuses;
     uint[] public sponsorPoolBonuses;
 &nbsp;
     uint[] public depositBonuses;
 &nbsp;
-    // Stats
-    uint totalDeposits;
-    uint totalWithdrawn;
-    uint totalInvestments;
-    uint totalActiveInvestments;
-    uint totalRefRewards;
-    uint totalRefPoolRewards;
-    uint totalSponsorPoolRewards;
-    uint totalDepositRewards;
-    uint totalPenalty;
-    uint totalExited;
+    uint public maxContractBalance;
+&nbsp;
+    uint public poolCycle;
+    uint public poolDrewAt;
+&nbsp;
+    uint public refPoolBalance;
+    uint public sponsorPoolBalance;
 }
 &nbsp;</pre></td></tr>
 </table></pre>
@@ -376,7 +289,7 @@ contract SharedVariables is SafePercentageCalculator, InterestCalculator, Events
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Mar 08 2021 12:28:09 GMT+0530 (India Standard Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri Mar 12 2021 00:30:51 GMT+0530 (India Standard Time)
 </div>
 </div>
 <script src="../prettify.js"></script>

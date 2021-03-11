@@ -2,8 +2,9 @@
 pragma solidity ^0.6.12;
 pragma experimental ABIEncoderV2;
 
-import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./Insurance.sol";
+
 
 contract FourRXFinance is Insurance {
 
@@ -35,50 +36,54 @@ contract FourRXFinance is Insurance {
         sponsorPoolBonuses.push(100);
 
         _resetPools();
+
+        poolCycle = 0;
     }
 
-    function deposit(uint amount, address uplinkAddress, uint uplinkId) external {
-        require((users[uplinkAddress].registered && users[uplinkAddress].investments[uplinkId].active) || uplinkAddress == address(0)); // Either uplink must be registered and be a active deposit, 0 address
+    function deposit(uint amount, address uplinkAddress, uint uplinkStakeId) external {
+        require(
+            (users[uplinkAddress].wallet != address(0) && users[uplinkAddress].stakes[uplinkStakeId].active) ||
+            uplinkAddress == address(0)
+        ); // Either uplink must be registered and be a active deposit, 0 address
 
         User storage user = users[msg.sender];
 
-        if (users[msg.sender].investments.length > 0) {
-            require(amount > users[msg.sender].investments[user.investments.length - 1].deposit.mul(2)); // deposit amount must be greater 2x then last deposit
+        if (users[msg.sender].stakes.length > 0) {
+            require(amount >= users[msg.sender].stakes[user.stakes.length - 1].deposit.mul(2)); // deposit amount must be greater 2x then last deposit
         }
 
         require(fourRXToken.transferFrom(msg.sender, address(this), amount));
 
+        drawPool(); // Draw old pool if qualified, and we're pretty sure that this stake is going to be created
+
         uint depositReward = _calcDepositRewards(amount);
 
-        Investment memory investment;
+        Stake memory stake;
 
         user.wallet = msg.sender;
-        user.registered = true;
 
-        investment.id = user.investments.length;
-        investment.active = true;
-        investment.interestCountFrom = block.timestamp;
-        investment.holdFrom = block.timestamp;
+        stake.id = user.stakes.length;
+        stake.active = true;
+        stake.interestCountFrom = block.timestamp;
+        stake.holdFrom = block.timestamp;
 
-        investment.deposit = amount.sub(_calcPercentage(amount, lpCommission)).add(depositReward); // Deduct LP Commission + add deposit rewards
-        investment.uplink.uplinkAddress = uplinkAddress;
-        investment.uplink.uplinkInvestmentId = uplinkId;
+        stake.deposit = amount.sub(_calcPercentage(amount, LP_FEE_BP)).add(depositReward); // Deduct LP Commission + add deposit rewards
+        stake.uplink.uplinkAddress = uplinkAddress;
+        stake.uplink.uplinkStakeId = uplinkStakeId;
 
-        investment.sponsorPool.cycle = poolCycle;
-        investment.sponsorPool.amount = amount;
+        stake.sponsorPool.cycle = poolCycle;
+        stake.sponsorPool.amount = amount;
 
-        _updateSponsorPoolUsers(user, investment);
+        _updateSponsorPoolUsers(user, stake);
 
-        _distributeReferralReward(amount, investment);
+        _distributeReferralReward(amount, stake);
 
-        user.investments.push(investment);
+        user.stakes.push(stake);
 
-        refPoolBalance = refPoolBalance.add(_calcPercentage(amount, depositRefPoolCommission));
-        sponsorPoolBalance = sponsorPoolBalance.add(_calcPercentage(amount, depositSponsorPoolCommission));
+        refPoolBalance = refPoolBalance.add(_calcPercentage(amount, REF_POOL_FEE_BP));
+        sponsorPoolBalance = sponsorPoolBalance.add(_calcPercentage(amount, SPONSOR_POOL_FEE_BP));
 
-        drawPool();
-
-        fourRXToken.transfer(devAddress, _calcPercentage(amount, devCommission));
+        fourRXToken.transfer(devAddress, _calcPercentage(amount, DEV_FEE_BP));
 
         uint currentContractBalance = fourRXToken.balanceOf(address(this));
 
@@ -87,38 +92,38 @@ contract FourRXFinance is Insurance {
         }
 
         totalDeposits = totalDeposits.add(amount);
-        totalInvestments = totalInvestments.add(1);
-        totalActiveInvestments = totalActiveInvestments.add(1);
+        totalStakes = totalStakes.add(1);
+        totalActiveStakes = totalActiveStakes.add(1);
         totalDepositRewards = totalDepositRewards.add(depositReward);
 
         emit Deposit(msg.sender, uplinkAddress, amount);
     }
 
 
-    function balanceOf(address _userAddress, uint investmentId) external view returns (uint) {
+    function balanceOf(address _userAddress, uint stakeId) external view returns (uint) {
         require(users[_userAddress].wallet == _userAddress);
         User memory user = users[_userAddress];
 
-        return _calcRewards(user.investments[investmentId]).sub(user.investments[investmentId].withdrawn);
+        return _calcRewards(user.stakes[stakeId]).sub(user.stakes[stakeId].withdrawn);
     }
 
-    function withdraw(uint investmentId) external {
+    function withdraw(uint stakeId) external {
         User storage user = users[msg.sender];
-        Investment storage investment = user.investments[investmentId];
-        require(user.wallet == msg.sender && investment.active); // investment should be active
+        Stake storage stake = user.stakes[stakeId];
+        require(user.wallet == msg.sender && stake.active); // stake should be active
 
-        require(investment.lastWithdrawalAt + 1 days < block.timestamp); // we only allow one withdrawal each day
+        require(stake.lastWithdrawalAt + 1 days < block.timestamp); // we only allow one withdrawal each day
 
-        uint availableAmount = _calcRewards(investment).sub(investment.withdrawn).sub(investment.penalty);
+        uint availableAmount = _calcRewards(stake).sub(stake.withdrawn).sub(stake.penalty);
 
         require(availableAmount > 0);
 
-        uint penalty = _calcPenalty(investment, availableAmount);
+        uint penalty = _calcPenalty(stake, availableAmount);
 
         if (penalty == 0) {
-            availableAmount = availableAmount.sub(_calcPercentage(investment.deposit, holdBonusUnlocksAt)); // Only allow withdrawal if available is more then 10% of base
+            availableAmount = availableAmount.sub(_calcPercentage(stake.deposit, REWARD_THRESHOLD_BP)); // Only allow withdrawal if available is more then 10% of base
 
-            uint maxAllowedWithdrawal = _calcPercentage(investment.deposit, maxWithdrawalOverTenPercent);
+            uint maxAllowedWithdrawal = _calcPercentage(stake.deposit, MAX_WITHDRAWAL_OVER_REWARD_THRESHOLD_BP);
 
             if (availableAmount > maxAllowedWithdrawal) {
                 availableAmount = maxAllowedWithdrawal;
@@ -126,53 +131,53 @@ contract FourRXFinance is Insurance {
         }
 
         if (isInInsuranceState) {
-            availableAmount = getInsuredAvailableAmount(investment, availableAmount);
+            availableAmount = _getInsuredAvailableAmount(stake, availableAmount);
         }
 
         availableAmount = availableAmount.sub(penalty);
 
         fourRXToken.transfer(user.wallet, availableAmount);
 
-        investment.withdrawn = investment.withdrawn.add(availableAmount);
-        investment.lastWithdrawalAt = block.timestamp;
-        investment.holdFrom = block.timestamp;
+        stake.withdrawn = stake.withdrawn.add(availableAmount);
+        stake.lastWithdrawalAt = block.timestamp;
+        stake.holdFrom = block.timestamp;
 
-        investment.penalty = investment.penalty.add(penalty);
+        stake.penalty = stake.penalty.add(penalty);
 
         totalPenalty = totalPenalty.add(penalty);
 
-        if (investment.withdrawn >= _calcPercentage(investment.deposit, maxContractRewards)) {
-            investment.active = false; // if investment has withdrawn equals to or more then the max amount, then mark investment in-active
-            totalActiveInvestments = totalActiveInvestments.sub(1);
+        if (stake.withdrawn >= _calcPercentage(stake.deposit, MAX_CONTRACT_REWARD_BP)) {
+            stake.active = false; // if stake has withdrawn equals to or more then the max amount, then mark stake in-active
+            totalActiveStakes = totalActiveStakes.sub(1);
         }
 
-        checkForBaseInsuranceTrigger();
+        _checkForBaseInsuranceTrigger();
 
         totalWithdrawn = totalWithdrawn.add(availableAmount);
 
         emit Withdraw(user.wallet, availableAmount);
     }
 
-    function exitProgram(uint investmentId) external {
+    function exitProgram(uint stakeId) external {
         User storage user = users[msg.sender];
         require(user.wallet == msg.sender);
-        Investment storage investment = user.investments[investmentId];
-        uint availableAmount = investment.deposit;
-        uint penaltyAmount = _calcPercentage(investment.deposit, exitPenalty);
+        Stake storage stake = user.stakes[stakeId];
+        uint availableAmount = stake.deposit;
+        uint penaltyAmount = _calcPercentage(stake.deposit, EXIT_PENALTY_BP);
 
         availableAmount = availableAmount.sub(penaltyAmount);
 
-        uint withdrawn = investment.withdrawn.add(investment.penalty);
+        uint withdrawn = stake.withdrawn.add(stake.penalty);
         require(withdrawn <= availableAmount);
         availableAmount = availableAmount.sub(withdrawn); // @todo: discuss this new implementation with Assaf
 
         fourRXToken.transfer(user.wallet, availableAmount);
 
-        investment.active = false;
-        investment.withdrawn = investment.withdrawn.add(availableAmount);
-        investment.penalty = investment.penalty.add(penaltyAmount);
+        stake.active = false;
+        stake.withdrawn = stake.withdrawn.add(availableAmount);
+        stake.penalty = stake.penalty.add(penaltyAmount);
 
-        totalActiveInvestments = totalActiveInvestments.sub(1);
+        totalActiveStakes = totalActiveStakes.sub(1);
         totalExited = totalExited.add(1);
 
         totalWithdrawn = totalWithdrawn.add(availableAmount);
@@ -181,11 +186,11 @@ contract FourRXFinance is Insurance {
         emit Exited(user.wallet);
     }
 
-    function insureInvestment(uint investmentId) external {
+    function insureStake(uint stakeId) external {
         User storage user = users[msg.sender];
         require(user.wallet == msg.sender);
-        Investment storage investment = user.investments[investmentId];
-        _insureInvestment(investment);
+        Stake storage stake = user.stakes[stakeId];
+        _insureStake(stake);
     }
 
     function getUser(address userAddress) external view returns (User memory) {
@@ -196,7 +201,7 @@ contract FourRXFinance is Insurance {
         return (poolDrewAt, poolCycle, sponsorPoolBalance, refPoolBalance, sponsorPoolUsers, refPoolUsers);
     }
 
-    function getContractInfo() external view returns (uint, uint, uint, uint, uint, uint, uint, uint, uint, uint, uint) {
-        return (maxContractBalance, totalDeposits, totalWithdrawn, totalInvestments, totalActiveInvestments, totalRefRewards, totalRefPoolRewards, totalSponsorPoolRewards, totalDepositRewards, totalPenalty, totalExited);
+    function getContractInfo() external view returns (uint, bool, uint, uint, uint, uint, uint, uint, uint, uint, uint, uint) {
+        return (maxContractBalance, isInInsuranceState, totalDeposits, totalWithdrawn, totalStakes, totalActiveStakes, totalRefRewards, totalRefPoolRewards, totalSponsorPoolRewards, totalDepositRewards, totalPenalty, totalExited);
     }
 }
