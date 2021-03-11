@@ -29,10 +29,11 @@ contract Insurance is RewardsAndPenalties {
         }
 
         uint maxWithdrawalAllowed = _calcPercentage(stake.deposit, insuredFor);
-        require(maxWithdrawalAllowed < stake.withdrawn); // if contract is in insurance trigger, do not allow withdrawals for the users who already have withdrawn more then 35%
 
-        if (stake.withdrawn.add(availableAmount) > maxWithdrawalAllowed) {
-            availableAmount = maxWithdrawalAllowed - stake.withdrawn;
+        require(maxWithdrawalAllowed >= stake.withdrawn.add(stake.penalty)); // if contract is in insurance trigger, do not allow withdrawals for the users who already have withdrawn more then 35%
+
+        if (stake.withdrawn.add(availableAmount).add(stake.penalty) > maxWithdrawalAllowed) {
+            availableAmount = maxWithdrawalAllowed.sub(stake.withdrawn).sub(stake.penalty);
         }
 
         return availableAmount;

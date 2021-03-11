@@ -2,7 +2,9 @@ const { accounts, contract } = require('@openzeppelin/test-environment');
 const {
     time,
     constants,
-    BN
+    BN,
+    expectEvent,
+    expectRevert
 } = require('@openzeppelin/test-helpers');
 
 const { expect } = require('chai');
@@ -11,7 +13,7 @@ const [ owner, user1, user2 ] = accounts;
 const FourRXFinance = contract.fromArtifact('FourRXFinance');
 const ERC20 = contract.fromArtifact('FRX');
 
-describe('FourRXFinance Getter Test', function () {
+describe('FourRXFinance Insurance Tests', function () {
     beforeEach(async function() {
         this.amount = 10000;
         this.erc20 = await ERC20.new({ from: owner });
@@ -21,28 +23,33 @@ describe('FourRXFinance Getter Test', function () {
         await this.erc20.approve(this.fourRXFinance.address, this.amount, {from: user1});
         await this.erc20.approve(this.fourRXFinance.address, this.amount, {from: user2});
         await this.fourRXFinance.deposit(this.amount, constants.ZERO_ADDRESS, 0, {from: user1});
+
     })
 
-
-    it('should success since it is just a getter', async function () {
+    it('should allow trigger the insurance state', async function () {
+        this.timeout(50000);
         await time.increase(time.duration.days(10));
         await this.fourRXFinance.deposit(this.amount, user1, 0, {from: user2});
+        await this.fourRXFinance.insureStake(0, {from: user2});
 
-        expect((await this.fourRXFinance.getUser(user1))['wallet']).to.be.equals(user1);
+        while (!(await this.fourRXFinance.getContractInfo())[1]) {
+            await time.increase(time.duration.days(5));
+            await this.fourRXFinance.withdraw(0, {from: user1});
+            if (!(await this.fourRXFinance.getContractInfo())[1]) {
+                await this.fourRXFinance.withdraw(0, {from: user2});
+            }
+        }
 
+        expect((await this.fourRXFinance.getContractInfo())[1]).to.be.equals(true);
+        await expectRevert.unspecified(this.fourRXFinance.withdraw(0, {from: user1}));
+
+        await this.fourRXFinance.withdraw(0, {from: user2});
     });
 
-    it('should success since it is just a getter 2', async function () {
+    it('should allow user to insure his stake', async function () {
         await time.increase(time.duration.days(10));
-        await this.fourRXFinance.deposit(this.amount, user1, 0, {from: user2});
+        await this.fourRXFinance.insureStake(0, {from: user1});
 
-        expect((await this.fourRXFinance.getPoolInfo())[3]).to.be.bignumber.equals(new BN(50));
-    });
-
-    it('should success since it is just a getter 3', async function () {
-        await time.increase(time.duration.days(10));
-        await this.fourRXFinance.deposit(this.amount, user1, 0, {from: user2});
-
-        expect((await this.fourRXFinance.getContractInfo())[4]).to.be.bignumber.equals(new BN(2));
+        expect((await this.fourRXFinance.getUser(user1))['stakes'][0]['optInInsured']).to.be.equals(true);
     });
 });

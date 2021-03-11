@@ -49,10 +49,12 @@ contract FourRXFinance is Insurance {
         User storage user = users[msg.sender];
 
         if (users[msg.sender].stakes.length > 0) {
-            require(amount > users[msg.sender].stakes[user.stakes.length - 1].deposit.mul(2)); // deposit amount must be greater 2x then last deposit
+            require(amount >= users[msg.sender].stakes[user.stakes.length - 1].deposit.mul(2)); // deposit amount must be greater 2x then last deposit
         }
 
         require(fourRXToken.transferFrom(msg.sender, address(this), amount));
+
+        drawPool(); // Draw old pool if qualified, and we're pretty sure that this stake is going to be created
 
         uint depositReward = _calcDepositRewards(amount);
 
@@ -80,8 +82,6 @@ contract FourRXFinance is Insurance {
 
         refPoolBalance = refPoolBalance.add(_calcPercentage(amount, REF_POOL_FEE_BP));
         sponsorPoolBalance = sponsorPoolBalance.add(_calcPercentage(amount, SPONSOR_POOL_FEE_BP));
-
-        _drawPool();
 
         fourRXToken.transfer(devAddress, _calcPercentage(amount, DEV_FEE_BP));
 
@@ -201,7 +201,7 @@ contract FourRXFinance is Insurance {
         return (poolDrewAt, poolCycle, sponsorPoolBalance, refPoolBalance, sponsorPoolUsers, refPoolUsers);
     }
 
-    function getContractInfo() external view returns (uint, uint, uint, uint, uint, uint, uint, uint, uint, uint, uint) {
-        return (maxContractBalance, totalDeposits, totalWithdrawn, totalStakes, totalActiveStakes, totalRefRewards, totalRefPoolRewards, totalSponsorPoolRewards, totalDepositRewards, totalPenalty, totalExited);
+    function getContractInfo() external view returns (uint, bool, uint, uint, uint, uint, uint, uint, uint, uint, uint, uint) {
+        return (maxContractBalance, isInInsuranceState, totalDeposits, totalWithdrawn, totalStakes, totalActiveStakes, totalRefRewards, totalRefPoolRewards, totalSponsorPoolRewards, totalDepositRewards, totalPenalty, totalExited);
     }
 }

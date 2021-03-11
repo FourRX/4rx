@@ -28,5 +28,5 @@ contract Constants {
 
     uint public constant MAX_WITHDRAWAL_OVER_REWARD_THRESHOLD_BP = 300; // Max daily withdrawal limit if user is above 10%
 
-    uint public constant DEV_FEE_BP = 5000; // 5%
+    uint public constant DEV_FEE_BP = 500; // 5%
 }

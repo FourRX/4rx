@@ -31,23 +31,41 @@ describe('FourRXFinance Registration Test', function () {
     });*/
 
     it('should allow user to register and make a deposit successfully', async function () {
-        const amount = 1000;
-        let receipt = await this.erc20.approve(this.fourRXFinance.address, amount);
+        this.timeout(50000);
+        const [user1, user2] = await ethers.getSigners();
+        const amount = 10000;
+        await this.erc20.transfer(user1.address, 1000000);
+        await this.erc20.transfer(user2.address, 1000000);
+        await this.erc20.connect(user1).approve(this.fourRXFinance.address, amount);
+        await this.erc20.connect(user2).approve(this.fourRXFinance.address, amount);
+        await this.fourRXFinance.connect(user1).deposit(amount, constants.ZERO_ADDRESS, 0);
 
-        /*expectEvent(receipt, 'Approval', {
-            owner: user1,
-            spender: this.fourRXFinance.address,
-            value: new BN(amount)
-        })*/
+        await network.provider.send('evm_increaseTime', [10*86400])
+        // await time.increase(time.duration.days(10));
+        await this.fourRXFinance.connect(user2).deposit(amount, user1.address, 0);
+        await this.fourRXFinance.connect(user2).insureStake(0);
 
-        receipt = await this.fourRXFinance.deposit(amount, constants.ZERO_ADDRESS, 0);
+        while (!(await this.fourRXFinance.getContractInfo())[1]) {
+            // await time.increase(time.duration.days(5));
+            await network.provider.send('evm_increaseTime', [5*86400])
+            await this.fourRXFinance.connect(user1).withdraw(0);
+            if (!(await this.fourRXFinance.getContractInfo())[1]) {
+                await this.fourRXFinance.connect(user2).withdraw(0);
+            }
+        }
 
-        // console.log(receipt);
+        expect((await this.fourRXFinance.getContractInfo())[1]).to.be.equals(true);
+        await expectRevert.unspecified(this.fourRXFinance.connect(user1).withdraw(0));
 
-        // expectEvent(receipt, 'Deposit', {
-        //     user: user1,
-        //     uplink: constants.ZERO_ADDRESS,
-        //     amount: new BN(amount)
-        // })
+        const user1Details = await this.fourRXFinance.getUser(user1.address);
+        const user2Details = await this.fourRXFinance.getUser(user2.address);
+        //
+        await this.fourRXFinance.connect(user2).withdraw(0);
+
+        console.log((await this.erc20.balanceOf(this.fourRXFinance.address)).toString());
+
+        console.log(user1Details, user2Details);
+
+        // console.log((await this.fourRXFinance.getContractInfo())[0].toString());
     });
 });

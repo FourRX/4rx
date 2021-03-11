@@ -99,7 +99,7 @@ contract Pools is SharedVariables {
         }
     }
 
-    function _drawPool() internal {
+    function drawPool() public {
         if (block.timestamp > poolDrewAt + 1 days) {
             for (uint i = 0; i < refPoolUsers.length; i++) {
                 if (refPoolUsers[i].user == address(0)) break;
