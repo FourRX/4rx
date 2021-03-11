@@ -1,19 +1,19 @@
 {
   "fileName": "InterestCalculator.sol",
   "contractName": "InterestCalculator",
-  "source": "// SPDX-License-Identifier: MIT\npragma solidity ^0.6.12;\n\nimport \"@openzeppelin/contracts/math/SafeMath.sol\";\n\n\ncontract InterestCalculator {\n    using SafeMath for uint;\n    uint private constant MAX_DAYS = 301;\n\n    function initInterestForDayArray() private pure returns (uint[] memory) {\n        uint[] memory interestForDays = new uint[](MAX_DAYS);\n\n        interestForDays[0] = 0;\n        interestForDays[1] = 1;\n        interestForDays[2] = 2;\n        interestForDays[3] = 3;\n        interestForDays[4] = 4;\n        interestForDays[5] = 5;\n        interestForDays[6] = 6;\n        interestForDays[7] = 6;\n        interestForDays[8] = 7;\n        interestForDays[9] = 8;\n        interestForDays[10] = 9;\n        interestForDays[11] = 10;\n        interestForDays[12] = 11;\n        interestForDays[13] = 12;\n        interestForDays[14] = 13;\n        interestForDays[15] = 14;\n        interestForDays[16] = 15;\n        interestForDays[17] = 16;\n        interestForDays[18] = 18;\n        interestForDays[19] = 19;\n        interestForDays[20] = 20;\n        interestForDays[21] = 21;\n        interestForDays[22] = 22;\n        interestForDays[23] = 23;\n        interestForDays[24] = 24;\n        interestForDays[25] = 25;\n        interestForDays[26] = 26;\n        interestForDays[27] = 27;\n        interestForDays[28] = 29;\n        interestForDays[29] = 30;\n        interestForDays[30] = 31;\n        interestForDays[31] = 32;\n        interestForDays[32] = 33;\n        interestForDays[33] = 34;\n        interestForDays[34] = 36;\n        interestForDays[35] = 37;\n        interestForDays[36] = 38;\n        interestForDays[37] = 39;\n        interestForDays[38] = 41;\n        interestForDays[39] = 42;\n        interestForDays[40] = 43;\n        interestForDays[41] = 44;\n        interestForDays[42] = 46;\n        interestForDays[43] = 47;\n        interestForDays[44] = 48;\n        interestForDays[45] = 50;\n        interestForDays[46] = 51;\n        interestForDays[47] = 52;\n        interestForDays[48] = 54;\n        interestForDays[49] = 55;\n        interestForDays[50] = 57;\n        interestForDays[51] = 58;\n        interestForDays[52] = 59;\n        interestForDays[53] = 61;\n        interestForDays[54] = 62;\n        interestForDays[55] = 64;\n        interestForDays[56] = 65;\n        interestForDays[57] = 67;\n        interestForDays[58] = 68;\n        interestForDays[59] = 70;\n        interestForDays[60] = 71;\n        interestForDays[61] = 73;\n        interestForDays[62] = 74;\n        interestForDays[63] = 76;\n        interestForDays[64] = 77;\n        interestForDays[65] = 79;\n        interestForDays[66] = 81;\n        interestForDays[67] = 82;\n        interestForDays[68] = 84;\n        interestForDays[69] = 86;\n        interestForDays[70] = 87;\n        interestForDays[71] = 89;\n        interestForDays[72] = 91;\n        interestForDays[73] = 92;\n        interestForDays[74] = 94;\n        interestForDays[75] = 96;\n        interestForDays[76] = 98;\n        interestForDays[77] = 99;\n        interestForDays[78] = 101;\n        interestForDays[79] = 103;\n        interestForDays[80] = 105;\n        interestForDays[81] = 107;\n        interestForDays[82] = 108;\n        interestForDays[83] = 110;\n        interestForDays[84] = 112;\n        interestForDays[85] = 114;\n        interestForDays[86] = 116;\n        interestForDays[87] = 118;\n        interestForDays[88] = 120;\n        interestForDays[89] = 122;\n        interestForDays[90] = 124;\n        interestForDays[90] = 126;\n        interestForDays[92] = 128;\n        interestForDays[93] = 130;\n        interestForDays[94] = 132;\n        interestForDays[95] = 134;\n        interestForDays[96] = 136;\n        interestForDays[97] = 138;\n        interestForDays[98] = 141;\n        interestForDays[99] = 143;\n        interestForDays[100] = 145;\n        interestForDays[101] = 147;\n        interestForDays[102] = 149;\n        interestForDays[103] = 152;\n        interestForDays[104] = 154;\n        interestForDays[105] = 156;\n        interestForDays[106] = 159;\n        interestForDays[107] = 161;\n        interestForDays[108] = 163;\n        interestForDays[109] = 166;\n        interestForDays[110] = 168;\n        interestForDays[111] = 170;\n        interestForDays[112] = 173;\n        interestForDays[113] = 175;\n        interestForDays[114] = 178;\n        interestForDays[115] = 180;\n        interestForDays[116] = 183;\n        interestForDays[117] = 185;\n        interestForDays[118] = 188;\n        interestForDays[119] = 190;\n        interestForDays[120] = 193;\n        interestForDays[121] = 196;\n        interestForDays[122] = 198;\n        interestForDays[123] = 201;\n        interestForDays[124] = 204;\n        interestForDays[125] = 206;\n        interestForDays[126] = 209;\n        interestForDays[127] = 212;\n        interestForDays[128] = 215;\n        interestForDays[129] = 218;\n        interestForDays[130] = 221;\n        interestForDays[131] = 223;\n        interestForDays[132] = 226;\n        interestForDays[133] = 229;\n        interestForDays[134] = 232;\n        interestForDays[135] = 235;\n        interestForDays[136] = 238;\n        interestForDays[137] = 241;\n        interestForDays[138] = 244;\n        interestForDays[139] = 247;\n        interestForDays[140] = 251;\n        interestForDays[141] = 254;\n        interestForDays[142] = 257;\n        interestForDays[143] = 260;\n        interestForDays[144] = 263;\n        interestForDays[145] = 267;\n        interestForDays[146] = 270;\n        interestForDays[147] = 273;\n        interestForDays[148] = 277;\n        interestForDays[149] = 280;\n        interestForDays[150] = 283;\n        interestForDays[151] = 287;\n        interestForDays[152] = 290;\n        interestForDays[153] = 294;\n        interestForDays[154] = 297;\n        interestForDays[155] = 301;\n        interestForDays[156] = 305;\n        interestForDays[157] = 308;\n        interestForDays[158] = 312;\n        interestForDays[159] = 316;\n        interestForDays[160] = 319;\n        interestForDays[161] = 323;\n        interestForDays[162] = 327;\n        interestForDays[163] = 331;\n        interestForDays[164] = 335;\n        interestForDays[165] = 339;\n        interestForDays[166] = 343;\n        interestForDays[167] = 347;\n        interestForDays[168] = 351;\n        interestForDays[169] = 355;\n        interestForDays[170] = 359;\n        interestForDays[171] = 363;\n        interestForDays[172] = 367;\n        interestForDays[173] = 371;\n        interestForDays[174] = 375;\n        interestForDays[175] = 380;\n        interestForDays[176] = 384;\n        interestForDays[177] = 388;\n        interestForDays[178] = 393;\n        interestForDays[179] = 397;\n        interestForDays[180] = 402;\n        interestForDays[181] = 406;\n        interestForDays[182] = 411;\n        interestForDays[183] = 415;\n        interestForDays[184] = 420;\n        interestForDays[185] = 425;\n        interestForDays[186] = 429;\n        interestForDays[187] = 434;\n        interestForDays[188] = 439;\n        interestForDays[189] = 444;\n        interestForDays[190] = 449;\n        interestForDays[191] = 454;\n        interestForDays[192] = 459;\n        interestForDays[193] = 464;\n        interestForDays[194] = 469;\n        interestForDays[195] = 474;\n        interestForDays[196] = 479;\n        interestForDays[197] = 484;\n        interestForDays[198] = 489;\n        interestForDays[199] = 495;\n        interestForDays[200] = 500;\n        interestForDays[201] = 506;\n        interestForDays[202] = 511;\n        interestForDays[203] = 516;\n        interestForDays[204] = 522;\n        interestForDays[205] = 528;\n        interestForDays[206] = 533;\n        interestForDays[207] = 539;\n        interestForDays[208] = 545;\n        interestForDays[209] = 551;\n        interestForDays[210] = 556;\n        interestForDays[211] = 562;\n        interestForDays[212] = 568;\n        interestForDays[213] = 574;\n        interestForDays[214] = 580;\n        interestForDays[215] = 586;\n        interestForDays[216] = 593;\n        interestForDays[217] = 599;\n        interestForDays[218] = 605;\n        interestForDays[219] = 611;\n        interestForDays[220] = 618;\n        interestForDays[221] = 624;\n        interestForDays[222] = 631;\n        interestForDays[223] = 637;\n        interestForDays[224] = 644;\n        interestForDays[225] = 651;\n        interestForDays[226] = 658;\n        interestForDays[227] = 664;\n        interestForDays[228] = 671;\n        interestForDays[229] = 678;\n        interestForDays[230] = 685;\n        interestForDays[231] = 692;\n        interestForDays[232] = 699;\n        interestForDays[233] = 707;\n        interestForDays[234] = 714;\n        interestForDays[235] = 721;\n        interestForDays[236] = 729;\n        interestForDays[237] = 736;\n        interestForDays[238] = 744;\n        interestForDays[239] = 751;\n        interestForDays[240] = 759;\n        interestForDays[241] = 767;\n        interestForDays[242] = 774;\n        interestForDays[243] = 782;\n        interestForDays[244] = 790;\n        interestForDays[245] = 798;\n        interestForDays[246] = 806;\n        interestForDays[247] = 814;\n        interestForDays[248] = 823;\n        interestForDays[249] = 831;\n        interestForDays[250] = 839;\n        interestForDays[251] = 848;\n        interestForDays[252] = 856;\n        interestForDays[253] = 865;\n        interestForDays[254] = 874;\n        interestForDays[255] = 882;\n        interestForDays[256] = 891;\n        interestForDays[257] = 900;\n        interestForDays[258] = 909;\n        interestForDays[259] = 918;\n        interestForDays[260] = 927;\n        interestForDays[261] = 937;\n        interestForDays[262] = 946;\n        interestForDays[263] = 955;\n        interestForDays[264] = 965;\n        interestForDays[265] = 974;\n        interestForDays[266] = 984;\n        interestForDays[267] = 994;\n        interestForDays[268] = 1004;\n        interestForDays[269] = 1014;\n        interestForDays[270] = 1024;\n        interestForDays[271] = 1034;\n        interestForDays[272] = 1044;\n        interestForDays[273] = 1054;\n        interestForDays[274] = 1065;\n        interestForDays[275] = 1075;\n        interestForDays[276] = 1086;\n        interestForDays[277] = 1096;\n        interestForDays[278] = 1107;\n        interestForDays[279] = 1118;\n        interestForDays[280] = 1129;\n        interestForDays[281] = 1140;\n        interestForDays[282] = 1151;\n        interestForDays[283] = 1162;\n        interestForDays[284] = 1174;\n        interestForDays[285] = 1185;\n        interestForDays[286] = 1197;\n        interestForDays[287] = 1208;\n        interestForDays[288] = 1220;\n        interestForDays[289] = 1232;\n        interestForDays[290] = 1244;\n        interestForDays[291] = 1256;\n        interestForDays[292] = 1268;\n        interestForDays[293] = 1281;\n        interestForDays[294] = 1293;\n        interestForDays[295] = 1306;\n        interestForDays[296] = 1318;\n        interestForDays[297] = 1331;\n        interestForDays[298] = 1344;\n        interestForDays[299] = 1357;\n        interestForDays[300] = 1370;\n\n        return interestForDays;\n    }\n\n    function initCumulativeInterestForDays(uint[] memory interestForDays) private pure returns (uint[] memory) {\n        uint[] memory cumulativeInterestForDays = new uint[](MAX_DAYS);\n\n        uint sum;\n        for(uint i = 0; i < MAX_DAYS; i++) {\n            sum = sum.add(interestForDays[i]);\n            cumulativeInterestForDays[i] = sum;\n        }\n\n        return cumulativeInterestForDays;\n    }\n\n    function getInterestTillDays(uint _day) internal pure returns(uint) {\n        require(_day < MAX_DAYS);\n        uint[] memory interestForDays = initInterestForDayArray();\n        uint[] memory cumulativeInterestForDays = initCumulativeInterestForDays(interestForDays);\n        return cumulativeInterestForDays[_day];\n    }\n\n    function getEstimateDaysFromInterest(uint interest) internal pure returns(uint) {\n        uint[] memory interestForDays = initInterestForDayArray();\n        uint[] memory cumulativeInterestForDays = initCumulativeInterestForDays(interestForDays);\n\n        // If interest is less then user could have gotten in 1 day, return 0;\n        if (interest < cumulativeInterestForDays[1]) {\n            return 0;\n        }\n\n        for(uint i = 1; i < MAX_DAYS - 1; i++) {\n            if (cumulativeInterestForDays[i] < interest && cumulativeInterestForDays[i + 1] > interest) {\n                return i;\n            }\n        }\n\n        // If interest is more then any amount we have, return MAX_DAYS - 1 // 300\n        return MAX_DAYS - 1;\n    }\n}\n",
+  "source": "// SPDX-License-Identifier: MIT\npragma solidity ^0.6.12;\n\nimport \"@openzeppelin/contracts/math/SafeMath.sol\";\n\n\ncontract InterestCalculator {\n    using SafeMath for uint;\n    uint private constant MAX_DAYS = 301;\n\n    function initInterestForDayArray() private pure returns (uint[] memory) {\n        uint[] memory interestForDays = new uint[](MAX_DAYS);\n\n        interestForDays[0] = 0;\n        interestForDays[1] = 1;\n        interestForDays[2] = 2;\n        interestForDays[3] = 3;\n        interestForDays[4] = 4;\n        interestForDays[5] = 5;\n        interestForDays[6] = 6;\n        interestForDays[7] = 6;\n        interestForDays[8] = 7;\n        interestForDays[9] = 8;\n        interestForDays[10] = 9;\n        interestForDays[11] = 10;\n        interestForDays[12] = 11;\n        interestForDays[13] = 12;\n        interestForDays[14] = 13;\n        interestForDays[15] = 14;\n        interestForDays[16] = 15;\n        interestForDays[17] = 16;\n        interestForDays[18] = 18;\n        interestForDays[19] = 19;\n        interestForDays[20] = 20;\n        interestForDays[21] = 21;\n        interestForDays[22] = 22;\n        interestForDays[23] = 23;\n        interestForDays[24] = 24;\n        interestForDays[25] = 25;\n        interestForDays[26] = 26;\n        interestForDays[27] = 27;\n        interestForDays[28] = 29;\n        interestForDays[29] = 30;\n        interestForDays[30] = 31;\n        interestForDays[31] = 32;\n        interestForDays[32] = 33;\n        interestForDays[33] = 34;\n        interestForDays[34] = 36;\n        interestForDays[35] = 37;\n        interestForDays[36] = 38;\n        interestForDays[37] = 39;\n        interestForDays[38] = 41;\n        interestForDays[39] = 42;\n        interestForDays[40] = 43;\n        interestForDays[41] = 44;\n        interestForDays[42] = 46;\n        interestForDays[43] = 47;\n        interestForDays[44] = 48;\n        interestForDays[45] = 50;\n        interestForDays[46] = 51;\n        interestForDays[47] = 52;\n        interestForDays[48] = 54;\n        interestForDays[49] = 55;\n        interestForDays[50] = 57;\n        interestForDays[51] = 58;\n        interestForDays[52] = 59;\n        interestForDays[53] = 61;\n        interestForDays[54] = 62;\n        interestForDays[55] = 64;\n        interestForDays[56] = 65;\n        interestForDays[57] = 67;\n        interestForDays[58] = 68;\n        interestForDays[59] = 70;\n        interestForDays[60] = 71;\n        interestForDays[61] = 73;\n        interestForDays[62] = 74;\n        interestForDays[63] = 76;\n        interestForDays[64] = 77;\n        interestForDays[65] = 79;\n        interestForDays[66] = 81;\n        interestForDays[67] = 82;\n        interestForDays[68] = 84;\n        interestForDays[69] = 86;\n        interestForDays[70] = 87;\n        interestForDays[71] = 89;\n        interestForDays[72] = 91;\n        interestForDays[73] = 92;\n        interestForDays[74] = 94;\n        interestForDays[75] = 96;\n        interestForDays[76] = 98;\n        interestForDays[77] = 99;\n        interestForDays[78] = 101;\n        interestForDays[79] = 103;\n        interestForDays[80] = 105;\n        interestForDays[81] = 107;\n        interestForDays[82] = 108;\n        interestForDays[83] = 110;\n        interestForDays[84] = 112;\n        interestForDays[85] = 114;\n        interestForDays[86] = 116;\n        interestForDays[87] = 118;\n        interestForDays[88] = 120;\n        interestForDays[89] = 122;\n        interestForDays[90] = 124;\n        interestForDays[90] = 126;\n        interestForDays[92] = 128;\n        interestForDays[93] = 130;\n        interestForDays[94] = 132;\n        interestForDays[95] = 134;\n        interestForDays[96] = 136;\n        interestForDays[97] = 138;\n        interestForDays[98] = 141;\n        interestForDays[99] = 143;\n        interestForDays[100] = 145;\n        interestForDays[101] = 147;\n        interestForDays[102] = 149;\n        interestForDays[103] = 152;\n        interestForDays[104] = 154;\n        interestForDays[105] = 156;\n        interestForDays[106] = 159;\n        interestForDays[107] = 161;\n        interestForDays[108] = 163;\n        interestForDays[109] = 166;\n        interestForDays[110] = 168;\n        interestForDays[111] = 170;\n        interestForDays[112] = 173;\n        interestForDays[113] = 175;\n        interestForDays[114] = 178;\n        interestForDays[115] = 180;\n        interestForDays[116] = 183;\n        interestForDays[117] = 185;\n        interestForDays[118] = 188;\n        interestForDays[119] = 190;\n        interestForDays[120] = 193;\n        interestForDays[121] = 196;\n        interestForDays[122] = 198;\n        interestForDays[123] = 201;\n        interestForDays[124] = 204;\n        interestForDays[125] = 206;\n        interestForDays[126] = 209;\n        interestForDays[127] = 212;\n        interestForDays[128] = 215;\n        interestForDays[129] = 218;\n        interestForDays[130] = 221;\n        interestForDays[131] = 223;\n        interestForDays[132] = 226;\n        interestForDays[133] = 229;\n        interestForDays[134] = 232;\n        interestForDays[135] = 235;\n        interestForDays[136] = 238;\n        interestForDays[137] = 241;\n        interestForDays[138] = 244;\n        interestForDays[139] = 247;\n        interestForDays[140] = 251;\n        interestForDays[141] = 254;\n        interestForDays[142] = 257;\n        interestForDays[143] = 260;\n        interestForDays[144] = 263;\n        interestForDays[145] = 267;\n        interestForDays[146] = 270;\n        interestForDays[147] = 273;\n        interestForDays[148] = 277;\n        interestForDays[149] = 280;\n        interestForDays[150] = 283;\n        interestForDays[151] = 287;\n        interestForDays[152] = 290;\n        interestForDays[153] = 294;\n        interestForDays[154] = 297;\n        interestForDays[155] = 301;\n        interestForDays[156] = 305;\n        interestForDays[157] = 308;\n        interestForDays[158] = 312;\n        interestForDays[159] = 316;\n        interestForDays[160] = 319;\n        interestForDays[161] = 323;\n        interestForDays[162] = 327;\n        interestForDays[163] = 331;\n        interestForDays[164] = 335;\n        interestForDays[165] = 339;\n        interestForDays[166] = 343;\n        interestForDays[167] = 347;\n        interestForDays[168] = 351;\n        interestForDays[169] = 355;\n        interestForDays[170] = 359;\n        interestForDays[171] = 363;\n        interestForDays[172] = 367;\n        interestForDays[173] = 371;\n        interestForDays[174] = 375;\n        interestForDays[175] = 380;\n        interestForDays[176] = 384;\n        interestForDays[177] = 388;\n        interestForDays[178] = 393;\n        interestForDays[179] = 397;\n        interestForDays[180] = 402;\n        interestForDays[181] = 406;\n        interestForDays[182] = 411;\n        interestForDays[183] = 415;\n        interestForDays[184] = 420;\n        interestForDays[185] = 425;\n        interestForDays[186] = 429;\n        interestForDays[187] = 434;\n        interestForDays[188] = 439;\n        interestForDays[189] = 444;\n        interestForDays[190] = 449;\n        interestForDays[191] = 454;\n        interestForDays[192] = 459;\n        interestForDays[193] = 464;\n        interestForDays[194] = 469;\n        interestForDays[195] = 474;\n        interestForDays[196] = 479;\n        interestForDays[197] = 484;\n        interestForDays[198] = 489;\n        interestForDays[199] = 495;\n        interestForDays[200] = 500;\n        interestForDays[201] = 506;\n        interestForDays[202] = 511;\n        interestForDays[203] = 516;\n        interestForDays[204] = 522;\n        interestForDays[205] = 528;\n        interestForDays[206] = 533;\n        interestForDays[207] = 539;\n        interestForDays[208] = 545;\n        interestForDays[209] = 551;\n        interestForDays[210] = 556;\n        interestForDays[211] = 562;\n        interestForDays[212] = 568;\n        interestForDays[213] = 574;\n        interestForDays[214] = 580;\n        interestForDays[215] = 586;\n        interestForDays[216] = 593;\n        interestForDays[217] = 599;\n        interestForDays[218] = 605;\n        interestForDays[219] = 611;\n        interestForDays[220] = 618;\n        interestForDays[221] = 624;\n        interestForDays[222] = 631;\n        interestForDays[223] = 637;\n        interestForDays[224] = 644;\n        interestForDays[225] = 651;\n        interestForDays[226] = 658;\n        interestForDays[227] = 664;\n        interestForDays[228] = 671;\n        interestForDays[229] = 678;\n        interestForDays[230] = 685;\n        interestForDays[231] = 692;\n        interestForDays[232] = 699;\n        interestForDays[233] = 707;\n        interestForDays[234] = 714;\n        interestForDays[235] = 721;\n        interestForDays[236] = 729;\n        interestForDays[237] = 736;\n        interestForDays[238] = 744;\n        interestForDays[239] = 751;\n        interestForDays[240] = 759;\n        interestForDays[241] = 767;\n        interestForDays[242] = 774;\n        interestForDays[243] = 782;\n        interestForDays[244] = 790;\n        interestForDays[245] = 798;\n        interestForDays[246] = 806;\n        interestForDays[247] = 814;\n        interestForDays[248] = 823;\n        interestForDays[249] = 831;\n        interestForDays[250] = 839;\n        interestForDays[251] = 848;\n        interestForDays[252] = 856;\n        interestForDays[253] = 865;\n        interestForDays[254] = 874;\n        interestForDays[255] = 882;\n        interestForDays[256] = 891;\n        interestForDays[257] = 900;\n        interestForDays[258] = 909;\n        interestForDays[259] = 918;\n        interestForDays[260] = 927;\n        interestForDays[261] = 937;\n        interestForDays[262] = 946;\n        interestForDays[263] = 955;\n        interestForDays[264] = 965;\n        interestForDays[265] = 974;\n        interestForDays[266] = 984;\n        interestForDays[267] = 994;\n        interestForDays[268] = 1004;\n        interestForDays[269] = 1014;\n        interestForDays[270] = 1024;\n        interestForDays[271] = 1034;\n        interestForDays[272] = 1044;\n        interestForDays[273] = 1054;\n        interestForDays[274] = 1065;\n        interestForDays[275] = 1075;\n        interestForDays[276] = 1086;\n        interestForDays[277] = 1096;\n        interestForDays[278] = 1107;\n        interestForDays[279] = 1118;\n        interestForDays[280] = 1129;\n        interestForDays[281] = 1140;\n        interestForDays[282] = 1151;\n        interestForDays[283] = 1162;\n        interestForDays[284] = 1174;\n        interestForDays[285] = 1185;\n        interestForDays[286] = 1197;\n        interestForDays[287] = 1208;\n        interestForDays[288] = 1220;\n        interestForDays[289] = 1232;\n        interestForDays[290] = 1244;\n        interestForDays[291] = 1256;\n        interestForDays[292] = 1268;\n        interestForDays[293] = 1281;\n        interestForDays[294] = 1293;\n        interestForDays[295] = 1306;\n        interestForDays[296] = 1318;\n        interestForDays[297] = 1331;\n        interestForDays[298] = 1344;\n        interestForDays[299] = 1357;\n        interestForDays[300] = 1370;\n\n        return interestForDays;\n    }\n\n    function initCumulativeInterestForDays(uint[] memory interestForDays) private pure returns (uint[] memory) {\n        uint[] memory cumulativeInterestForDays = new uint[](MAX_DAYS);\n\n        uint sum;\n        for(uint i = 0; i < MAX_DAYS; i++) {\n            sum = sum.add(interestForDays[i]);\n            cumulativeInterestForDays[i] = sum;\n        }\n\n        return cumulativeInterestForDays;\n    }\n\n    function _getInterestTillDays(uint _day) internal pure returns(uint) {\n        require(_day < MAX_DAYS);\n        uint[] memory interestForDays = initInterestForDayArray();\n        uint[] memory cumulativeInterestForDays = initCumulativeInterestForDays(interestForDays);\n        return cumulativeInterestForDays[_day];\n    }\n}\n",
   "sourcePath": "contracts/InterestCalculator.sol",
-  "sourceMap": "112:12429:14:-:0;;;;;;;;;;;;;;;;;;;",
-  "deployedSourceMap": "112:12429:14:-:0;;;;;",
+  "sourceMap": "112:11686:14:-:0;;;;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "112:11686:14:-:0;;;;;",
   "abi": [],
   "ast": {
     "absolutePath": "contracts/InterestCalculator.sol",
     "exportedSymbols": {
       "InterestCalculator": [
-        5924
+        5855
       ]
     },
-    "id": 5925,
+    "id": 5856,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
@@ -33,7 +33,7 @@
         "file": "@openzeppelin/contracts/math/SafeMath.sol",
         "id": 3934,
         "nodeType": "ImportDirective",
-        "scope": 5925,
+        "scope": 5856,
         "sourceUnit": 328,
         "src": "58:51:14",
         "symbolAliases": [],
@@ -46,9 +46,9 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 5924,
+        "id": 5855,
         "linearizedBaseContracts": [
-          5924
+          5855
         ],
         "name": "InterestCalculator",
         "nodeType": "ContractDefinition",
@@ -87,7 +87,7 @@
             "name": "MAX_DAYS",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 5924,
+            "scope": 5855,
             "src": "175:36:14",
             "stateVariable": true,
             "storageLocation": "default",
@@ -25313,7 +25313,7 @@
               ],
               "src": "274:15:14"
             },
-            "scope": 5924,
+            "scope": 5855,
             "src": "218:10845:14",
             "stateMutability": "pure",
             "virtual": false,
@@ -25948,7 +25948,7 @@
               ],
               "src": "11160:15:14"
             },
-            "scope": 5924,
+            "scope": 5855,
             "src": "11069:398:14",
             "stateMutability": "pure",
             "virtual": false,
@@ -25958,7 +25958,7 @@
             "body": {
               "id": 5853,
               "nodeType": "Block",
-              "src": "11541:254:14",
+              "src": "11542:254:14",
               "statements": [
                 {
                   "expression": {
@@ -25982,7 +25982,7 @@
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
                           "referencedDeclaration": 5821,
-                          "src": "11559:4:14",
+                          "src": "11560:4:14",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
                             "typeString": "uint256"
@@ -25997,13 +25997,13 @@
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
                           "referencedDeclaration": 3940,
-                          "src": "11566:8:14",
+                          "src": "11567:8:14",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
                             "typeString": "uint256"
                           }
                         },
-                        "src": "11559:15:14",
+                        "src": "11560:15:14",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bool",
                           "typeString": "bool"
@@ -26025,7 +26025,7 @@
                         -18
                       ],
                       "referencedDeclaration": -18,
-                      "src": "11551:7:14",
+                      "src": "11552:7:14",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
                         "typeString": "function (bool) pure"
@@ -26039,7 +26039,7 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "11551:24:14",
+                    "src": "11552:24:14",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
@@ -26048,7 +26048,7 @@
                   },
                   "id": 5831,
                   "nodeType": "ExpressionStatement",
-                  "src": "11551:24:14"
+                  "src": "11552:24:14"
                 },
                 {
                   "assignments": [
@@ -26063,7 +26063,7 @@
                       "nodeType": "VariableDeclaration",
                       "overrides": null,
                       "scope": 5853,
-                      "src": "11585:29:14",
+                      "src": "11586:29:14",
                       "stateVariable": false,
                       "storageLocation": "memory",
                       "typeDescriptions": {
@@ -26075,7 +26075,7 @@
                           "id": 5834,
                           "name": "uint",
                           "nodeType": "ElementaryTypeName",
-                          "src": "11585:4:14",
+                          "src": "11586:4:14",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
                             "typeString": "uint256"
@@ -26084,7 +26084,7 @@
                         "id": 5835,
                         "length": null,
                         "nodeType": "ArrayTypeName",
-                        "src": "11585:6:14",
+                        "src": "11586:6:14",
                         "typeDescriptions": {
                           "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
                           "typeString": "uint256[]"
@@ -26105,7 +26105,7 @@
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
                       "referencedDeclaration": 5766,
-                      "src": "11617:23:14",
+                      "src": "11618:23:14",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_pure$__$returns$_t_array$_t_uint256_$dyn_memory_ptr_$",
                         "typeString": "function () pure returns (uint256[] memory)"
@@ -26119,7 +26119,7 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "11617:25:14",
+                    "src": "11618:25:14",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_array$_t_uint256_$dyn_memory_ptr",
@@ -26127,7 +26127,7 @@
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
-                  "src": "11585:57:14"
+                  "src": "11586:57:14"
                 },
                 {
                   "assignments": [
@@ -26142,7 +26142,7 @@
                       "nodeType": "VariableDeclaration",
                       "overrides": null,
                       "scope": 5853,
-                      "src": "11652:39:14",
+                      "src": "11653:39:14",
                       "stateVariable": false,
                       "storageLocation": "memory",
                       "typeDescriptions": {
@@ -26154,7 +26154,7 @@
                           "id": 5842,
                           "name": "uint",
                           "nodeType": "ElementaryTypeName",
-                          "src": "11652:4:14",
+                          "src": "11653:4:14",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
                             "typeString": "uint256"
@@ -26163,7 +26163,7 @@
                         "id": 5843,
                         "length": null,
                         "nodeType": "ArrayTypeName",
-                        "src": "11652:6:14",
+                        "src": "11653:6:14",
                         "typeDescriptions": {
                           "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
                           "typeString": "uint256[]"
@@ -26184,7 +26184,7 @@
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
                         "referencedDeclaration": 5836,
-                        "src": "11724:15:14",
+                        "src": "11725:15:14",
                         "typeDescriptions": {
                           "typeIdentifier": "t_array$_t_uint256_$dyn_memory_ptr",
                           "typeString": "uint256[] memory"
@@ -26203,7 +26203,7 @@
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
                       "referencedDeclaration": 5819,
-                      "src": "11694:29:14",
+                      "src": "11695:29:14",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_pure$_t_array$_t_uint256_$dyn_memory_ptr_$returns$_t_array$_t_uint256_$dyn_memory_ptr_$",
                         "typeString": "function (uint256[] memory) pure returns (uint256[] memory)"
@@ -26217,7 +26217,7 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "11694:46:14",
+                    "src": "11695:46:14",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_array$_t_uint256_$dyn_memory_ptr",
@@ -26225,7 +26225,7 @@
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
-                  "src": "11652:88:14"
+                  "src": "11653:88:14"
                 },
                 {
                   "expression": {
@@ -26237,7 +26237,7 @@
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
                       "referencedDeclaration": 5844,
-                      "src": "11757:25:14",
+                      "src": "11758:25:14",
                       "typeDescriptions": {
                         "typeIdentifier": "t_array$_t_uint256_$dyn_memory_ptr",
                         "typeString": "uint256[] memory"
@@ -26251,7 +26251,7 @@
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
                       "referencedDeclaration": 5821,
-                      "src": "11783:4:14",
+                      "src": "11784:4:14",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
@@ -26262,7 +26262,7 @@
                     "isPure": false,
                     "lValueRequested": false,
                     "nodeType": "IndexAccess",
-                    "src": "11757:31:14",
+                    "src": "11758:31:14",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -26271,7 +26271,7 @@
                   "functionReturnParameters": 5825,
                   "id": 5852,
                   "nodeType": "Return",
-                  "src": "11750:38:14"
+                  "src": "11751:38:14"
                 }
               ]
             },
@@ -26280,7 +26280,7 @@
             "implemented": true,
             "kind": "function",
             "modifiers": [],
-            "name": "getInterestTillDays",
+            "name": "_getInterestTillDays",
             "nodeType": "FunctionDefinition",
             "overrides": null,
             "parameters": {
@@ -26295,7 +26295,7 @@
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
                   "scope": 5854,
-                  "src": "11502:9:14",
+                  "src": "11503:9:14",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -26306,7 +26306,7 @@
                     "id": 5820,
                     "name": "uint",
                     "nodeType": "ElementaryTypeName",
-                    "src": "11502:4:14",
+                    "src": "11503:4:14",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -26316,7 +26316,7 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "11501:11:14"
+              "src": "11502:11:14"
             },
             "returnParameters": {
               "id": 5825,
@@ -26330,7 +26330,7 @@
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
                   "scope": 5854,
-                  "src": "11535:4:14",
+                  "src": "11536:4:14",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -26341,7 +26341,7 @@
                     "id": 5823,
                     "name": "uint",
                     "nodeType": "ElementaryTypeName",
-                    "src": "11535:4:14",
+                    "src": "11536:4:14",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -26351,878 +26351,23 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "11534:6:14"
+              "src": "11535:6:14"
             },
-            "scope": 5924,
-            "src": "11473:322:14",
-            "stateMutability": "pure",
-            "virtual": false,
-            "visibility": "internal"
-          },
-          {
-            "body": {
-              "id": 5922,
-              "nodeType": "Block",
-              "src": "11881:658:14",
-              "statements": [
-                {
-                  "assignments": [
-                    5865
-                  ],
-                  "declarations": [
-                    {
-                      "constant": false,
-                      "id": 5865,
-                      "mutability": "mutable",
-                      "name": "interestForDays",
-                      "nodeType": "VariableDeclaration",
-                      "overrides": null,
-                      "scope": 5922,
-                      "src": "11891:29:14",
-                      "stateVariable": false,
-                      "storageLocation": "memory",
-                      "typeDescriptions": {
-                        "typeIdentifier": "t_array$_t_uint256_$dyn_memory_ptr",
-                        "typeString": "uint256[]"
-                      },
-                      "typeName": {
-                        "baseType": {
-                          "id": 5863,
-                          "name": "uint",
-                          "nodeType": "ElementaryTypeName",
-                          "src": "11891:4:14",
-                          "typeDescriptions": {
-                            "typeIdentifier": "t_uint256",
-                            "typeString": "uint256"
-                          }
-                        },
-                        "id": 5864,
-                        "length": null,
-                        "nodeType": "ArrayTypeName",
-                        "src": "11891:6:14",
-                        "typeDescriptions": {
-                          "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
-                          "typeString": "uint256[]"
-                        }
-                      },
-                      "value": null,
-                      "visibility": "internal"
-                    }
-                  ],
-                  "id": 5868,
-                  "initialValue": {
-                    "argumentTypes": null,
-                    "arguments": [],
-                    "expression": {
-                      "argumentTypes": [],
-                      "id": 5866,
-                      "name": "initInterestForDayArray",
-                      "nodeType": "Identifier",
-                      "overloadedDeclarations": [],
-                      "referencedDeclaration": 5766,
-                      "src": "11923:23:14",
-                      "typeDescriptions": {
-                        "typeIdentifier": "t_function_internal_pure$__$returns$_t_array$_t_uint256_$dyn_memory_ptr_$",
-                        "typeString": "function () pure returns (uint256[] memory)"
-                      }
-                    },
-                    "id": 5867,
-                    "isConstant": false,
-                    "isLValue": false,
-                    "isPure": false,
-                    "kind": "functionCall",
-                    "lValueRequested": false,
-                    "names": [],
-                    "nodeType": "FunctionCall",
-                    "src": "11923:25:14",
-                    "tryCall": false,
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_array$_t_uint256_$dyn_memory_ptr",
-                      "typeString": "uint256[] memory"
-                    }
-                  },
-                  "nodeType": "VariableDeclarationStatement",
-                  "src": "11891:57:14"
-                },
-                {
-                  "assignments": [
-                    5873
-                  ],
-                  "declarations": [
-                    {
-                      "constant": false,
-                      "id": 5873,
-                      "mutability": "mutable",
-                      "name": "cumulativeInterestForDays",
-                      "nodeType": "VariableDeclaration",
-                      "overrides": null,
-                      "scope": 5922,
-                      "src": "11958:39:14",
-                      "stateVariable": false,
-                      "storageLocation": "memory",
-                      "typeDescriptions": {
-                        "typeIdentifier": "t_array$_t_uint256_$dyn_memory_ptr",
-                        "typeString": "uint256[]"
-                      },
-                      "typeName": {
-                        "baseType": {
-                          "id": 5871,
-                          "name": "uint",
-                          "nodeType": "ElementaryTypeName",
-                          "src": "11958:4:14",
-                          "typeDescriptions": {
-                            "typeIdentifier": "t_uint256",
-                            "typeString": "uint256"
-                          }
-                        },
-                        "id": 5872,
-                        "length": null,
-                        "nodeType": "ArrayTypeName",
-                        "src": "11958:6:14",
-                        "typeDescriptions": {
-                          "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
-                          "typeString": "uint256[]"
-                        }
-                      },
-                      "value": null,
-                      "visibility": "internal"
-                    }
-                  ],
-                  "id": 5877,
-                  "initialValue": {
-                    "argumentTypes": null,
-                    "arguments": [
-                      {
-                        "argumentTypes": null,
-                        "id": 5875,
-                        "name": "interestForDays",
-                        "nodeType": "Identifier",
-                        "overloadedDeclarations": [],
-                        "referencedDeclaration": 5865,
-                        "src": "12030:15:14",
-                        "typeDescriptions": {
-                          "typeIdentifier": "t_array$_t_uint256_$dyn_memory_ptr",
-                          "typeString": "uint256[] memory"
-                        }
-                      }
-                    ],
-                    "expression": {
-                      "argumentTypes": [
-                        {
-                          "typeIdentifier": "t_array$_t_uint256_$dyn_memory_ptr",
-                          "typeString": "uint256[] memory"
-                        }
-                      ],
-                      "id": 5874,
-                      "name": "initCumulativeInterestForDays",
-                      "nodeType": "Identifier",
-                      "overloadedDeclarations": [],
-                      "referencedDeclaration": 5819,
-                      "src": "12000:29:14",
-                      "typeDescriptions": {
-                        "typeIdentifier": "t_function_internal_pure$_t_array$_t_uint256_$dyn_memory_ptr_$returns$_t_array$_t_uint256_$dyn_memory_ptr_$",
-                        "typeString": "function (uint256[] memory) pure returns (uint256[] memory)"
-                      }
-                    },
-                    "id": 5876,
-                    "isConstant": false,
-                    "isLValue": false,
-                    "isPure": false,
-                    "kind": "functionCall",
-                    "lValueRequested": false,
-                    "names": [],
-                    "nodeType": "FunctionCall",
-                    "src": "12000:46:14",
-                    "tryCall": false,
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_array$_t_uint256_$dyn_memory_ptr",
-                      "typeString": "uint256[] memory"
-                    }
-                  },
-                  "nodeType": "VariableDeclarationStatement",
-                  "src": "11958:88:14"
-                },
-                {
-                  "condition": {
-                    "argumentTypes": null,
-                    "commonType": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    },
-                    "id": 5882,
-                    "isConstant": false,
-                    "isLValue": false,
-                    "isPure": false,
-                    "lValueRequested": false,
-                    "leftExpression": {
-                      "argumentTypes": null,
-                      "id": 5878,
-                      "name": "interest",
-                      "nodeType": "Identifier",
-                      "overloadedDeclarations": [],
-                      "referencedDeclaration": 5856,
-                      "src": "12140:8:14",
-                      "typeDescriptions": {
-                        "typeIdentifier": "t_uint256",
-                        "typeString": "uint256"
-                      }
-                    },
-                    "nodeType": "BinaryOperation",
-                    "operator": "<",
-                    "rightExpression": {
-                      "argumentTypes": null,
-                      "baseExpression": {
-                        "argumentTypes": null,
-                        "id": 5879,
-                        "name": "cumulativeInterestForDays",
-                        "nodeType": "Identifier",
-                        "overloadedDeclarations": [],
-                        "referencedDeclaration": 5873,
-                        "src": "12151:25:14",
-                        "typeDescriptions": {
-                          "typeIdentifier": "t_array$_t_uint256_$dyn_memory_ptr",
-                          "typeString": "uint256[] memory"
-                        }
-                      },
-                      "id": 5881,
-                      "indexExpression": {
-                        "argumentTypes": null,
-                        "hexValue": "31",
-                        "id": 5880,
-                        "isConstant": false,
-                        "isLValue": false,
-                        "isPure": true,
-                        "kind": "number",
-                        "lValueRequested": false,
-                        "nodeType": "Literal",
-                        "src": "12177:1:14",
-                        "subdenomination": null,
-                        "typeDescriptions": {
-                          "typeIdentifier": "t_rational_1_by_1",
-                          "typeString": "int_const 1"
-                        },
-                        "value": "1"
-                      },
-                      "isConstant": false,
-                      "isLValue": true,
-                      "isPure": false,
-                      "lValueRequested": false,
-                      "nodeType": "IndexAccess",
-                      "src": "12151:28:14",
-                      "typeDescriptions": {
-                        "typeIdentifier": "t_uint256",
-                        "typeString": "uint256"
-                      }
-                    },
-                    "src": "12140:39:14",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_bool",
-                      "typeString": "bool"
-                    }
-                  },
-                  "falseBody": null,
-                  "id": 5886,
-                  "nodeType": "IfStatement",
-                  "src": "12136:78:14",
-                  "trueBody": {
-                    "id": 5885,
-                    "nodeType": "Block",
-                    "src": "12181:33:14",
-                    "statements": [
-                      {
-                        "expression": {
-                          "argumentTypes": null,
-                          "hexValue": "30",
-                          "id": 5883,
-                          "isConstant": false,
-                          "isLValue": false,
-                          "isPure": true,
-                          "kind": "number",
-                          "lValueRequested": false,
-                          "nodeType": "Literal",
-                          "src": "12202:1:14",
-                          "subdenomination": null,
-                          "typeDescriptions": {
-                            "typeIdentifier": "t_rational_0_by_1",
-                            "typeString": "int_const 0"
-                          },
-                          "value": "0"
-                        },
-                        "functionReturnParameters": 5860,
-                        "id": 5884,
-                        "nodeType": "Return",
-                        "src": "12195:8:14"
-                      }
-                    ]
-                  }
-                },
-                {
-                  "body": {
-                    "id": 5916,
-                    "nodeType": "Block",
-                    "src": "12263:157:14",
-                    "statements": [
-                      {
-                        "condition": {
-                          "argumentTypes": null,
-                          "commonType": {
-                            "typeIdentifier": "t_bool",
-                            "typeString": "bool"
-                          },
-                          "id": 5911,
-                          "isConstant": false,
-                          "isLValue": false,
-                          "isPure": false,
-                          "lValueRequested": false,
-                          "leftExpression": {
-                            "argumentTypes": null,
-                            "commonType": {
-                              "typeIdentifier": "t_uint256",
-                              "typeString": "uint256"
-                            },
-                            "id": 5903,
-                            "isConstant": false,
-                            "isLValue": false,
-                            "isPure": false,
-                            "lValueRequested": false,
-                            "leftExpression": {
-                              "argumentTypes": null,
-                              "baseExpression": {
-                                "argumentTypes": null,
-                                "id": 5899,
-                                "name": "cumulativeInterestForDays",
-                                "nodeType": "Identifier",
-                                "overloadedDeclarations": [],
-                                "referencedDeclaration": 5873,
-                                "src": "12281:25:14",
-                                "typeDescriptions": {
-                                  "typeIdentifier": "t_array$_t_uint256_$dyn_memory_ptr",
-                                  "typeString": "uint256[] memory"
-                                }
-                              },
-                              "id": 5901,
-                              "indexExpression": {
-                                "argumentTypes": null,
-                                "id": 5900,
-                                "name": "i",
-                                "nodeType": "Identifier",
-                                "overloadedDeclarations": [],
-                                "referencedDeclaration": 5888,
-                                "src": "12307:1:14",
-                                "typeDescriptions": {
-                                  "typeIdentifier": "t_uint256",
-                                  "typeString": "uint256"
-                                }
-                              },
-                              "isConstant": false,
-                              "isLValue": true,
-                              "isPure": false,
-                              "lValueRequested": false,
-                              "nodeType": "IndexAccess",
-                              "src": "12281:28:14",
-                              "typeDescriptions": {
-                                "typeIdentifier": "t_uint256",
-                                "typeString": "uint256"
-                              }
-                            },
-                            "nodeType": "BinaryOperation",
-                            "operator": "<",
-                            "rightExpression": {
-                              "argumentTypes": null,
-                              "id": 5902,
-                              "name": "interest",
-                              "nodeType": "Identifier",
-                              "overloadedDeclarations": [],
-                              "referencedDeclaration": 5856,
-                              "src": "12312:8:14",
-                              "typeDescriptions": {
-                                "typeIdentifier": "t_uint256",
-                                "typeString": "uint256"
-                              }
-                            },
-                            "src": "12281:39:14",
-                            "typeDescriptions": {
-                              "typeIdentifier": "t_bool",
-                              "typeString": "bool"
-                            }
-                          },
-                          "nodeType": "BinaryOperation",
-                          "operator": "&&",
-                          "rightExpression": {
-                            "argumentTypes": null,
-                            "commonType": {
-                              "typeIdentifier": "t_uint256",
-                              "typeString": "uint256"
-                            },
-                            "id": 5910,
-                            "isConstant": false,
-                            "isLValue": false,
-                            "isPure": false,
-                            "lValueRequested": false,
-                            "leftExpression": {
-                              "argumentTypes": null,
-                              "baseExpression": {
-                                "argumentTypes": null,
-                                "id": 5904,
-                                "name": "cumulativeInterestForDays",
-                                "nodeType": "Identifier",
-                                "overloadedDeclarations": [],
-                                "referencedDeclaration": 5873,
-                                "src": "12324:25:14",
-                                "typeDescriptions": {
-                                  "typeIdentifier": "t_array$_t_uint256_$dyn_memory_ptr",
-                                  "typeString": "uint256[] memory"
-                                }
-                              },
-                              "id": 5908,
-                              "indexExpression": {
-                                "argumentTypes": null,
-                                "commonType": {
-                                  "typeIdentifier": "t_uint256",
-                                  "typeString": "uint256"
-                                },
-                                "id": 5907,
-                                "isConstant": false,
-                                "isLValue": false,
-                                "isPure": false,
-                                "lValueRequested": false,
-                                "leftExpression": {
-                                  "argumentTypes": null,
-                                  "id": 5905,
-                                  "name": "i",
-                                  "nodeType": "Identifier",
-                                  "overloadedDeclarations": [],
-                                  "referencedDeclaration": 5888,
-                                  "src": "12350:1:14",
-                                  "typeDescriptions": {
-                                    "typeIdentifier": "t_uint256",
-                                    "typeString": "uint256"
-                                  }
-                                },
-                                "nodeType": "BinaryOperation",
-                                "operator": "+",
-                                "rightExpression": {
-                                  "argumentTypes": null,
-                                  "hexValue": "31",
-                                  "id": 5906,
-                                  "isConstant": false,
-                                  "isLValue": false,
-                                  "isPure": true,
-                                  "kind": "number",
-                                  "lValueRequested": false,
-                                  "nodeType": "Literal",
-                                  "src": "12354:1:14",
-                                  "subdenomination": null,
-                                  "typeDescriptions": {
-                                    "typeIdentifier": "t_rational_1_by_1",
-                                    "typeString": "int_const 1"
-                                  },
-                                  "value": "1"
-                                },
-                                "src": "12350:5:14",
-                                "typeDescriptions": {
-                                  "typeIdentifier": "t_uint256",
-                                  "typeString": "uint256"
-                                }
-                              },
-                              "isConstant": false,
-                              "isLValue": true,
-                              "isPure": false,
-                              "lValueRequested": false,
-                              "nodeType": "IndexAccess",
-                              "src": "12324:32:14",
-                              "typeDescriptions": {
-                                "typeIdentifier": "t_uint256",
-                                "typeString": "uint256"
-                              }
-                            },
-                            "nodeType": "BinaryOperation",
-                            "operator": ">",
-                            "rightExpression": {
-                              "argumentTypes": null,
-                              "id": 5909,
-                              "name": "interest",
-                              "nodeType": "Identifier",
-                              "overloadedDeclarations": [],
-                              "referencedDeclaration": 5856,
-                              "src": "12359:8:14",
-                              "typeDescriptions": {
-                                "typeIdentifier": "t_uint256",
-                                "typeString": "uint256"
-                              }
-                            },
-                            "src": "12324:43:14",
-                            "typeDescriptions": {
-                              "typeIdentifier": "t_bool",
-                              "typeString": "bool"
-                            }
-                          },
-                          "src": "12281:86:14",
-                          "typeDescriptions": {
-                            "typeIdentifier": "t_bool",
-                            "typeString": "bool"
-                          }
-                        },
-                        "falseBody": null,
-                        "id": 5915,
-                        "nodeType": "IfStatement",
-                        "src": "12277:133:14",
-                        "trueBody": {
-                          "id": 5914,
-                          "nodeType": "Block",
-                          "src": "12369:41:14",
-                          "statements": [
-                            {
-                              "expression": {
-                                "argumentTypes": null,
-                                "id": 5912,
-                                "name": "i",
-                                "nodeType": "Identifier",
-                                "overloadedDeclarations": [],
-                                "referencedDeclaration": 5888,
-                                "src": "12394:1:14",
-                                "typeDescriptions": {
-                                  "typeIdentifier": "t_uint256",
-                                  "typeString": "uint256"
-                                }
-                              },
-                              "functionReturnParameters": 5860,
-                              "id": 5913,
-                              "nodeType": "Return",
-                              "src": "12387:8:14"
-                            }
-                          ]
-                        }
-                      }
-                    ]
-                  },
-                  "condition": {
-                    "argumentTypes": null,
-                    "commonType": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    },
-                    "id": 5895,
-                    "isConstant": false,
-                    "isLValue": false,
-                    "isPure": false,
-                    "lValueRequested": false,
-                    "leftExpression": {
-                      "argumentTypes": null,
-                      "id": 5891,
-                      "name": "i",
-                      "nodeType": "Identifier",
-                      "overloadedDeclarations": [],
-                      "referencedDeclaration": 5888,
-                      "src": "12240:1:14",
-                      "typeDescriptions": {
-                        "typeIdentifier": "t_uint256",
-                        "typeString": "uint256"
-                      }
-                    },
-                    "nodeType": "BinaryOperation",
-                    "operator": "<",
-                    "rightExpression": {
-                      "argumentTypes": null,
-                      "commonType": {
-                        "typeIdentifier": "t_uint256",
-                        "typeString": "uint256"
-                      },
-                      "id": 5894,
-                      "isConstant": false,
-                      "isLValue": false,
-                      "isPure": true,
-                      "lValueRequested": false,
-                      "leftExpression": {
-                        "argumentTypes": null,
-                        "id": 5892,
-                        "name": "MAX_DAYS",
-                        "nodeType": "Identifier",
-                        "overloadedDeclarations": [],
-                        "referencedDeclaration": 3940,
-                        "src": "12244:8:14",
-                        "typeDescriptions": {
-                          "typeIdentifier": "t_uint256",
-                          "typeString": "uint256"
-                        }
-                      },
-                      "nodeType": "BinaryOperation",
-                      "operator": "-",
-                      "rightExpression": {
-                        "argumentTypes": null,
-                        "hexValue": "31",
-                        "id": 5893,
-                        "isConstant": false,
-                        "isLValue": false,
-                        "isPure": true,
-                        "kind": "number",
-                        "lValueRequested": false,
-                        "nodeType": "Literal",
-                        "src": "12255:1:14",
-                        "subdenomination": null,
-                        "typeDescriptions": {
-                          "typeIdentifier": "t_rational_1_by_1",
-                          "typeString": "int_const 1"
-                        },
-                        "value": "1"
-                      },
-                      "src": "12244:12:14",
-                      "typeDescriptions": {
-                        "typeIdentifier": "t_uint256",
-                        "typeString": "uint256"
-                      }
-                    },
-                    "src": "12240:16:14",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_bool",
-                      "typeString": "bool"
-                    }
-                  },
-                  "id": 5917,
-                  "initializationExpression": {
-                    "assignments": [
-                      5888
-                    ],
-                    "declarations": [
-                      {
-                        "constant": false,
-                        "id": 5888,
-                        "mutability": "mutable",
-                        "name": "i",
-                        "nodeType": "VariableDeclaration",
-                        "overrides": null,
-                        "scope": 5917,
-                        "src": "12228:6:14",
-                        "stateVariable": false,
-                        "storageLocation": "default",
-                        "typeDescriptions": {
-                          "typeIdentifier": "t_uint256",
-                          "typeString": "uint256"
-                        },
-                        "typeName": {
-                          "id": 5887,
-                          "name": "uint",
-                          "nodeType": "ElementaryTypeName",
-                          "src": "12228:4:14",
-                          "typeDescriptions": {
-                            "typeIdentifier": "t_uint256",
-                            "typeString": "uint256"
-                          }
-                        },
-                        "value": null,
-                        "visibility": "internal"
-                      }
-                    ],
-                    "id": 5890,
-                    "initialValue": {
-                      "argumentTypes": null,
-                      "hexValue": "31",
-                      "id": 5889,
-                      "isConstant": false,
-                      "isLValue": false,
-                      "isPure": true,
-                      "kind": "number",
-                      "lValueRequested": false,
-                      "nodeType": "Literal",
-                      "src": "12237:1:14",
-                      "subdenomination": null,
-                      "typeDescriptions": {
-                        "typeIdentifier": "t_rational_1_by_1",
-                        "typeString": "int_const 1"
-                      },
-                      "value": "1"
-                    },
-                    "nodeType": "VariableDeclarationStatement",
-                    "src": "12228:10:14"
-                  },
-                  "loopExpression": {
-                    "expression": {
-                      "argumentTypes": null,
-                      "id": 5897,
-                      "isConstant": false,
-                      "isLValue": false,
-                      "isPure": false,
-                      "lValueRequested": false,
-                      "nodeType": "UnaryOperation",
-                      "operator": "++",
-                      "prefix": false,
-                      "src": "12258:3:14",
-                      "subExpression": {
-                        "argumentTypes": null,
-                        "id": 5896,
-                        "name": "i",
-                        "nodeType": "Identifier",
-                        "overloadedDeclarations": [],
-                        "referencedDeclaration": 5888,
-                        "src": "12258:1:14",
-                        "typeDescriptions": {
-                          "typeIdentifier": "t_uint256",
-                          "typeString": "uint256"
-                        }
-                      },
-                      "typeDescriptions": {
-                        "typeIdentifier": "t_uint256",
-                        "typeString": "uint256"
-                      }
-                    },
-                    "id": 5898,
-                    "nodeType": "ExpressionStatement",
-                    "src": "12258:3:14"
-                  },
-                  "nodeType": "ForStatement",
-                  "src": "12224:196:14"
-                },
-                {
-                  "expression": {
-                    "argumentTypes": null,
-                    "commonType": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    },
-                    "id": 5920,
-                    "isConstant": false,
-                    "isLValue": false,
-                    "isPure": true,
-                    "lValueRequested": false,
-                    "leftExpression": {
-                      "argumentTypes": null,
-                      "id": 5918,
-                      "name": "MAX_DAYS",
-                      "nodeType": "Identifier",
-                      "overloadedDeclarations": [],
-                      "referencedDeclaration": 3940,
-                      "src": "12520:8:14",
-                      "typeDescriptions": {
-                        "typeIdentifier": "t_uint256",
-                        "typeString": "uint256"
-                      }
-                    },
-                    "nodeType": "BinaryOperation",
-                    "operator": "-",
-                    "rightExpression": {
-                      "argumentTypes": null,
-                      "hexValue": "31",
-                      "id": 5919,
-                      "isConstant": false,
-                      "isLValue": false,
-                      "isPure": true,
-                      "kind": "number",
-                      "lValueRequested": false,
-                      "nodeType": "Literal",
-                      "src": "12531:1:14",
-                      "subdenomination": null,
-                      "typeDescriptions": {
-                        "typeIdentifier": "t_rational_1_by_1",
-                        "typeString": "int_const 1"
-                      },
-                      "value": "1"
-                    },
-                    "src": "12520:12:14",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "functionReturnParameters": 5860,
-                  "id": 5921,
-                  "nodeType": "Return",
-                  "src": "12513:19:14"
-                }
-              ]
-            },
-            "documentation": null,
-            "id": 5923,
-            "implemented": true,
-            "kind": "function",
-            "modifiers": [],
-            "name": "getEstimateDaysFromInterest",
-            "nodeType": "FunctionDefinition",
-            "overrides": null,
-            "parameters": {
-              "id": 5857,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 5856,
-                  "mutability": "mutable",
-                  "name": "interest",
-                  "nodeType": "VariableDeclaration",
-                  "overrides": null,
-                  "scope": 5923,
-                  "src": "11838:13:14",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 5855,
-                    "name": "uint",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "11838:4:14",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "value": null,
-                  "visibility": "internal"
-                }
-              ],
-              "src": "11837:15:14"
-            },
-            "returnParameters": {
-              "id": 5860,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 5859,
-                  "mutability": "mutable",
-                  "name": "",
-                  "nodeType": "VariableDeclaration",
-                  "overrides": null,
-                  "scope": 5923,
-                  "src": "11875:4:14",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 5858,
-                    "name": "uint",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "11875:4:14",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "value": null,
-                  "visibility": "internal"
-                }
-              ],
-              "src": "11874:6:14"
-            },
-            "scope": 5924,
-            "src": "11801:738:14",
+            "scope": 5855,
+            "src": "11473:323:14",
             "stateMutability": "pure",
             "virtual": false,
             "visibility": "internal"
           }
         ],
-        "scope": 5925,
-        "src": "112:12429:14"
+        "scope": 5856,
+        "src": "112:11686:14"
       }
     ],
-    "src": "32:12510:14"
+    "src": "32:11767:14"
   },
-  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea26469706673582212203a0956bd19761998f9a587ec85e96be646767dd10feb7d3b89e8bc9472dd926264736f6c634300060c0033",
-  "deployedBytecode": "0x6080604052600080fdfea26469706673582212203a0956bd19761998f9a587ec85e96be646767dd10feb7d3b89e8bc9472dd926264736f6c634300060c0033",
+  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea26469706673582212203cf0598a2c5e63419f0507619bacb514ddfddd522738e7ada3336ea4f524ceeb64736f6c634300060c0033",
+  "deployedBytecode": "0x6080604052600080fdfea26469706673582212203cf0598a2c5e63419f0507619bacb514ddfddd522738e7ada3336ea4f524ceeb64736f6c634300060c0033",
   "compiler": {
     "name": "solc",
     "version": "0.6.12+commit.27d51765.Emscripten.clang",

@@ -29,7 +29,7 @@ contract SharedVariables is Constants, StatsVars, PercentageCalculator, Interest
 
     struct Uplink {
         address uplinkAddress;
-        uint uplinkInvestmentId;
+        uint uplinkStakeId;
     }
 
     struct Stake {

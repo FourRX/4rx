@@ -1,10 +1,10 @@
 {
   "fileName": "SharedVariables.sol",
   "contractName": "SharedVariables",
-  "source": "// SPDX-License-Identifier: MIT\npragma solidity ^0.6.12;\n\nimport \"@openzeppelin/contracts/token/ERC20/IERC20.sol\";\nimport \"./InterestCalculator.sol\";\nimport \"./Events.sol\";\nimport \"./PercentageCalculator.sol\";\nimport \"./utils/Utils.sol\";\nimport \"./Constants.sol\";\nimport \"./StatsVars.sol\";\n\n\ncontract SharedVariables is Constants, StatsVars, PercentageCalculator, InterestCalculator, Events, Utils {\n    using SafeMath for uint;\n\n    IERC20 public fourRXToken;\n\n    address public devAddress = 0x64B8cb4C04Ba902010856d913B4e5DF940748Bf2; // Dummy address replace it for prod/dev\n\n    struct PoolUser {\n        address user; // user's address\n        uint stakeId;\n    }\n\n    struct Pool {\n        uint cycle;\n        uint amount;\n    }\n\n    struct Uplink {\n        address uplinkAddress;\n        uint uplinkInvestmentId;\n    }\n\n    struct Stake {\n        uint id;\n        bool active;\n        bool optInInsured; // Is insured ???\n\n        uint holdFrom; // Timestamp from which hold should be counted\n        uint deposit; // Initial Deposit\n        uint withdrawn; // Total withdrawn from this stake\n        uint penalty; // Total penalty on this stale\n\n        // Rewards\n        uint refCommission; // Ref rewards\n        uint refPoolRewards; // Ref Pool Rewards\n        uint sponsorPoolRewards; // Sponsor Pool Rewards\n\n        uint interestCountFrom; // TimeStamp from which interest should be counted, from the beginning\n        uint lastWithdrawalAt; // date time of last withdrawals so we don't allow more then 3% a day\n\n        Uplink uplink; // Referrer\n        Pool refPool; // To store this user's last 24 hour RefPool entries\n        Pool sponsorPool; // To store this user's last 24 hour Sponsor Pool entries\n    }\n\n    struct User {\n        address wallet; // Wallet Address\n        Stake[] stakes;\n    }\n\n    mapping (address => User) public users;\n\n    PoolUser[12] public refPoolUsers;\n    PoolUser[10] public sponsorPoolUsers;\n\n    uint[] public refPoolBonuses;\n    uint[] public sponsorPoolBonuses;\n\n    uint[] public depositBonuses;\n\n    uint public maxContractBalance;\n\n    uint public poolCycle;\n    uint public poolDrewAt;\n\n    uint public refPoolBalance;\n    uint public sponsorPoolBalance;\n}\n",
+  "source": "// SPDX-License-Identifier: MIT\npragma solidity ^0.6.12;\n\nimport \"@openzeppelin/contracts/token/ERC20/IERC20.sol\";\nimport \"./InterestCalculator.sol\";\nimport \"./Events.sol\";\nimport \"./PercentageCalculator.sol\";\nimport \"./utils/Utils.sol\";\nimport \"./Constants.sol\";\nimport \"./StatsVars.sol\";\n\n\ncontract SharedVariables is Constants, StatsVars, PercentageCalculator, InterestCalculator, Events, Utils {\n    using SafeMath for uint;\n\n    IERC20 public fourRXToken;\n\n    address public devAddress = 0x64B8cb4C04Ba902010856d913B4e5DF940748Bf2; // Dummy address replace it for prod/dev\n\n    struct PoolUser {\n        address user; // user's address\n        uint stakeId;\n    }\n\n    struct Pool {\n        uint cycle;\n        uint amount;\n    }\n\n    struct Uplink {\n        address uplinkAddress;\n        uint uplinkStakeId;\n    }\n\n    struct Stake {\n        uint id;\n        bool active;\n        bool optInInsured; // Is insured ???\n\n        uint holdFrom; // Timestamp from which hold should be counted\n        uint deposit; // Initial Deposit\n        uint withdrawn; // Total withdrawn from this stake\n        uint penalty; // Total penalty on this stale\n\n        // Rewards\n        uint refCommission; // Ref rewards\n        uint refPoolRewards; // Ref Pool Rewards\n        uint sponsorPoolRewards; // Sponsor Pool Rewards\n\n        uint interestCountFrom; // TimeStamp from which interest should be counted, from the beginning\n        uint lastWithdrawalAt; // date time of last withdrawals so we don't allow more then 3% a day\n\n        Uplink uplink; // Referrer\n        Pool refPool; // To store this user's last 24 hour RefPool entries\n        Pool sponsorPool; // To store this user's last 24 hour Sponsor Pool entries\n    }\n\n    struct User {\n        address wallet; // Wallet Address\n        Stake[] stakes;\n    }\n\n    mapping (address => User) public users;\n\n    PoolUser[12] public refPoolUsers;\n    PoolUser[10] public sponsorPoolUsers;\n\n    uint[] public refPoolBonuses;\n    uint[] public sponsorPoolBonuses;\n\n    uint[] public depositBonuses;\n\n    uint public maxContractBalance;\n\n    uint public poolCycle;\n    uint public poolDrewAt;\n\n    uint public refPoolBalance;\n    uint public sponsorPoolBalance;\n}\n",
   "sourcePath": "contracts/SharedVariables.sol",
-  "sourceMap": "292:1925:18:-:0;;;466:70;;;-1:-1:-1;;;;;;466:70:18;494:42;466:70;;;292:1925;;;;;;;;;;;;;;;;",
-  "deployedSourceMap": "292:1925:18:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;969:44:8;;;:::i;:::-;;;;;;;;;;;;;;;;1131:46;;;:::i;1031:47::-;;;:::i;194:34:19:-;;;:::i;267:31::-;;;:::i;163:32:20:-;;;:::i;466:70:18:-;;;:::i;:::-;;;;-1:-1:-1;;;;;466:70:18;;;;;;;;;;;;;;2184:30;;;:::i;2024:28::-;;;;;;;;;;;;;;;;-1:-1:-1;2024:28:18;;:::i;478:43:8:-;;;:::i;128:26:19:-;;;:::i;178:47:15:-;;;:::i;2059:30:18:-;;;:::i;84:51:8:-;;;:::i;160:28:19:-;;;:::i;345:31::-;;;:::i;97:25::-;;;:::i;304:35::-;;;:::i;412:23::-;;;:::i;1908:36:18:-;;;;;;;;;;;;;;;;-1:-1:-1;1908:36:18;;:::i;:::-;;;;-1:-1:-1;;;;;1908:36:18;;;;;;;;;;;;;;;;;;;;;150:37:8;;;:::i;378:45::-;;;:::i;1825:38:18:-;;;;;;;;;;;;;;;;-1:-1:-1;1825:38:18;-1:-1:-1;;;;;1825:38:18;;:::i;434:25::-;;;:::i;200:44:8:-;;;:::i;234:27:19:-;;;:::i;2096:21:18:-;;;:::i;1951:28::-;;;;;;;;;;;;;;;;-1:-1:-1;1951:28:18;;:::i;2152:26::-;;;:::i;794:51:8:-;;;:::i;1985:32:18:-;;;;;;;;;;;;;;;;-1:-1:-1;1985:32:18;;:::i;894:44:8:-;;;:::i;382:24:19:-;;;:::i;1870:32:18:-;;;;;;;;;;;;;;;;-1:-1:-1;1870:32:18;;:::i;2123:22::-;;;:::i;969:44:8:-;1008:5;969:44;:::o;1131:46::-;1174:3;1131:46;:::o;1031:47::-;1077:1;1031:47;:::o;194:34:19:-;;;;:::o;267:31::-;;;;:::o;163:32:20:-;190:5;163:32;:::o;466:70:18:-;;;-1:-1:-1;;;;;466:70:18;;:::o;2184:30::-;;;;:::o;2024:28::-;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;2024:28:18;:::o;478:43:8:-;517:4;478:43;:::o;128:26:19:-;;;;:::o;178:47:15:-;220:5;178:47;:::o;2059:30:18:-;;;;:::o;84:51:8:-;130:5;84:51;:::o;160:28:19:-;;;;:::o;345:31::-;;;;:::o;97:25::-;;;;:::o;304:35::-;;;;:::o;412:23::-;;;;:::o;1908:36:18:-;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;1908:36:18;;;;-1:-1:-1;1908:36:18;:::o;150:37:8:-;183:4;150:37;:::o;378:45::-;421:2;378:45;:::o;1825:38:18:-;;;;;;;;;;;;-1:-1:-1;;;;;1825:38:18;;:::o;434:25::-;;;-1:-1:-1;;;;;434:25:18;;:::o;200:44:8:-;241:3;200:44;:::o;234:27:19:-;;;;:::o;2096:21:18:-;;;;:::o;1951:28::-;;;;;;;;;;2152:26;;;;:::o;794:51:8:-;844:1;794:51;:::o;1985:32:18:-;;;;;;;;;;894:44:8;935:3;894:44;:::o;382:24:19:-;;;;:::o;1870:32:18:-;;;;;;;;;2123:22;;;;:::o",
+  "sourceMap": "292:1920:18:-:0;;;466:70;;;-1:-1:-1;;;;;;466:70:18;494:42;466:70;;;292:1920;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "292:1920:18:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;969:44:8;;;:::i;:::-;;;;;;;;;;;;;;;;1131:46;;;:::i;1031:47::-;;;:::i;189:29:19:-;;;:::i;257:31::-;;;:::i;163:32:20:-;;;:::i;466:70:18:-;;;:::i;:::-;;;;-1:-1:-1;;;;;466:70:18;;;;;;;;;;;;;;2179:30;;;:::i;2019:28::-;;;;;;;;;;;;;;;;-1:-1:-1;2019:28:18;;:::i;478:43:8:-;;;:::i;128:26:19:-;;;:::i;178:47:15:-;;;:::i;2054:30:18:-;;;:::i;84:51:8:-;;;:::i;335:31:19:-;;;:::i;97:25::-;;;:::i;294:35::-;;;:::i;402:23::-;;;:::i;1903:36:18:-;;;;;;;;;;;;;;;;-1:-1:-1;1903:36:18;;:::i;:::-;;;;-1:-1:-1;;;;;1903:36:18;;;;;;;;;;;;;;;;;;;;;150:37:8;;;:::i;378:45::-;;;:::i;1820:38:18:-;;;;;;;;;;;;;;;;-1:-1:-1;1820:38:18;-1:-1:-1;;;;;1820:38:18;;:::i;434:25::-;;;:::i;200:44:8:-;;;:::i;160:23:19:-;;;:::i;224:27::-;;;:::i;2091:21:18:-;;;:::i;1946:28::-;;;;;;;;;;;;;;;;-1:-1:-1;1946:28:18;;:::i;2147:26::-;;;:::i;794:51:8:-;;;:::i;1980:32:18:-;;;;;;;;;;;;;;;;-1:-1:-1;1980:32:18;;:::i;894:44:8:-;;;:::i;372:24:19:-;;;:::i;1865:32:18:-;;;;;;;;;;;;;;;;-1:-1:-1;1865:32:18;;:::i;2118:22::-;;;:::i;969:44:8:-;1008:5;969:44;:::o;1131:46::-;1174:3;1131:46;:::o;1031:47::-;1077:1;1031:47;:::o;189:29:19:-;;;;:::o;257:31::-;;;;:::o;163:32:20:-;190:5;163:32;:::o;466:70:18:-;;;-1:-1:-1;;;;;466:70:18;;:::o;2179:30::-;;;;:::o;2019:28::-;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;2019:28:18;:::o;478:43:8:-;517:4;478:43;:::o;128:26:19:-;;;;:::o;178:47:15:-;220:5;178:47;:::o;2054:30:18:-;;;;:::o;84:51:8:-;130:5;84:51;:::o;335:31:19:-;;;;:::o;97:25::-;;;;:::o;294:35::-;;;;:::o;402:23::-;;;;:::o;1903:36:18:-;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;1903:36:18;;;;-1:-1:-1;1903:36:18;:::o;150:37:8:-;183:4;150:37;:::o;378:45::-;421:2;378:45;:::o;1820:38:18:-;;;;;;;;;;;;-1:-1:-1;;;;;1820:38:18;;:::o;434:25::-;;;-1:-1:-1;;;;;434:25:18;;:::o;200:44:8:-;241:3;200:44;:::o;160:23:19:-;;;;:::o;224:27::-;;;;:::o;2091:21:18:-;;;;:::o;1946:28::-;;;;;;;;;;2147:26;;;;:::o;794:51:8:-;844:1;794:51;:::o;1980:32:18:-;;;;;;;;;;894:44:8;935:3;894:44;:::o;372:24:19:-;;;;:::o;1865:32:18:-;;;;;;;;;2118:22;;;;:::o",
   "abi": [
     {
       "anonymous": false,
@@ -501,7 +501,7 @@
     },
     {
       "inputs": [],
-      "name": "totalActiveInvestments",
+      "name": "totalActiveStakes",
       "outputs": [
         {
           "internalType": "uint256",
@@ -541,19 +541,6 @@
     {
       "inputs": [],
       "name": "totalExited",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "totalInvestments",
       "outputs": [
         {
           "internalType": "uint256",
@@ -618,6 +605,19 @@
     },
     {
       "inputs": [],
+      "name": "totalStakes",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
       "name": "totalWithdrawn",
       "outputs": [
         {
@@ -653,15 +653,15 @@
     "absolutePath": "contracts/SharedVariables.sol",
     "exportedSymbols": {
       "SharedVariables": [
-        7147
+        7078
       ]
     },
-    "id": 7148,
+    "id": 7079,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 7036,
+        "id": 6967,
         "literals": [
           "solidity",
           "^",
@@ -674,9 +674,9 @@
       {
         "absolutePath": "@openzeppelin/contracts/token/ERC20/IERC20.sol",
         "file": "@openzeppelin/contracts/token/ERC20/IERC20.sol",
-        "id": 7037,
+        "id": 6968,
         "nodeType": "ImportDirective",
-        "scope": 7148,
+        "scope": 7079,
         "sourceUnit": 909,
         "src": "58:56:18",
         "symbolAliases": [],
@@ -685,10 +685,10 @@
       {
         "absolutePath": "contracts/InterestCalculator.sol",
         "file": "./InterestCalculator.sol",
-        "id": 7038,
+        "id": 6969,
         "nodeType": "ImportDirective",
-        "scope": 7148,
-        "sourceUnit": 5925,
+        "scope": 7079,
+        "sourceUnit": 5856,
         "src": "115:34:18",
         "symbolAliases": [],
         "unitAlias": ""
@@ -696,9 +696,9 @@
       {
         "absolutePath": "contracts/Events.sol",
         "file": "./Events.sol",
-        "id": 7039,
+        "id": 6970,
         "nodeType": "ImportDirective",
-        "scope": 7148,
+        "scope": 7079,
         "sourceUnit": 1950,
         "src": "150:22:18",
         "symbolAliases": [],
@@ -707,10 +707,10 @@
       {
         "absolutePath": "contracts/PercentageCalculator.sol",
         "file": "./PercentageCalculator.sol",
-        "id": 7040,
+        "id": 6971,
         "nodeType": "ImportDirective",
-        "scope": 7148,
-        "sourceUnit": 5977,
+        "scope": 7079,
+        "sourceUnit": 5908,
         "src": "173:36:18",
         "symbolAliases": [],
         "unitAlias": ""
@@ -718,10 +718,10 @@
       {
         "absolutePath": "contracts/utils/Utils.sol",
         "file": "./utils/Utils.sol",
-        "id": 7041,
+        "id": 6972,
         "nodeType": "ImportDirective",
-        "scope": 7148,
-        "sourceUnit": 7199,
+        "scope": 7079,
+        "sourceUnit": 7130,
         "src": "210:27:18",
         "symbolAliases": [],
         "unitAlias": ""
@@ -729,9 +729,9 @@
       {
         "absolutePath": "contracts/Constants.sol",
         "file": "./Constants.sol",
-        "id": 7042,
+        "id": 6973,
         "nodeType": "ImportDirective",
-        "scope": 7148,
+        "scope": 7079,
         "sourceUnit": 1894,
         "src": "238:25:18",
         "symbolAliases": [],
@@ -740,10 +740,10 @@
       {
         "absolutePath": "contracts/StatsVars.sol",
         "file": "./StatsVars.sol",
-        "id": 7043,
+        "id": 6974,
         "nodeType": "ImportDirective",
-        "scope": 7148,
-        "sourceUnit": 7171,
+        "scope": 7079,
+        "sourceUnit": 7102,
         "src": "264:25:18",
         "symbolAliases": [],
         "unitAlias": ""
@@ -755,7 +755,7 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 7044,
+              "id": 6975,
               "name": "Constants",
               "nodeType": "UserDefinedTypeName",
               "referencedDeclaration": 1893,
@@ -765,7 +765,7 @@
                 "typeString": "contract Constants"
               }
             },
-            "id": 7045,
+            "id": 6976,
             "nodeType": "InheritanceSpecifier",
             "src": "320:9:18"
           },
@@ -773,17 +773,17 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 7046,
+              "id": 6977,
               "name": "StatsVars",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 7170,
+              "referencedDeclaration": 7101,
               "src": "331:9:18",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_StatsVars_$7170",
+                "typeIdentifier": "t_contract$_StatsVars_$7101",
                 "typeString": "contract StatsVars"
               }
             },
-            "id": 7047,
+            "id": 6978,
             "nodeType": "InheritanceSpecifier",
             "src": "331:9:18"
           },
@@ -791,17 +791,17 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 7048,
+              "id": 6979,
               "name": "PercentageCalculator",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 5976,
+              "referencedDeclaration": 5907,
               "src": "342:20:18",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_PercentageCalculator_$5976",
+                "typeIdentifier": "t_contract$_PercentageCalculator_$5907",
                 "typeString": "contract PercentageCalculator"
               }
             },
-            "id": 7049,
+            "id": 6980,
             "nodeType": "InheritanceSpecifier",
             "src": "342:20:18"
           },
@@ -809,17 +809,17 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 7050,
+              "id": 6981,
               "name": "InterestCalculator",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 5924,
+              "referencedDeclaration": 5855,
               "src": "364:18:18",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_InterestCalculator_$5924",
+                "typeIdentifier": "t_contract$_InterestCalculator_$5855",
                 "typeString": "contract InterestCalculator"
               }
             },
-            "id": 7051,
+            "id": 6982,
             "nodeType": "InheritanceSpecifier",
             "src": "364:18:18"
           },
@@ -827,7 +827,7 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 7052,
+              "id": 6983,
               "name": "Events",
               "nodeType": "UserDefinedTypeName",
               "referencedDeclaration": 1949,
@@ -837,7 +837,7 @@
                 "typeString": "contract Events"
               }
             },
-            "id": 7053,
+            "id": 6984,
             "nodeType": "InheritanceSpecifier",
             "src": "384:6:18"
           },
@@ -845,17 +845,17 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 7054,
+              "id": 6985,
               "name": "Utils",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 7198,
+              "referencedDeclaration": 7129,
               "src": "392:5:18",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Utils_$7198",
+                "typeIdentifier": "t_contract$_Utils_$7129",
                 "typeString": "contract Utils"
               }
             },
-            "id": 7055,
+            "id": 6986,
             "nodeType": "InheritanceSpecifier",
             "src": "392:5:18"
           }
@@ -863,32 +863,32 @@
         "contractDependencies": [
           1893,
           1949,
-          5924,
-          5976,
-          7170,
-          7198
+          5855,
+          5907,
+          7101,
+          7129
         ],
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 7147,
+        "id": 7078,
         "linearizedBaseContracts": [
-          7147,
-          7198,
+          7078,
+          7129,
           1949,
-          5924,
-          5976,
-          7170,
+          5855,
+          5907,
+          7101,
           1893
         ],
         "name": "SharedVariables",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
-            "id": 7058,
+            "id": 6989,
             "libraryName": {
               "contractScope": null,
-              "id": 7056,
+              "id": 6987,
               "name": "SafeMath",
               "nodeType": "UserDefinedTypeName",
               "referencedDeclaration": 327,
@@ -901,7 +901,7 @@
             "nodeType": "UsingForDirective",
             "src": "404:24:18",
             "typeName": {
-              "id": 7057,
+              "id": 6988,
               "name": "uint",
               "nodeType": "ElementaryTypeName",
               "src": "423:4:18",
@@ -914,12 +914,12 @@
           {
             "constant": false,
             "functionSelector": "a9122af7",
-            "id": 7060,
+            "id": 6991,
             "mutability": "mutable",
             "name": "fourRXToken",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 7147,
+            "scope": 7078,
             "src": "434:25:18",
             "stateVariable": true,
             "storageLocation": "default",
@@ -929,7 +929,7 @@
             },
             "typeName": {
               "contractScope": null,
-              "id": 7059,
+              "id": 6990,
               "name": "IERC20",
               "nodeType": "UserDefinedTypeName",
               "referencedDeclaration": 908,
@@ -945,12 +945,12 @@
           {
             "constant": false,
             "functionSelector": "3ad10ef6",
-            "id": 7063,
+            "id": 6994,
             "mutability": "mutable",
             "name": "devAddress",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 7147,
+            "scope": 7078,
             "src": "466:70:18",
             "stateVariable": true,
             "storageLocation": "default",
@@ -959,7 +959,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 7061,
+              "id": 6992,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "466:7:18",
@@ -972,7 +972,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "307836344238636234433034426139303230313038353664393133423465354446393430373438426632",
-              "id": 7062,
+              "id": 6993,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -991,16 +991,16 @@
           },
           {
             "canonicalName": "SharedVariables.PoolUser",
-            "id": 7068,
+            "id": 6999,
             "members": [
               {
                 "constant": false,
-                "id": 7065,
+                "id": 6996,
                 "mutability": "mutable",
                 "name": "user",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 7068,
+                "scope": 6999,
                 "src": "610:12:18",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -1009,7 +1009,7 @@
                   "typeString": "address"
                 },
                 "typeName": {
-                  "id": 7064,
+                  "id": 6995,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
                   "src": "610:7:18",
@@ -1024,12 +1024,12 @@
               },
               {
                 "constant": false,
-                "id": 7067,
+                "id": 6998,
                 "mutability": "mutable",
                 "name": "stakeId",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 7068,
+                "scope": 6999,
                 "src": "650:12:18",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -1038,7 +1038,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 7066,
+                  "id": 6997,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
                   "src": "650:4:18",
@@ -1053,22 +1053,22 @@
             ],
             "name": "PoolUser",
             "nodeType": "StructDefinition",
-            "scope": 7147,
+            "scope": 7078,
             "src": "584:85:18",
             "visibility": "public"
           },
           {
             "canonicalName": "SharedVariables.Pool",
-            "id": 7073,
+            "id": 7004,
             "members": [
               {
                 "constant": false,
-                "id": 7070,
+                "id": 7001,
                 "mutability": "mutable",
                 "name": "cycle",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 7073,
+                "scope": 7004,
                 "src": "697:10:18",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -1077,7 +1077,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 7069,
+                  "id": 7000,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
                   "src": "697:4:18",
@@ -1091,12 +1091,12 @@
               },
               {
                 "constant": false,
-                "id": 7072,
+                "id": 7003,
                 "mutability": "mutable",
                 "name": "amount",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 7073,
+                "scope": 7004,
                 "src": "717:11:18",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -1105,7 +1105,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 7071,
+                  "id": 7002,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
                   "src": "717:4:18",
@@ -1120,22 +1120,22 @@
             ],
             "name": "Pool",
             "nodeType": "StructDefinition",
-            "scope": 7147,
+            "scope": 7078,
             "src": "675:60:18",
             "visibility": "public"
           },
           {
             "canonicalName": "SharedVariables.Uplink",
-            "id": 7078,
+            "id": 7009,
             "members": [
               {
                 "constant": false,
-                "id": 7075,
+                "id": 7006,
                 "mutability": "mutable",
                 "name": "uplinkAddress",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 7078,
+                "scope": 7009,
                 "src": "765:21:18",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -1144,7 +1144,7 @@
                   "typeString": "address"
                 },
                 "typeName": {
-                  "id": 7074,
+                  "id": 7005,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
                   "src": "765:7:18",
@@ -1159,13 +1159,13 @@
               },
               {
                 "constant": false,
-                "id": 7077,
+                "id": 7008,
                 "mutability": "mutable",
-                "name": "uplinkInvestmentId",
+                "name": "uplinkStakeId",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 7078,
-                "src": "796:23:18",
+                "scope": 7009,
+                "src": "796:18:18",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1173,7 +1173,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 7076,
+                  "id": 7007,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
                   "src": "796:4:18",
@@ -1188,23 +1188,23 @@
             ],
             "name": "Uplink",
             "nodeType": "StructDefinition",
-            "scope": 7147,
-            "src": "741:85:18",
+            "scope": 7078,
+            "src": "741:80:18",
             "visibility": "public"
           },
           {
             "canonicalName": "SharedVariables.Stake",
-            "id": 7109,
+            "id": 7040,
             "members": [
               {
                 "constant": false,
-                "id": 7080,
+                "id": 7011,
                 "mutability": "mutable",
                 "name": "id",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 7109,
-                "src": "855:7:18",
+                "scope": 7040,
+                "src": "850:7:18",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1212,10 +1212,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 7079,
+                  "id": 7010,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "855:4:18",
+                  "src": "850:4:18",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -1226,13 +1226,13 @@
               },
               {
                 "constant": false,
-                "id": 7082,
+                "id": 7013,
                 "mutability": "mutable",
                 "name": "active",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 7109,
-                "src": "872:11:18",
+                "scope": 7040,
+                "src": "867:11:18",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1240,10 +1240,10 @@
                   "typeString": "bool"
                 },
                 "typeName": {
-                  "id": 7081,
+                  "id": 7012,
                   "name": "bool",
                   "nodeType": "ElementaryTypeName",
-                  "src": "872:4:18",
+                  "src": "867:4:18",
                   "typeDescriptions": {
                     "typeIdentifier": "t_bool",
                     "typeString": "bool"
@@ -1254,13 +1254,13 @@
               },
               {
                 "constant": false,
-                "id": 7084,
+                "id": 7015,
                 "mutability": "mutable",
                 "name": "optInInsured",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 7109,
-                "src": "893:17:18",
+                "scope": 7040,
+                "src": "888:17:18",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1268,10 +1268,10 @@
                   "typeString": "bool"
                 },
                 "typeName": {
-                  "id": 7083,
+                  "id": 7014,
                   "name": "bool",
                   "nodeType": "ElementaryTypeName",
-                  "src": "893:4:18",
+                  "src": "888:4:18",
                   "typeDescriptions": {
                     "typeIdentifier": "t_bool",
                     "typeString": "bool"
@@ -1282,13 +1282,13 @@
               },
               {
                 "constant": false,
-                "id": 7086,
+                "id": 7017,
                 "mutability": "mutable",
                 "name": "holdFrom",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 7109,
-                "src": "939:13:18",
+                "scope": 7040,
+                "src": "934:13:18",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1296,10 +1296,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 7085,
+                  "id": 7016,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "939:4:18",
+                  "src": "934:4:18",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -1310,13 +1310,13 @@
               },
               {
                 "constant": false,
-                "id": 7088,
+                "id": 7019,
                 "mutability": "mutable",
                 "name": "deposit",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 7109,
-                "src": "1009:12:18",
+                "scope": 7040,
+                "src": "1004:12:18",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1324,10 +1324,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 7087,
+                  "id": 7018,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "1009:4:18",
+                  "src": "1004:4:18",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -1338,13 +1338,13 @@
               },
               {
                 "constant": false,
-                "id": 7090,
+                "id": 7021,
                 "mutability": "mutable",
                 "name": "withdrawn",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 7109,
-                "src": "1050:14:18",
+                "scope": 7040,
+                "src": "1045:14:18",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1352,10 +1352,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 7089,
+                  "id": 7020,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "1050:4:18",
+                  "src": "1045:4:18",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -1366,13 +1366,13 @@
               },
               {
                 "constant": false,
-                "id": 7092,
+                "id": 7023,
                 "mutability": "mutable",
                 "name": "penalty",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 7109,
-                "src": "1109:12:18",
+                "scope": 7040,
+                "src": "1104:12:18",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1380,10 +1380,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 7091,
+                  "id": 7022,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "1109:4:18",
+                  "src": "1104:4:18",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -1394,13 +1394,13 @@
               },
               {
                 "constant": false,
-                "id": 7094,
+                "id": 7025,
                 "mutability": "mutable",
                 "name": "refCommission",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 7109,
-                "src": "1182:18:18",
+                "scope": 7040,
+                "src": "1177:18:18",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1408,10 +1408,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 7093,
+                  "id": 7024,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "1182:4:18",
+                  "src": "1177:4:18",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -1422,13 +1422,13 @@
               },
               {
                 "constant": false,
-                "id": 7096,
+                "id": 7027,
                 "mutability": "mutable",
                 "name": "refPoolRewards",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 7109,
-                "src": "1225:19:18",
+                "scope": 7040,
+                "src": "1220:19:18",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1436,10 +1436,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 7095,
+                  "id": 7026,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "1225:4:18",
+                  "src": "1220:4:18",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -1450,13 +1450,13 @@
               },
               {
                 "constant": false,
-                "id": 7098,
+                "id": 7029,
                 "mutability": "mutable",
                 "name": "sponsorPoolRewards",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 7109,
-                "src": "1274:23:18",
+                "scope": 7040,
+                "src": "1269:23:18",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1464,10 +1464,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 7097,
+                  "id": 7028,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "1274:4:18",
+                  "src": "1269:4:18",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -1478,13 +1478,13 @@
               },
               {
                 "constant": false,
-                "id": 7100,
+                "id": 7031,
                 "mutability": "mutable",
                 "name": "interestCountFrom",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 7109,
-                "src": "1332:22:18",
+                "scope": 7040,
+                "src": "1327:22:18",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1492,10 +1492,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 7099,
+                  "id": 7030,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "1332:4:18",
+                  "src": "1327:4:18",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -1506,13 +1506,13 @@
               },
               {
                 "constant": false,
-                "id": 7102,
+                "id": 7033,
                 "mutability": "mutable",
                 "name": "lastWithdrawalAt",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 7109,
-                "src": "1435:21:18",
+                "scope": 7040,
+                "src": "1430:21:18",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1520,10 +1520,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 7101,
+                  "id": 7032,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "1435:4:18",
+                  "src": "1430:4:18",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -1534,28 +1534,28 @@
               },
               {
                 "constant": false,
-                "id": 7104,
+                "id": 7035,
                 "mutability": "mutable",
                 "name": "uplink",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 7109,
-                "src": "1537:13:18",
+                "scope": 7040,
+                "src": "1532:13:18",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_Uplink_$7078_storage_ptr",
+                  "typeIdentifier": "t_struct$_Uplink_$7009_storage_ptr",
                   "typeString": "struct SharedVariables.Uplink"
                 },
                 "typeName": {
                   "contractScope": null,
-                  "id": 7103,
+                  "id": 7034,
                   "name": "Uplink",
                   "nodeType": "UserDefinedTypeName",
-                  "referencedDeclaration": 7078,
-                  "src": "1537:6:18",
+                  "referencedDeclaration": 7009,
+                  "src": "1532:6:18",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_Uplink_$7078_storage_ptr",
+                    "typeIdentifier": "t_struct$_Uplink_$7009_storage_ptr",
                     "typeString": "struct SharedVariables.Uplink"
                   }
                 },
@@ -1564,28 +1564,28 @@
               },
               {
                 "constant": false,
-                "id": 7106,
+                "id": 7037,
                 "mutability": "mutable",
                 "name": "refPool",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 7109,
-                "src": "1572:12:18",
+                "scope": 7040,
+                "src": "1567:12:18",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_Pool_$7073_storage_ptr",
+                  "typeIdentifier": "t_struct$_Pool_$7004_storage_ptr",
                   "typeString": "struct SharedVariables.Pool"
                 },
                 "typeName": {
                   "contractScope": null,
-                  "id": 7105,
+                  "id": 7036,
                   "name": "Pool",
                   "nodeType": "UserDefinedTypeName",
-                  "referencedDeclaration": 7073,
-                  "src": "1572:4:18",
+                  "referencedDeclaration": 7004,
+                  "src": "1567:4:18",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_Pool_$7073_storage_ptr",
+                    "typeIdentifier": "t_struct$_Pool_$7004_storage_ptr",
                     "typeString": "struct SharedVariables.Pool"
                   }
                 },
@@ -1594,28 +1594,28 @@
               },
               {
                 "constant": false,
-                "id": 7108,
+                "id": 7039,
                 "mutability": "mutable",
                 "name": "sponsorPool",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 7109,
-                "src": "1647:16:18",
+                "scope": 7040,
+                "src": "1642:16:18",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_Pool_$7073_storage_ptr",
+                  "typeIdentifier": "t_struct$_Pool_$7004_storage_ptr",
                   "typeString": "struct SharedVariables.Pool"
                 },
                 "typeName": {
                   "contractScope": null,
-                  "id": 7107,
+                  "id": 7038,
                   "name": "Pool",
                   "nodeType": "UserDefinedTypeName",
-                  "referencedDeclaration": 7073,
-                  "src": "1647:4:18",
+                  "referencedDeclaration": 7004,
+                  "src": "1642:4:18",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_Pool_$7073_storage_ptr",
+                    "typeIdentifier": "t_struct$_Pool_$7004_storage_ptr",
                     "typeString": "struct SharedVariables.Pool"
                   }
                 },
@@ -1625,23 +1625,23 @@
             ],
             "name": "Stake",
             "nodeType": "StructDefinition",
-            "scope": 7147,
-            "src": "832:896:18",
+            "scope": 7078,
+            "src": "827:896:18",
             "visibility": "public"
           },
           {
             "canonicalName": "SharedVariables.User",
-            "id": 7115,
+            "id": 7046,
             "members": [
               {
                 "constant": false,
-                "id": 7111,
+                "id": 7042,
                 "mutability": "mutable",
                 "name": "wallet",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 7115,
-                "src": "1756:14:18",
+                "scope": 7046,
+                "src": "1751:14:18",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1649,10 +1649,10 @@
                   "typeString": "address"
                 },
                 "typeName": {
-                  "id": 7110,
+                  "id": 7041,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
-                  "src": "1756:7:18",
+                  "src": "1751:7:18",
                   "stateMutability": "nonpayable",
                   "typeDescriptions": {
                     "typeIdentifier": "t_address",
@@ -1664,38 +1664,38 @@
               },
               {
                 "constant": false,
-                "id": 7114,
+                "id": 7045,
                 "mutability": "mutable",
                 "name": "stakes",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 7115,
-                "src": "1798:14:18",
+                "scope": 7046,
+                "src": "1793:14:18",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_array$_t_struct$_Stake_$7109_storage_$dyn_storage_ptr",
+                  "typeIdentifier": "t_array$_t_struct$_Stake_$7040_storage_$dyn_storage_ptr",
                   "typeString": "struct SharedVariables.Stake[]"
                 },
                 "typeName": {
                   "baseType": {
                     "contractScope": null,
-                    "id": 7112,
+                    "id": 7043,
                     "name": "Stake",
                     "nodeType": "UserDefinedTypeName",
-                    "referencedDeclaration": 7109,
-                    "src": "1798:5:18",
+                    "referencedDeclaration": 7040,
+                    "src": "1793:5:18",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Stake_$7109_storage_ptr",
+                      "typeIdentifier": "t_struct$_Stake_$7040_storage_ptr",
                       "typeString": "struct SharedVariables.Stake"
                     }
                   },
-                  "id": 7113,
+                  "id": 7044,
                   "length": null,
                   "nodeType": "ArrayTypeName",
-                  "src": "1798:7:18",
+                  "src": "1793:7:18",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_array$_t_struct$_Stake_$7109_storage_$dyn_storage_ptr",
+                    "typeIdentifier": "t_array$_t_struct$_Stake_$7040_storage_$dyn_storage_ptr",
                     "typeString": "struct SharedVariables.Stake[]"
                   }
                 },
@@ -1705,53 +1705,53 @@
             ],
             "name": "User",
             "nodeType": "StructDefinition",
-            "scope": 7147,
-            "src": "1734:85:18",
+            "scope": 7078,
+            "src": "1729:85:18",
             "visibility": "public"
           },
           {
             "constant": false,
             "functionSelector": "a87430ba",
-            "id": 7119,
+            "id": 7050,
             "mutability": "mutable",
             "name": "users",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 7147,
-            "src": "1825:38:18",
+            "scope": 7078,
+            "src": "1820:38:18",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_User_$7115_storage_$",
+              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_User_$7046_storage_$",
               "typeString": "mapping(address => struct SharedVariables.User)"
             },
             "typeName": {
-              "id": 7118,
+              "id": 7049,
               "keyType": {
-                "id": 7116,
+                "id": 7047,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
-                "src": "1834:7:18",
+                "src": "1829:7:18",
                 "typeDescriptions": {
                   "typeIdentifier": "t_address",
                   "typeString": "address"
                 }
               },
               "nodeType": "Mapping",
-              "src": "1825:25:18",
+              "src": "1820:25:18",
               "typeDescriptions": {
-                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_User_$7115_storage_$",
+                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_User_$7046_storage_$",
                 "typeString": "mapping(address => struct SharedVariables.User)"
               },
               "valueType": {
                 "contractScope": null,
-                "id": 7117,
+                "id": 7048,
                 "name": "User",
                 "nodeType": "UserDefinedTypeName",
-                "referencedDeclaration": 7115,
-                "src": "1845:4:18",
+                "referencedDeclaration": 7046,
+                "src": "1840:4:18",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_User_$7115_storage_ptr",
+                  "typeIdentifier": "t_struct$_User_$7046_storage_ptr",
                   "typeString": "struct SharedVariables.User"
                 }
               }
@@ -1762,44 +1762,44 @@
           {
             "constant": false,
             "functionSelector": "ed56f6a1",
-            "id": 7123,
+            "id": 7054,
             "mutability": "mutable",
             "name": "refPoolUsers",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 7147,
-            "src": "1870:32:18",
+            "scope": 7078,
+            "src": "1865:32:18",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_array$_t_struct$_PoolUser_$7068_storage_$12_storage",
+              "typeIdentifier": "t_array$_t_struct$_PoolUser_$6999_storage_$12_storage",
               "typeString": "struct SharedVariables.PoolUser[12]"
             },
             "typeName": {
               "baseType": {
                 "contractScope": null,
-                "id": 7120,
+                "id": 7051,
                 "name": "PoolUser",
                 "nodeType": "UserDefinedTypeName",
-                "referencedDeclaration": 7068,
-                "src": "1870:8:18",
+                "referencedDeclaration": 6999,
+                "src": "1865:8:18",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_PoolUser_$7068_storage_ptr",
+                  "typeIdentifier": "t_struct$_PoolUser_$6999_storage_ptr",
                   "typeString": "struct SharedVariables.PoolUser"
                 }
               },
-              "id": 7122,
+              "id": 7053,
               "length": {
                 "argumentTypes": null,
                 "hexValue": "3132",
-                "id": 7121,
+                "id": 7052,
                 "isConstant": false,
                 "isLValue": false,
                 "isPure": true,
                 "kind": "number",
                 "lValueRequested": false,
                 "nodeType": "Literal",
-                "src": "1879:2:18",
+                "src": "1874:2:18",
                 "subdenomination": null,
                 "typeDescriptions": {
                   "typeIdentifier": "t_rational_12_by_1",
@@ -1808,9 +1808,9 @@
                 "value": "12"
               },
               "nodeType": "ArrayTypeName",
-              "src": "1870:12:18",
+              "src": "1865:12:18",
               "typeDescriptions": {
-                "typeIdentifier": "t_array$_t_struct$_PoolUser_$7068_storage_$12_storage_ptr",
+                "typeIdentifier": "t_array$_t_struct$_PoolUser_$6999_storage_$12_storage_ptr",
                 "typeString": "struct SharedVariables.PoolUser[12]"
               }
             },
@@ -1820,44 +1820,44 @@
           {
             "constant": false,
             "functionSelector": "9c236aa8",
-            "id": 7127,
+            "id": 7058,
             "mutability": "mutable",
             "name": "sponsorPoolUsers",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 7147,
-            "src": "1908:36:18",
+            "scope": 7078,
+            "src": "1903:36:18",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_array$_t_struct$_PoolUser_$7068_storage_$10_storage",
+              "typeIdentifier": "t_array$_t_struct$_PoolUser_$6999_storage_$10_storage",
               "typeString": "struct SharedVariables.PoolUser[10]"
             },
             "typeName": {
               "baseType": {
                 "contractScope": null,
-                "id": 7124,
+                "id": 7055,
                 "name": "PoolUser",
                 "nodeType": "UserDefinedTypeName",
-                "referencedDeclaration": 7068,
-                "src": "1908:8:18",
+                "referencedDeclaration": 6999,
+                "src": "1903:8:18",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_PoolUser_$7068_storage_ptr",
+                  "typeIdentifier": "t_struct$_PoolUser_$6999_storage_ptr",
                   "typeString": "struct SharedVariables.PoolUser"
                 }
               },
-              "id": 7126,
+              "id": 7057,
               "length": {
                 "argumentTypes": null,
                 "hexValue": "3130",
-                "id": 7125,
+                "id": 7056,
                 "isConstant": false,
                 "isLValue": false,
                 "isPure": true,
                 "kind": "number",
                 "lValueRequested": false,
                 "nodeType": "Literal",
-                "src": "1917:2:18",
+                "src": "1912:2:18",
                 "subdenomination": null,
                 "typeDescriptions": {
                   "typeIdentifier": "t_rational_10_by_1",
@@ -1866,9 +1866,9 @@
                 "value": "10"
               },
               "nodeType": "ArrayTypeName",
-              "src": "1908:12:18",
+              "src": "1903:12:18",
               "typeDescriptions": {
-                "typeIdentifier": "t_array$_t_struct$_PoolUser_$7068_storage_$10_storage_ptr",
+                "typeIdentifier": "t_array$_t_struct$_PoolUser_$6999_storage_$10_storage_ptr",
                 "typeString": "struct SharedVariables.PoolUser[10]"
               }
             },
@@ -1878,13 +1878,13 @@
           {
             "constant": false,
             "functionSelector": "d5766ebd",
-            "id": 7130,
+            "id": 7061,
             "mutability": "mutable",
             "name": "refPoolBonuses",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 7147,
-            "src": "1951:28:18",
+            "scope": 7078,
+            "src": "1946:28:18",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1893,19 +1893,19 @@
             },
             "typeName": {
               "baseType": {
-                "id": 7128,
+                "id": 7059,
                 "name": "uint",
                 "nodeType": "ElementaryTypeName",
-                "src": "1951:4:18",
+                "src": "1946:4:18",
                 "typeDescriptions": {
                   "typeIdentifier": "t_uint256",
                   "typeString": "uint256"
                 }
               },
-              "id": 7129,
+              "id": 7060,
               "length": null,
               "nodeType": "ArrayTypeName",
-              "src": "1951:6:18",
+              "src": "1946:6:18",
               "typeDescriptions": {
                 "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
                 "typeString": "uint256[]"
@@ -1917,13 +1917,13 @@
           {
             "constant": false,
             "functionSelector": "df5a75ef",
-            "id": 7133,
+            "id": 7064,
             "mutability": "mutable",
             "name": "sponsorPoolBonuses",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 7147,
-            "src": "1985:32:18",
+            "scope": 7078,
+            "src": "1980:32:18",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1932,19 +1932,19 @@
             },
             "typeName": {
               "baseType": {
-                "id": 7131,
+                "id": 7062,
                 "name": "uint",
                 "nodeType": "ElementaryTypeName",
-                "src": "1985:4:18",
+                "src": "1980:4:18",
                 "typeDescriptions": {
                   "typeIdentifier": "t_uint256",
                   "typeString": "uint256"
                 }
               },
-              "id": 7132,
+              "id": 7063,
               "length": null,
               "nodeType": "ArrayTypeName",
-              "src": "1985:6:18",
+              "src": "1980:6:18",
               "typeDescriptions": {
                 "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
                 "typeString": "uint256[]"
@@ -1956,13 +1956,13 @@
           {
             "constant": false,
             "functionSelector": "48a91a24",
-            "id": 7136,
+            "id": 7067,
             "mutability": "mutable",
             "name": "depositBonuses",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 7147,
-            "src": "2024:28:18",
+            "scope": 7078,
+            "src": "2019:28:18",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1971,19 +1971,19 @@
             },
             "typeName": {
               "baseType": {
-                "id": 7134,
+                "id": 7065,
                 "name": "uint",
                 "nodeType": "ElementaryTypeName",
-                "src": "2024:4:18",
+                "src": "2019:4:18",
                 "typeDescriptions": {
                   "typeIdentifier": "t_uint256",
                   "typeString": "uint256"
                 }
               },
-              "id": 7135,
+              "id": 7066,
               "length": null,
               "nodeType": "ArrayTypeName",
-              "src": "2024:6:18",
+              "src": "2019:6:18",
               "typeDescriptions": {
                 "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
                 "typeString": "uint256[]"
@@ -1995,13 +1995,13 @@
           {
             "constant": false,
             "functionSelector": "65fcb49e",
-            "id": 7138,
+            "id": 7069,
             "mutability": "mutable",
             "name": "maxContractBalance",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 7147,
-            "src": "2059:30:18",
+            "scope": 7078,
+            "src": "2054:30:18",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -2009,10 +2009,10 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 7137,
+              "id": 7068,
               "name": "uint",
               "nodeType": "ElementaryTypeName",
-              "src": "2059:4:18",
+              "src": "2054:4:18",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -2024,13 +2024,13 @@
           {
             "constant": false,
             "functionSelector": "cabea10d",
-            "id": 7140,
+            "id": 7071,
             "mutability": "mutable",
             "name": "poolCycle",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 7147,
-            "src": "2096:21:18",
+            "scope": 7078,
+            "src": "2091:21:18",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -2038,10 +2038,10 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 7139,
+              "id": 7070,
               "name": "uint",
               "nodeType": "ElementaryTypeName",
-              "src": "2096:4:18",
+              "src": "2091:4:18",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -2053,13 +2053,13 @@
           {
             "constant": false,
             "functionSelector": "fd0b8252",
-            "id": 7142,
+            "id": 7073,
             "mutability": "mutable",
             "name": "poolDrewAt",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 7147,
-            "src": "2123:22:18",
+            "scope": 7078,
+            "src": "2118:22:18",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -2067,10 +2067,10 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 7141,
+              "id": 7072,
               "name": "uint",
               "nodeType": "ElementaryTypeName",
-              "src": "2123:4:18",
+              "src": "2118:4:18",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -2082,13 +2082,13 @@
           {
             "constant": false,
             "functionSelector": "d82daec7",
-            "id": 7144,
+            "id": 7075,
             "mutability": "mutable",
             "name": "refPoolBalance",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 7147,
-            "src": "2152:26:18",
+            "scope": 7078,
+            "src": "2147:26:18",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -2096,10 +2096,10 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 7143,
+              "id": 7074,
               "name": "uint",
               "nodeType": "ElementaryTypeName",
-              "src": "2152:4:18",
+              "src": "2147:4:18",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -2111,13 +2111,13 @@
           {
             "constant": false,
             "functionSelector": "3df936c9",
-            "id": 7146,
+            "id": 7077,
             "mutability": "mutable",
             "name": "sponsorPoolBalance",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 7147,
-            "src": "2184:30:18",
+            "scope": 7078,
+            "src": "2179:30:18",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -2125,10 +2125,10 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 7145,
+              "id": 7076,
               "name": "uint",
               "nodeType": "ElementaryTypeName",
-              "src": "2184:4:18",
+              "src": "2179:4:18",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -2138,14 +2138,14 @@
             "visibility": "public"
           }
         ],
-        "scope": 7148,
-        "src": "292:1925:18"
+        "scope": 7079,
+        "src": "292:1920:18"
       }
     ],
-    "src": "32:2186:18"
+    "src": "32:2181:18"
   },
-  "bytecode": "0x6080604052600b80546001600160a01b0319167364b8cb4c04ba902010856d913b4e5df940748bf217905534801561003657600080fd5b50610549806100466000396000f3fe608060405234801561001057600080fd5b50600436106101d85760003560e01c806303162d2c146101dd5780630781235a146101f75780630ac39f72146101ff5780630f9fa6aa146101f757806312dd5fe4146101f757806324cf3682146102075780632673ebf71461020f57806327cfe856146102175780633ad10ef61461021f5780633df936c91461024357806348a91a241461024b578063498dc5b5146102685780634b3197131461027057806363b815fa1461027857806365fcb49e1461028057806369da94d81461028857806370fd37cf146102905780637247b2b9146102985780637d882097146102a05780638876bb3e146102a857806391994b2c146102b05780639b6eec7d146102685780639c236aa8146102b8578063a00d4980146102f8578063a13a801a14610300578063a87430ba14610308578063a9122af71461032e578063aaf1a0da14610300578063b963ddb414610336578063bfe0e0201461033e578063cabea10d14610346578063d5766ebd1461034e578063d82daec71461036b578063d902f40c14610373578063df5a75ef1461037b578063e523141114610398578063e6af61c8146103a0578063ed56f6a1146103a8578063f48e595a14610398578063fd0b8252146103c5575b600080fd5b6101e56103cd565b60408051918252519081900360200190f35b6101e56103d3565b6101e56103d9565b6101e56103de565b6101e56103e4565b6101e56103ea565b6102276103f1565b604080516001600160a01b039092168252519081900360200190f35b6101e5610400565b6101e56004803603602081101561026157600080fd5b5035610406565b6101e5610424565b6101e561042a565b6101e5610430565b6101e5610436565b6101e561043c565b6101e5610442565b6101e5610448565b6101e561044e565b6101e5610454565b6101e561045a565b6102d5600480360360208110156102ce57600080fd5b5035610460565b604080516001600160a01b03909316835260208301919091528051918290030190f35b6101e5610489565b6101e561048f565b6102276004803603602081101561031e57600080fd5b50356001600160a01b0316610494565b6102276104af565b6101e56104be565b6101e56104c4565b6101e56104ca565b6101e56004803603602081101561036457600080fd5b50356104d0565b6101e56104dd565b6101e56104e3565b6101e56004803603602081101561039157600080fd5b50356104e8565b6101e56104f5565b6101e56104fa565b6102d5600480360360208110156103be57600080fd5b5035610500565b6101e561050d565b61a8c081565b61012c81565b600281565b60035481565b60055481565b6201518081565b600b546001600160a01b031681565b60405481565b603b818154811061041357fe5b600091825260209091200154905081565b61138881565b60015481565b61271081565b603c5481565b61753081565b60025481565b60075481565b60005481565b60065481565b60095481565b602581600a811061046d57fe5b6002020180546001909101546001600160a01b03909116915082565b6103e881565b603281565b600c602052600090815260409020546001600160a01b031681565b600a546001600160a01b031681565b6102bc81565b60045481565b603d5481565b6039818154811061041357fe5b603f5481565b600181565b603a818154811061041357fe5b606481565b60085481565b600d81600c811061046d57fe5b603e548156fea26469706673582212205d89e12a5291678da1f93c68a725d1f905f9ab5af4da539dc7e7a13a63b3d44c64736f6c634300060c0033",
-  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106101d85760003560e01c806303162d2c146101dd5780630781235a146101f75780630ac39f72146101ff5780630f9fa6aa146101f757806312dd5fe4146101f757806324cf3682146102075780632673ebf71461020f57806327cfe856146102175780633ad10ef61461021f5780633df936c91461024357806348a91a241461024b578063498dc5b5146102685780634b3197131461027057806363b815fa1461027857806365fcb49e1461028057806369da94d81461028857806370fd37cf146102905780637247b2b9146102985780637d882097146102a05780638876bb3e146102a857806391994b2c146102b05780639b6eec7d146102685780639c236aa8146102b8578063a00d4980146102f8578063a13a801a14610300578063a87430ba14610308578063a9122af71461032e578063aaf1a0da14610300578063b963ddb414610336578063bfe0e0201461033e578063cabea10d14610346578063d5766ebd1461034e578063d82daec71461036b578063d902f40c14610373578063df5a75ef1461037b578063e523141114610398578063e6af61c8146103a0578063ed56f6a1146103a8578063f48e595a14610398578063fd0b8252146103c5575b600080fd5b6101e56103cd565b60408051918252519081900360200190f35b6101e56103d3565b6101e56103d9565b6101e56103de565b6101e56103e4565b6101e56103ea565b6102276103f1565b604080516001600160a01b039092168252519081900360200190f35b6101e5610400565b6101e56004803603602081101561026157600080fd5b5035610406565b6101e5610424565b6101e561042a565b6101e5610430565b6101e5610436565b6101e561043c565b6101e5610442565b6101e5610448565b6101e561044e565b6101e5610454565b6101e561045a565b6102d5600480360360208110156102ce57600080fd5b5035610460565b604080516001600160a01b03909316835260208301919091528051918290030190f35b6101e5610489565b6101e561048f565b6102276004803603602081101561031e57600080fd5b50356001600160a01b0316610494565b6102276104af565b6101e56104be565b6101e56104c4565b6101e56104ca565b6101e56004803603602081101561036457600080fd5b50356104d0565b6101e56104dd565b6101e56104e3565b6101e56004803603602081101561039157600080fd5b50356104e8565b6101e56104f5565b6101e56104fa565b6102d5600480360360208110156103be57600080fd5b5035610500565b6101e561050d565b61a8c081565b61012c81565b600281565b60035481565b60055481565b6201518081565b600b546001600160a01b031681565b60405481565b603b818154811061041357fe5b600091825260209091200154905081565b61138881565b60015481565b61271081565b603c5481565b61753081565b60025481565b60075481565b60005481565b60065481565b60095481565b602581600a811061046d57fe5b6002020180546001909101546001600160a01b03909116915082565b6103e881565b603281565b600c602052600090815260409020546001600160a01b031681565b600a546001600160a01b031681565b6102bc81565b60045481565b603d5481565b6039818154811061041357fe5b603f5481565b600181565b603a818154811061041357fe5b606481565b60085481565b600d81600c811061046d57fe5b603e548156fea26469706673582212205d89e12a5291678da1f93c68a725d1f905f9ab5af4da539dc7e7a13a63b3d44c64736f6c634300060c0033",
+  "bytecode": "0x6080604052600b80546001600160a01b0319167364b8cb4c04ba902010856d913b4e5df940748bf217905534801561003657600080fd5b50610549806100466000396000f3fe608060405234801561001057600080fd5b50600436106101d85760003560e01c806303162d2c146101dd5780630781235a146101f75780630ac39f72146101ff5780630f9fa6aa146101f757806312dd5fe4146101f75780631f079e01146102075780632673ebf71461020f57806327cfe856146102175780633ad10ef61461021f5780633df936c91461024357806348a91a241461024b578063498dc5b5146102685780634b3197131461027057806363b815fa1461027857806365fcb49e1461028057806369da94d8146102885780637247b2b9146102905780637d882097146102985780638876bb3e146102a057806391994b2c146102a85780639b6eec7d146102685780639c236aa8146102b0578063a00d4980146102f0578063a13a801a146102f8578063a87430ba14610300578063a9122af714610326578063aaf1a0da146102f8578063b963ddb41461032e578063bf9befb114610336578063bfe0e0201461033e578063cabea10d14610346578063d5766ebd1461034e578063d82daec71461036b578063d902f40c14610373578063df5a75ef1461037b578063e523141114610398578063e6af61c8146103a0578063ed56f6a1146103a8578063f48e595a14610398578063fd0b8252146103c5575b600080fd5b6101e56103cd565b60408051918252519081900360200190f35b6101e56103d3565b6101e56103d9565b6101e56103de565b6101e56103e4565b6101e56103ea565b6102276103f1565b604080516001600160a01b039092168252519081900360200190f35b6101e5610400565b6101e56004803603602081101561026157600080fd5b5035610406565b6101e5610424565b6101e561042a565b6101e5610430565b6101e5610436565b6101e561043c565b6101e5610442565b6101e5610448565b6101e561044e565b6101e5610454565b6102cd600480360360208110156102c657600080fd5b503561045a565b604080516001600160a01b03909316835260208301919091528051918290030190f35b6101e5610483565b6101e5610489565b6102276004803603602081101561031657600080fd5b50356001600160a01b031661048e565b6102276104a9565b6101e56104b8565b6101e56104be565b6101e56104c4565b6101e56104ca565b6101e56004803603602081101561036457600080fd5b50356104d0565b6101e56104dd565b6101e56104e3565b6101e56004803603602081101561039157600080fd5b50356104e8565b6101e56104f5565b6101e56104fa565b6102cd600480360360208110156103be57600080fd5b5035610500565b6101e561050d565b61a8c081565b61012c81565b600281565b60035481565b60055481565b6201518081565b600b546001600160a01b031681565b60405481565b603b818154811061041357fe5b600091825260209091200154905081565b61138881565b60015481565b61271081565b603c5481565b61753081565b60075481565b60005481565b60065481565b60095481565b602581600a811061046757fe5b6002020180546001909101546001600160a01b03909116915082565b6103e881565b603281565b600c602052600090815260409020546001600160a01b031681565b600a546001600160a01b031681565b6102bc81565b60025481565b60045481565b603d5481565b6039818154811061041357fe5b603f5481565b600181565b603a818154811061041357fe5b606481565b60085481565b600d81600c811061046757fe5b603e548156fea26469706673582212204586957cd17b704d471a97ae80407d9f0a239cb0a1f7319cd73d086ad8c9615664736f6c634300060c0033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106101d85760003560e01c806303162d2c146101dd5780630781235a146101f75780630ac39f72146101ff5780630f9fa6aa146101f757806312dd5fe4146101f75780631f079e01146102075780632673ebf71461020f57806327cfe856146102175780633ad10ef61461021f5780633df936c91461024357806348a91a241461024b578063498dc5b5146102685780634b3197131461027057806363b815fa1461027857806365fcb49e1461028057806369da94d8146102885780637247b2b9146102905780637d882097146102985780638876bb3e146102a057806391994b2c146102a85780639b6eec7d146102685780639c236aa8146102b0578063a00d4980146102f0578063a13a801a146102f8578063a87430ba14610300578063a9122af714610326578063aaf1a0da146102f8578063b963ddb41461032e578063bf9befb114610336578063bfe0e0201461033e578063cabea10d14610346578063d5766ebd1461034e578063d82daec71461036b578063d902f40c14610373578063df5a75ef1461037b578063e523141114610398578063e6af61c8146103a0578063ed56f6a1146103a8578063f48e595a14610398578063fd0b8252146103c5575b600080fd5b6101e56103cd565b60408051918252519081900360200190f35b6101e56103d3565b6101e56103d9565b6101e56103de565b6101e56103e4565b6101e56103ea565b6102276103f1565b604080516001600160a01b039092168252519081900360200190f35b6101e5610400565b6101e56004803603602081101561026157600080fd5b5035610406565b6101e5610424565b6101e561042a565b6101e5610430565b6101e5610436565b6101e561043c565b6101e5610442565b6101e5610448565b6101e561044e565b6101e5610454565b6102cd600480360360208110156102c657600080fd5b503561045a565b604080516001600160a01b03909316835260208301919091528051918290030190f35b6101e5610483565b6101e5610489565b6102276004803603602081101561031657600080fd5b50356001600160a01b031661048e565b6102276104a9565b6101e56104b8565b6101e56104be565b6101e56104c4565b6101e56104ca565b6101e56004803603602081101561036457600080fd5b50356104d0565b6101e56104dd565b6101e56104e3565b6101e56004803603602081101561039157600080fd5b50356104e8565b6101e56104f5565b6101e56104fa565b6102cd600480360360208110156103be57600080fd5b5035610500565b6101e561050d565b61a8c081565b61012c81565b600281565b60035481565b60055481565b6201518081565b600b546001600160a01b031681565b60405481565b603b818154811061041357fe5b600091825260209091200154905081565b61138881565b60015481565b61271081565b603c5481565b61753081565b60075481565b60005481565b60065481565b60095481565b602581600a811061046757fe5b6002020180546001909101546001600160a01b03909116915082565b6103e881565b603281565b600c602052600090815260409020546001600160a01b031681565b600a546001600160a01b031681565b6102bc81565b60025481565b60045481565b603d5481565b6039818154811061041357fe5b603f5481565b600181565b603a818154811061041357fe5b606481565b60085481565b600d81600c811061046757fe5b603e548156fea26469706673582212204586957cd17b704d471a97ae80407d9f0a239cb0a1f7319cd73d086ad8c9615664736f6c634300060c0033",
   "compiler": {
     "name": "solc",
     "version": "0.6.12+commit.27d51765.Emscripten.clang",

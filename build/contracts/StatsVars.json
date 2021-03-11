@@ -1,14 +1,14 @@
 {
   "fileName": "StatsVars.sol",
   "contractName": "StatsVars",
-  "source": "// SPDX-License-Identifier: MIT\npragma solidity ^0.6.12;\n\n\ncontract StatsVars {\n    // Stats\n    uint public totalDeposits;\n    uint public totalWithdrawn;\n    uint public totalInvestments;\n    uint public totalActiveInvestments;\n    uint public totalRefRewards;\n    uint public totalRefPoolRewards;\n    uint public totalSponsorPoolRewards;\n    uint public totalDepositRewards;\n    uint public totalPenalty;\n    uint public totalExited;\n}\n",
+  "source": "// SPDX-License-Identifier: MIT\npragma solidity ^0.6.12;\n\n\ncontract StatsVars {\n    // Stats\n    uint public totalDeposits;\n    uint public totalWithdrawn;\n    uint public totalStakes;\n    uint public totalActiveStakes;\n    uint public totalRefRewards;\n    uint public totalRefPoolRewards;\n    uint public totalSponsorPoolRewards;\n    uint public totalDepositRewards;\n    uint public totalPenalty;\n    uint public totalExited;\n}\n",
   "sourcePath": "contracts/StatsVars.sol",
-  "sourceMap": "59:379:19:-:0;;;;;;;;;;;;;;;;;;;",
-  "deployedSourceMap": "59:379:19:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;194:34;;;:::i;:::-;;;;;;;;;;;;;;;;267:31;;;:::i;128:26::-;;;:::i;160:28::-;;;:::i;345:31::-;;;:::i;97:25::-;;;:::i;304:35::-;;;:::i;412:23::-;;;:::i;234:27::-;;;:::i;382:24::-;;;:::i;194:34::-;;;;:::o;267:31::-;;;;:::o;128:26::-;;;;:::o;160:28::-;;;;:::o;345:31::-;;;;:::o;97:25::-;;;;:::o;304:35::-;;;;:::o;412:23::-;;;;:::o;234:27::-;;;;:::o;382:24::-;;;;:::o",
+  "sourceMap": "59:369:19:-:0;;;;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "59:369:19:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;189:29;;;:::i;:::-;;;;;;;;;;;;;;;;257:31;;;:::i;128:26::-;;;:::i;335:31::-;;;:::i;97:25::-;;;:::i;294:35::-;;;:::i;402:23::-;;;:::i;160:::-;;;:::i;224:27::-;;;:::i;372:24::-;;;:::i;189:29::-;;;;:::o;257:31::-;;;;:::o;128:26::-;;;;:::o;335:31::-;;;;:::o;97:25::-;;;;:::o;294:35::-;;;;:::o;402:23::-;;;;:::o;160:::-;;;;:::o;224:27::-;;;;:::o;372:24::-;;;;:::o",
   "abi": [
     {
       "inputs": [],
-      "name": "totalActiveInvestments",
+      "name": "totalActiveStakes",
       "outputs": [
         {
           "internalType": "uint256",
@@ -48,19 +48,6 @@
     {
       "inputs": [],
       "name": "totalExited",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "totalInvestments",
       "outputs": [
         {
           "internalType": "uint256",
@@ -125,6 +112,19 @@
     },
     {
       "inputs": [],
+      "name": "totalStakes",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
       "name": "totalWithdrawn",
       "outputs": [
         {
@@ -141,15 +141,15 @@
     "absolutePath": "contracts/StatsVars.sol",
     "exportedSymbols": {
       "StatsVars": [
-        7170
+        7101
       ]
     },
-    "id": 7171,
+    "id": 7102,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 7149,
+        "id": 7080,
         "literals": [
           "solidity",
           "^",
@@ -166,9 +166,9 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 7170,
+        "id": 7101,
         "linearizedBaseContracts": [
-          7170
+          7101
         ],
         "name": "StatsVars",
         "nodeType": "ContractDefinition",
@@ -176,12 +176,12 @@
           {
             "constant": false,
             "functionSelector": "7d882097",
-            "id": 7151,
+            "id": 7082,
             "mutability": "mutable",
             "name": "totalDeposits",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 7170,
+            "scope": 7101,
             "src": "97:25:19",
             "stateVariable": true,
             "storageLocation": "default",
@@ -190,7 +190,7 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 7150,
+              "id": 7081,
               "name": "uint",
               "nodeType": "ElementaryTypeName",
               "src": "97:4:19",
@@ -205,12 +205,12 @@
           {
             "constant": false,
             "functionSelector": "4b319713",
-            "id": 7153,
+            "id": 7084,
             "mutability": "mutable",
             "name": "totalWithdrawn",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 7170,
+            "scope": 7101,
             "src": "128:26:19",
             "stateVariable": true,
             "storageLocation": "default",
@@ -219,7 +219,7 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 7152,
+              "id": 7083,
               "name": "uint",
               "nodeType": "ElementaryTypeName",
               "src": "128:4:19",
@@ -233,14 +233,14 @@
           },
           {
             "constant": false,
-            "functionSelector": "70fd37cf",
-            "id": 7155,
+            "functionSelector": "bf9befb1",
+            "id": 7086,
             "mutability": "mutable",
-            "name": "totalInvestments",
+            "name": "totalStakes",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 7170,
-            "src": "160:28:19",
+            "scope": 7101,
+            "src": "160:23:19",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -248,7 +248,7 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 7154,
+              "id": 7085,
               "name": "uint",
               "nodeType": "ElementaryTypeName",
               "src": "160:4:19",
@@ -262,14 +262,14 @@
           },
           {
             "constant": false,
-            "functionSelector": "24cf3682",
-            "id": 7157,
+            "functionSelector": "1f079e01",
+            "id": 7088,
             "mutability": "mutable",
-            "name": "totalActiveInvestments",
+            "name": "totalActiveStakes",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 7170,
-            "src": "194:34:19",
+            "scope": 7101,
+            "src": "189:29:19",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -277,10 +277,10 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 7156,
+              "id": 7087,
               "name": "uint",
               "nodeType": "ElementaryTypeName",
-              "src": "194:4:19",
+              "src": "189:4:19",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -292,13 +292,13 @@
           {
             "constant": false,
             "functionSelector": "bfe0e020",
-            "id": 7159,
+            "id": 7090,
             "mutability": "mutable",
             "name": "totalRefRewards",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 7170,
-            "src": "234:27:19",
+            "scope": 7101,
+            "src": "224:27:19",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -306,10 +306,10 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 7158,
+              "id": 7089,
               "name": "uint",
               "nodeType": "ElementaryTypeName",
-              "src": "234:4:19",
+              "src": "224:4:19",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -321,13 +321,13 @@
           {
             "constant": false,
             "functionSelector": "2673ebf7",
-            "id": 7161,
+            "id": 7092,
             "mutability": "mutable",
             "name": "totalRefPoolRewards",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 7170,
-            "src": "267:31:19",
+            "scope": 7101,
+            "src": "257:31:19",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -335,10 +335,10 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 7160,
+              "id": 7091,
               "name": "uint",
               "nodeType": "ElementaryTypeName",
-              "src": "267:4:19",
+              "src": "257:4:19",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -350,13 +350,13 @@
           {
             "constant": false,
             "functionSelector": "8876bb3e",
-            "id": 7163,
+            "id": 7094,
             "mutability": "mutable",
             "name": "totalSponsorPoolRewards",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 7170,
-            "src": "304:35:19",
+            "scope": 7101,
+            "src": "294:35:19",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -364,10 +364,10 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 7162,
+              "id": 7093,
               "name": "uint",
               "nodeType": "ElementaryTypeName",
-              "src": "304:4:19",
+              "src": "294:4:19",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -379,13 +379,13 @@
           {
             "constant": false,
             "functionSelector": "7247b2b9",
-            "id": 7165,
+            "id": 7096,
             "mutability": "mutable",
             "name": "totalDepositRewards",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 7170,
-            "src": "345:31:19",
+            "scope": 7101,
+            "src": "335:31:19",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -393,10 +393,10 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 7164,
+              "id": 7095,
               "name": "uint",
               "nodeType": "ElementaryTypeName",
-              "src": "345:4:19",
+              "src": "335:4:19",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -408,13 +408,13 @@
           {
             "constant": false,
             "functionSelector": "e6af61c8",
-            "id": 7167,
+            "id": 7098,
             "mutability": "mutable",
             "name": "totalPenalty",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 7170,
-            "src": "382:24:19",
+            "scope": 7101,
+            "src": "372:24:19",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -422,10 +422,10 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 7166,
+              "id": 7097,
               "name": "uint",
               "nodeType": "ElementaryTypeName",
-              "src": "382:4:19",
+              "src": "372:4:19",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -437,13 +437,13 @@
           {
             "constant": false,
             "functionSelector": "91994b2c",
-            "id": 7169,
+            "id": 7100,
             "mutability": "mutable",
             "name": "totalExited",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 7170,
-            "src": "412:23:19",
+            "scope": 7101,
+            "src": "402:23:19",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -451,10 +451,10 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 7168,
+              "id": 7099,
               "name": "uint",
               "nodeType": "ElementaryTypeName",
-              "src": "412:4:19",
+              "src": "402:4:19",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -464,14 +464,14 @@
             "visibility": "public"
           }
         ],
-        "scope": 7171,
-        "src": "59:379:19"
+        "scope": 7102,
+        "src": "59:369:19"
       }
     ],
-    "src": "32:407:19"
+    "src": "32:397:19"
   },
-  "bytecode": "0x608060405234801561001057600080fd5b50610167806100206000396000f3fe608060405234801561001057600080fd5b506004361061008e5760003560e01c806324cf3682146100935780632673ebf7146100ad5780634b319713146100b557806370fd37cf146100bd5780637247b2b9146100c55780637d882097146100cd5780638876bb3e146100d557806391994b2c146100dd578063bfe0e020146100e5578063e6af61c8146100ed575b600080fd5b61009b6100f5565b60408051918252519081900360200190f35b61009b6100fb565b61009b610101565b61009b610107565b61009b61010d565b61009b610113565b61009b610119565b61009b61011f565b61009b610125565b61009b61012b565b60035481565b60055481565b60015481565b60025481565b60075481565b60005481565b60065481565b60095481565b60045481565b6008548156fea2646970667358221220fd04f18b1d4fdcbea00ca04689e6496daf059f13cc80cfbb04a88cc2c1850c5364736f6c634300060c0033",
-  "deployedBytecode": "0x608060405234801561001057600080fd5b506004361061008e5760003560e01c806324cf3682146100935780632673ebf7146100ad5780634b319713146100b557806370fd37cf146100bd5780637247b2b9146100c55780637d882097146100cd5780638876bb3e146100d557806391994b2c146100dd578063bfe0e020146100e5578063e6af61c8146100ed575b600080fd5b61009b6100f5565b60408051918252519081900360200190f35b61009b6100fb565b61009b610101565b61009b610107565b61009b61010d565b61009b610113565b61009b610119565b61009b61011f565b61009b610125565b61009b61012b565b60035481565b60055481565b60015481565b60025481565b60075481565b60005481565b60065481565b60095481565b60045481565b6008548156fea2646970667358221220fd04f18b1d4fdcbea00ca04689e6496daf059f13cc80cfbb04a88cc2c1850c5364736f6c634300060c0033",
+  "bytecode": "0x608060405234801561001057600080fd5b50610167806100206000396000f3fe608060405234801561001057600080fd5b506004361061008e5760003560e01c80631f079e01146100935780632673ebf7146100ad5780634b319713146100b55780637247b2b9146100bd5780637d882097146100c55780638876bb3e146100cd57806391994b2c146100d5578063bf9befb1146100dd578063bfe0e020146100e5578063e6af61c8146100ed575b600080fd5b61009b6100f5565b60408051918252519081900360200190f35b61009b6100fb565b61009b610101565b61009b610107565b61009b61010d565b61009b610113565b61009b610119565b61009b61011f565b61009b610125565b61009b61012b565b60035481565b60055481565b60015481565b60075481565b60005481565b60065481565b60095481565b60025481565b60045481565b6008548156fea2646970667358221220382a36cfcd0156c026b50d209fb0978d6d07c535d02d612471d312c5aeb7f0f964736f6c634300060c0033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b506004361061008e5760003560e01c80631f079e01146100935780632673ebf7146100ad5780634b319713146100b55780637247b2b9146100bd5780637d882097146100c55780638876bb3e146100cd57806391994b2c146100d5578063bf9befb1146100dd578063bfe0e020146100e5578063e6af61c8146100ed575b600080fd5b61009b6100f5565b60408051918252519081900360200190f35b61009b6100fb565b61009b610101565b61009b610107565b61009b61010d565b61009b610113565b61009b610119565b61009b61011f565b61009b610125565b61009b61012b565b60035481565b60055481565b60015481565b60075481565b60005481565b60065481565b60095481565b60025481565b60045481565b6008548156fea2646970667358221220382a36cfcd0156c026b50d209fb0978d6d07c535d02d612471d312c5aeb7f0f964736f6c634300060c0033",
   "compiler": {
     "name": "solc",
     "version": "0.6.12+commit.27d51765.Emscripten.clang",

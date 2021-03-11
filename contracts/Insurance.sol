@@ -11,7 +11,7 @@ contract Insurance is RewardsAndPenalties {
 
     bool public isInInsuranceState = false; // if contract is only allowing insured money this becomes true;
 
-    function checkForBaseInsuranceTrigger() internal {
+    function _checkForBaseInsuranceTrigger() internal {
         if (fourRXToken.balanceOf(address(this)) <= _calcPercentage(maxContractBalance, BASE_INSURANCE_FOR_BP)) {
             isInInsuranceState = true;
         } else {
@@ -19,7 +19,7 @@ contract Insurance is RewardsAndPenalties {
         }
     }
 
-    function getInsuredAvailableAmount(Stake memory stake, uint withdrawalAmount) internal pure returns (uint)
+    function _getInsuredAvailableAmount(Stake memory stake, uint withdrawalAmount) internal pure returns (uint)
     {
         uint availableAmount = withdrawalAmount;
         // Calc correct insured value by checking which insurance should be applied
@@ -38,7 +38,7 @@ contract Insurance is RewardsAndPenalties {
         return availableAmount;
     }
 
-    function _insureInvestment(Stake storage stake) internal {
+    function _insureStake(Stake storage stake) internal {
         require(!stake.optInInsured && stake.active);
 
         stake.deposit = stake.deposit.sub(_calcPercentage(stake.deposit, OPT_IN_INSURANCE_FEE_BP));

@@ -40,9 +40,9 @@ contract FourRXFinance is Insurance {
         poolCycle = 0;
     }
 
-    function deposit(uint amount, address uplinkAddress, uint uplinkId) external {
+    function deposit(uint amount, address uplinkAddress, uint uplinkStakeId) external {
         require(
-            (users[uplinkAddress].wallet != address(0) && users[uplinkAddress].stakes[uplinkId].active) ||
+            (users[uplinkAddress].wallet != address(0) && users[uplinkAddress].stakes[uplinkStakeId].active) ||
             uplinkAddress == address(0)
         ); // Either uplink must be registered and be a active deposit, 0 address
 
@@ -67,7 +67,7 @@ contract FourRXFinance is Insurance {
 
         stake.deposit = amount.sub(_calcPercentage(amount, LP_FEE_BP)).add(depositReward); // Deduct LP Commission + add deposit rewards
         stake.uplink.uplinkAddress = uplinkAddress;
-        stake.uplink.uplinkInvestmentId = uplinkId;
+        stake.uplink.uplinkStakeId = uplinkStakeId;
 
         stake.sponsorPool.cycle = poolCycle;
         stake.sponsorPool.amount = amount;
@@ -81,7 +81,7 @@ contract FourRXFinance is Insurance {
         refPoolBalance = refPoolBalance.add(_calcPercentage(amount, REF_POOL_FEE_BP));
         sponsorPoolBalance = sponsorPoolBalance.add(_calcPercentage(amount, SPONSOR_POOL_FEE_BP));
 
-        drawPool();
+        _drawPool();
 
         fourRXToken.transfer(devAddress, _calcPercentage(amount, DEV_FEE_BP));
 
@@ -92,8 +92,8 @@ contract FourRXFinance is Insurance {
         }
 
         totalDeposits = totalDeposits.add(amount);
-        totalInvestments = totalInvestments.add(1);
-        totalActiveInvestments = totalActiveInvestments.add(1);
+        totalStakes = totalStakes.add(1);
+        totalActiveStakes = totalActiveStakes.add(1);
         totalDepositRewards = totalDepositRewards.add(depositReward);
 
         emit Deposit(msg.sender, uplinkAddress, amount);
@@ -131,7 +131,7 @@ contract FourRXFinance is Insurance {
         }
 
         if (isInInsuranceState) {
-            availableAmount = getInsuredAvailableAmount(stake, availableAmount);
+            availableAmount = _getInsuredAvailableAmount(stake, availableAmount);
         }
 
         availableAmount = availableAmount.sub(penalty);
@@ -148,10 +148,10 @@ contract FourRXFinance is Insurance {
 
         if (stake.withdrawn >= _calcPercentage(stake.deposit, MAX_CONTRACT_REWARD_BP)) {
             stake.active = false; // if stake has withdrawn equals to or more then the max amount, then mark stake in-active
-            totalActiveInvestments = totalActiveInvestments.sub(1);
+            totalActiveStakes = totalActiveStakes.sub(1);
         }
 
-        checkForBaseInsuranceTrigger();
+        _checkForBaseInsuranceTrigger();
 
         totalWithdrawn = totalWithdrawn.add(availableAmount);
 
@@ -177,7 +177,7 @@ contract FourRXFinance is Insurance {
         stake.withdrawn = stake.withdrawn.add(availableAmount);
         stake.penalty = stake.penalty.add(penaltyAmount);
 
-        totalActiveInvestments = totalActiveInvestments.sub(1);
+        totalActiveStakes = totalActiveStakes.sub(1);
         totalExited = totalExited.add(1);
 
         totalWithdrawn = totalWithdrawn.add(availableAmount);
@@ -186,11 +186,11 @@ contract FourRXFinance is Insurance {
         emit Exited(user.wallet);
     }
 
-    function insureInvestment(uint stakeId) external {
+    function insureStake(uint stakeId) external {
         User storage user = users[msg.sender];
         require(user.wallet == msg.sender);
         Stake storage stake = user.stakes[stakeId];
-        _insureInvestment(stake);
+        _insureStake(stake);
     }
 
     function getUser(address userAddress) external view returns (User memory) {
@@ -202,6 +202,6 @@ contract FourRXFinance is Insurance {
     }
 
     function getContractInfo() external view returns (uint, uint, uint, uint, uint, uint, uint, uint, uint, uint, uint) {
-        return (maxContractBalance, totalDeposits, totalWithdrawn, totalInvestments, totalActiveInvestments, totalRefRewards, totalRefPoolRewards, totalSponsorPoolRewards, totalDepositRewards, totalPenalty, totalExited);
+        return (maxContractBalance, totalDeposits, totalWithdrawn, totalStakes, totalActiveStakes, totalRefRewards, totalRefPoolRewards, totalSponsorPoolRewards, totalDepositRewards, totalPenalty, totalExited);
     }
 }

@@ -328,29 +328,10 @@ contract InterestCalculator {
         return cumulativeInterestForDays;
     }
 
-    function getInterestTillDays(uint _day) internal pure returns(uint) {
+    function _getInterestTillDays(uint _day) internal pure returns(uint) {
         require(_day < MAX_DAYS);
         uint[] memory interestForDays = initInterestForDayArray();
         uint[] memory cumulativeInterestForDays = initCumulativeInterestForDays(interestForDays);
         return cumulativeInterestForDays[_day];
-    }
-
-    function getEstimateDaysFromInterest(uint interest) internal pure returns(uint) {
-        uint[] memory interestForDays = initInterestForDayArray();
-        uint[] memory cumulativeInterestForDays = initCumulativeInterestForDays(interestForDays);
-
-        // If interest is less then user could have gotten in 1 day, return 0;
-        if (interest < cumulativeInterestForDays[1]) {
-            return 0;
-        }
-
-        for(uint i = 1; i < MAX_DAYS - 1; i++) {
-            if (cumulativeInterestForDays[i] < interest && cumulativeInterestForDays[i + 1] > interest) {
-                return i;
-            }
-        }
-
-        // If interest is more then any amount we have, return MAX_DAYS - 1 // 300
-        return MAX_DAYS - 1;
     }
 }

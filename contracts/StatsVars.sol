@@ -6,8 +6,8 @@ contract StatsVars {
     // Stats
     uint public totalDeposits;
     uint public totalWithdrawn;
-    uint public totalInvestments;
-    uint public totalActiveInvestments;
+    uint public totalStakes;
+    uint public totalActiveStakes;
     uint public totalRefRewards;
     uint public totalRefPoolRewards;
     uint public totalSponsorPoolRewards;
