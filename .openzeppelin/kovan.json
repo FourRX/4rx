@@ -34,6 +34,11 @@
         "address": "0xA0261d39B45Af8A8948dAC8a70DDF9227412Cd64",
         "kind": "NonProxy",
         "bytecodeHash": "52dba7d80d8203d6da6fea37d60b9613161147488385f2d3b3664731560f3375"
+      },
+      {
+        "address": "0xfa1644bdEc76aa6A65b4AA0A789731f01F152C7E",
+        "kind": "NonProxy",
+        "bytecodeHash": "b1c4bfd5ea8c470fbb65c67a7103cb92f8a0236b24fc7d5ccda93dab248a7fbe"
       }
     ],
     "4RXFinance/FRX": [

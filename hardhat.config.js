@@ -1,18 +1,26 @@
 require("@nomiclabs/hardhat-waffle");
-require('hardhat-deploy');
-require('dotenv').config();
+require("hardhat-deploy");
+require("dotenv").config();
+require("hardhat-gas-reporter");
+
 const privateKeys = process.env.PRIVATE_KEYS || ""
 
 /**
  * @type import('hardhat/config').HardhatUserConfig
  */
 module.exports = {
-  solidity: "0.6.12",
-  settings: {
-    optimizer: {
-      enabled: true,
-      runs: 1
+  solidity: {
+    version: "0.6.12",
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 200
+      },
     }
+  },
+  gasReporter: {
+    currency: 'USD',
+    gasPrice: 119
   },
   networks: {
     hardhat: {

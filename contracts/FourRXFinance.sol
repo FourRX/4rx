@@ -5,35 +5,39 @@ pragma experimental ABIEncoderV2;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./Insurance.sol";
 
-
+/// @title 4RX Finance Staking DAPP Contract
+/// @notice Available functionality: Deposit, Withdraw, ExitProgram, Insure Stake
+/// @dev
 contract FourRXFinance is Insurance {
 
     constructor(address fourRXTokenAddress) public {
         fourRXToken = IERC20(fourRXTokenAddress);
 
-        refPoolBonuses.push(2000);
-        refPoolBonuses.push(1700);
-        refPoolBonuses.push(1400);
-        refPoolBonuses.push(1100);
-        refPoolBonuses.push(1000);
-        refPoolBonuses.push(700);
-        refPoolBonuses.push(600);
-        refPoolBonuses.push(500);
-        refPoolBonuses.push(400);
-        refPoolBonuses.push(300);
-        refPoolBonuses.push(200);
-        refPoolBonuses.push(100);
+        // Ref Bonus // 12 Max Participants
+        refPoolBonuses.push(2000); // 20%
+        refPoolBonuses.push(1700); // 17%
+        refPoolBonuses.push(1400); // 14%
+        refPoolBonuses.push(1100); // 11%
+        refPoolBonuses.push(1000); // 10%
+        refPoolBonuses.push(700); // 7%
+        refPoolBonuses.push(600); // 6%
+        refPoolBonuses.push(500); // 5%
+        refPoolBonuses.push(400); // 4%
+        refPoolBonuses.push(300); // 3%
+        refPoolBonuses.push(200); // 2%
+        refPoolBonuses.push(100); // 1%
 
-        sponsorPoolBonuses.push(3000);
-        sponsorPoolBonuses.push(2000);
-        sponsorPoolBonuses.push(1200);
-        sponsorPoolBonuses.push(1000);
-        sponsorPoolBonuses.push(800);
-        sponsorPoolBonuses.push(700);
-        sponsorPoolBonuses.push(600);
-        sponsorPoolBonuses.push(400);
-        sponsorPoolBonuses.push(200);
-        sponsorPoolBonuses.push(100);
+        // Sponsor Pool // 10 Max Participants
+        sponsorPoolBonuses.push(3000); // 30%
+        sponsorPoolBonuses.push(2000); // 20%
+        sponsorPoolBonuses.push(1200); // 12%
+        sponsorPoolBonuses.push(1000); // 10%
+        sponsorPoolBonuses.push(800); // 8%
+        sponsorPoolBonuses.push(700); // 7%
+        sponsorPoolBonuses.push(600); // 6%
+        sponsorPoolBonuses.push(400); // 4%
+        sponsorPoolBonuses.push(200); // 2%
+        sponsorPoolBonuses.push(100); // 1%
 
         _resetPools();
 
@@ -41,19 +45,20 @@ contract FourRXFinance is Insurance {
     }
 
     function deposit(uint amount, address uplinkAddress, uint uplinkStakeId) external {
+        // 2k
         require(
             (users[uplinkAddress].wallet != address(0) && users[uplinkAddress].stakes[uplinkStakeId].active) ||
             uplinkAddress == address(0)
         ); // Either uplink must be registered and be a active deposit, 0 address
 
         User storage user = users[msg.sender];
-
+        // 1k
         if (users[msg.sender].stakes.length > 0) {
             require(amount >= users[msg.sender].stakes[user.stakes.length - 1].deposit.mul(2)); // deposit amount must be greater 2x then last deposit
         }
-
+        // 30k
         require(fourRXToken.transferFrom(msg.sender, address(this), amount));
-
+        // 66k
         drawPool(); // Draw old pool if qualified, and we're pretty sure that this stake is going to be created
 
         uint depositReward = _calcDepositRewards(amount);
@@ -73,16 +78,16 @@ contract FourRXFinance is Insurance {
 
         stake.sponsorPool.cycle = poolCycle;
         stake.sponsorPool.amount = amount;
-
+        // 33k
         _updateSponsorPoolUsers(user, stake);
-
+        // 54k
         _distributeReferralReward(amount, stake);
 
         user.stakes.push(stake);
-
+        // 52k
         refPoolBalance = refPoolBalance.add(_calcPercentage(amount, REF_POOL_FEE_BP));
         sponsorPoolBalance = sponsorPoolBalance.add(_calcPercentage(amount, SPONSOR_POOL_FEE_BP));
-
+        // 30k
         fourRXToken.transfer(devAddress, _calcPercentage(amount, DEV_FEE_BP));
 
         uint currentContractBalance = fourRXToken.balanceOf(address(this));
@@ -90,7 +95,7 @@ contract FourRXFinance is Insurance {
         if (currentContractBalance > maxContractBalance) {
             maxContractBalance = currentContractBalance;
         }
-
+        // 54k
         totalDeposits = totalDeposits.add(amount);
         totalStakes = totalStakes.add(1);
         totalActiveStakes = totalActiveStakes.add(1);
@@ -169,7 +174,7 @@ contract FourRXFinance is Insurance {
 
         uint withdrawn = stake.withdrawn.add(stake.penalty);
         require(withdrawn <= availableAmount);
-        availableAmount = availableAmount.sub(withdrawn); // @todo: discuss this new implementation with Assaf
+        availableAmount = availableAmount.sub(withdrawn);
 
         fourRXToken.transfer(user.wallet, availableAmount);
 
@@ -190,8 +195,10 @@ contract FourRXFinance is Insurance {
         User storage user = users[msg.sender];
         require(user.wallet == msg.sender);
         Stake storage stake = user.stakes[stakeId];
-        _insureStake(stake);
+        _insureStake(user.wallet, stake);
     }
+
+    // Getters
 
     function getUser(address userAddress) external view returns (User memory) {
         return users[userAddress];

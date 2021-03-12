@@ -1,0 +1,949 @@
+{
+  "fileName": "Constants.sol",
+  "contractName": "Constants",
+  "source": "// SPDX-License-Identifier: MIT\npragma solidity ^0.6.12;\n\n\ncontract Constants {\n    uint public constant MAX_CONTRACT_REWARD_BP = 37455; // 374.55%\n\n    uint public constant LP_FEE_BP = 5; // 5%\n    uint public constant REF_COMMISSION_BP = 800; // 8%\n\n    // Ref and sponsor pools\n    uint public constant REF_POOL_FEE_BP = 50; // 0.5%, goes to ref pool from each deposit\n    uint public constant SPONSOR_POOL_FEE_BP = 50; // 0.5%, goes to sponsor pool from each deposit\n\n    uint public constant EXIT_PENALTY_BP = 5000; // 50%, deduct from user's initial deposit on exit\n\n    // Contract bonus\n    uint public constant MAX_CONTRACT_BONUS_BP = 300; // maximum bonus a user can get 3%\n    uint public constant CONTRACT_BONUS_UNIT = 250;    // For each 250 token balance of contract, gives\n    uint public constant CONTRACT_BONUS_PER_UNIT_BP = 1; // 0.01% extra interest\n\n    // Hold bonus\n    uint public constant MAX_HOLD_BONUS_BP = 100; // Maximum 1% hold bonus\n    uint public constant HOLD_BONUS_UNIT = 43200; // 12 hours\n    uint public constant HOLD_BONUS_PER_UNIT_BP = 2; // 0.02% hold bonus for each 12 hours of hold\n\n    uint public constant REWARD_THRESHOLD_BP = 300; // User will only get hold bonus if his rewards are more then 3% of his deposit\n\n    uint public constant MAX_WITHDRAWAL_OVER_REWARD_THRESHOLD_BP = 300; // Max daily withdrawal limit if user is above REWARD_THRESHOLD_BP\n\n    uint public constant DEV_FEE_BP = 500; // 5%\n}\n",
+  "sourcePath": "contracts/Constants.sol",
+  "sourceMap": "59:1389:8:-:0;;;;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "59:1389:8:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;967:44;;;:::i;:::-;;;;;;;;;;;;;;;;1129:46;;;:::i;1029:47::-;;;:::i;476:43::-;;;:::i;84:51::-;;;:::i;1402:37::-;;;:::i;153:34::-;;;:::i;376:45::-;;;:::i;199:44::-;;;:::i;792:51::-;;;:::i;892:44::-;;;:::i;688:46::-;;;:::i;967:44::-;1006:5;967:44;:::o;1129:46::-;1172:3;1129:46;:::o;1029:47::-;1075:1;1029:47;:::o;476:43::-;515:4;476:43;:::o;84:51::-;130:5;84:51;:::o;1402:37::-;1436:3;1402:37;:::o;153:34::-;186:1;153:34;:::o;376:45::-;419:2;376:45;:::o;199:44::-;240:3;199:44;:::o;792:51::-;842:1;792:51;:::o;892:44::-;933:3;892:44;:::o;688:46::-;731:3;688:46;:::o",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "CONTRACT_BONUS_PER_UNIT_BP",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "CONTRACT_BONUS_UNIT",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "DEV_FEE_BP",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "EXIT_PENALTY_BP",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "HOLD_BONUS_PER_UNIT_BP",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "HOLD_BONUS_UNIT",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "LP_FEE_BP",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "MAX_CONTRACT_BONUS_BP",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "MAX_CONTRACT_REWARD_BP",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "MAX_HOLD_BONUS_BP",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "MAX_WITHDRAWAL_OVER_REWARD_THRESHOLD_BP",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "REF_COMMISSION_BP",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "REF_POOL_FEE_BP",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "REWARD_THRESHOLD_BP",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "SPONSOR_POOL_FEE_BP",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "ast": {
+    "absolutePath": "contracts/Constants.sol",
+    "exportedSymbols": {
+      "Constants": [
+        1893
+      ]
+    },
+    "id": 1894,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 1847,
+        "literals": [
+          "solidity",
+          "^",
+          "0.6",
+          ".12"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "32:24:8"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 1893,
+        "linearizedBaseContracts": [
+          1893
+        ],
+        "name": "Constants",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": true,
+            "functionSelector": "69da94d8",
+            "id": 1850,
+            "mutability": "constant",
+            "name": "MAX_CONTRACT_REWARD_BP",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 1893,
+            "src": "84:51:8",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 1848,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "84:4:8",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "3337343535",
+              "id": 1849,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "130:5:8",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_37455_by_1",
+                "typeString": "int_const 37455"
+              },
+              "value": "37455"
+            },
+            "visibility": "public"
+          },
+          {
+            "constant": true,
+            "functionSelector": "a00d4980",
+            "id": 1853,
+            "mutability": "constant",
+            "name": "LP_FEE_BP",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 1893,
+            "src": "153:34:8",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 1851,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "153:4:8",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "35",
+              "id": 1852,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "186:1:8",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_5_by_1",
+                "typeString": "int_const 5"
+              },
+              "value": "5"
+            },
+            "visibility": "public"
+          },
+          {
+            "constant": true,
+            "functionSelector": "b963ddb4",
+            "id": 1856,
+            "mutability": "constant",
+            "name": "REF_COMMISSION_BP",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 1893,
+            "src": "199:44:8",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 1854,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "199:4:8",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "383030",
+              "id": 1855,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "240:3:8",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_800_by_1",
+                "typeString": "int_const 800"
+              },
+              "value": "800"
+            },
+            "visibility": "public"
+          },
+          {
+            "constant": true,
+            "functionSelector": "aaf1a0da",
+            "id": 1859,
+            "mutability": "constant",
+            "name": "REF_POOL_FEE_BP",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 1893,
+            "src": "285:41:8",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 1857,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "285:4:8",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "3530",
+              "id": 1858,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "324:2:8",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_50_by_1",
+                "typeString": "int_const 50"
+              },
+              "value": "50"
+            },
+            "visibility": "public"
+          },
+          {
+            "constant": true,
+            "functionSelector": "a13a801a",
+            "id": 1862,
+            "mutability": "constant",
+            "name": "SPONSOR_POOL_FEE_BP",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 1893,
+            "src": "376:45:8",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 1860,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "376:4:8",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "3530",
+              "id": 1861,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "419:2:8",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_50_by_1",
+                "typeString": "int_const 50"
+              },
+              "value": "50"
+            },
+            "visibility": "public"
+          },
+          {
+            "constant": true,
+            "functionSelector": "498dc5b5",
+            "id": 1865,
+            "mutability": "constant",
+            "name": "EXIT_PENALTY_BP",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 1893,
+            "src": "476:43:8",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 1863,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "476:4:8",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "35303030",
+              "id": 1864,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "515:4:8",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_5000_by_1",
+                "typeString": "int_const 5000"
+              },
+              "value": "5000"
+            },
+            "visibility": "public"
+          },
+          {
+            "constant": true,
+            "functionSelector": "0f9fa6aa",
+            "id": 1868,
+            "mutability": "constant",
+            "name": "MAX_CONTRACT_BONUS_BP",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 1893,
+            "src": "599:48:8",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 1866,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "599:4:8",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "333030",
+              "id": 1867,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "644:3:8",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_300_by_1",
+                "typeString": "int_const 300"
+              },
+              "value": "300"
+            },
+            "visibility": "public"
+          },
+          {
+            "constant": true,
+            "functionSelector": "f48e595a",
+            "id": 1871,
+            "mutability": "constant",
+            "name": "CONTRACT_BONUS_UNIT",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 1893,
+            "src": "688:46:8",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 1869,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "688:4:8",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "323530",
+              "id": 1870,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "731:3:8",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_250_by_1",
+                "typeString": "int_const 250"
+              },
+              "value": "250"
+            },
+            "visibility": "public"
+          },
+          {
+            "constant": true,
+            "functionSelector": "d902f40c",
+            "id": 1874,
+            "mutability": "constant",
+            "name": "CONTRACT_BONUS_PER_UNIT_BP",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 1893,
+            "src": "792:51:8",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 1872,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "792:4:8",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "31",
+              "id": 1873,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "842:1:8",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_1_by_1",
+                "typeString": "int_const 1"
+              },
+              "value": "1"
+            },
+            "visibility": "public"
+          },
+          {
+            "constant": true,
+            "functionSelector": "e5231411",
+            "id": 1877,
+            "mutability": "constant",
+            "name": "MAX_HOLD_BONUS_BP",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 1893,
+            "src": "892:44:8",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 1875,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "892:4:8",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "313030",
+              "id": 1876,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "933:3:8",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_100_by_1",
+                "typeString": "int_const 100"
+              },
+              "value": "100"
+            },
+            "visibility": "public"
+          },
+          {
+            "constant": true,
+            "functionSelector": "03162d2c",
+            "id": 1880,
+            "mutability": "constant",
+            "name": "HOLD_BONUS_UNIT",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 1893,
+            "src": "967:44:8",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 1878,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "967:4:8",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "3433323030",
+              "id": 1879,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "1006:5:8",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_43200_by_1",
+                "typeString": "int_const 43200"
+              },
+              "value": "43200"
+            },
+            "visibility": "public"
+          },
+          {
+            "constant": true,
+            "functionSelector": "0ac39f72",
+            "id": 1883,
+            "mutability": "constant",
+            "name": "HOLD_BONUS_PER_UNIT_BP",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 1893,
+            "src": "1029:47:8",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 1881,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "1029:4:8",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "32",
+              "id": 1882,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "1075:1:8",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_2_by_1",
+                "typeString": "int_const 2"
+              },
+              "value": "2"
+            },
+            "visibility": "public"
+          },
+          {
+            "constant": true,
+            "functionSelector": "0781235a",
+            "id": 1886,
+            "mutability": "constant",
+            "name": "REWARD_THRESHOLD_BP",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 1893,
+            "src": "1129:46:8",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 1884,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "1129:4:8",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "333030",
+              "id": 1885,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "1172:3:8",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_300_by_1",
+                "typeString": "int_const 300"
+              },
+              "value": "300"
+            },
+            "visibility": "public"
+          },
+          {
+            "constant": true,
+            "functionSelector": "12dd5fe4",
+            "id": 1889,
+            "mutability": "constant",
+            "name": "MAX_WITHDRAWAL_OVER_REWARD_THRESHOLD_BP",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 1893,
+            "src": "1262:66:8",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 1887,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "1262:4:8",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "333030",
+              "id": 1888,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "1325:3:8",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_300_by_1",
+                "typeString": "int_const 300"
+              },
+              "value": "300"
+            },
+            "visibility": "public"
+          },
+          {
+            "constant": true,
+            "functionSelector": "9b6eec7d",
+            "id": 1892,
+            "mutability": "constant",
+            "name": "DEV_FEE_BP",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 1893,
+            "src": "1402:37:8",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 1890,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "1402:4:8",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "353030",
+              "id": 1891,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "1436:3:8",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_500_by_1",
+                "typeString": "int_const 500"
+              },
+              "value": "500"
+            },
+            "visibility": "public"
+          }
+        ],
+        "scope": 1894,
+        "src": "59:1389:8"
+      }
+    ],
+    "src": "32:1417:8"
+  },
+  "bytecode": "0x608060405234801561001057600080fd5b506101b4806100206000396000f3fe608060405234801561001057600080fd5b50600436106100c55760003560e01c806303162d2c146100ca5780630781235a146100e45780630ac39f72146100ec5780630f9fa6aa146100e457806312dd5fe4146100e4578063498dc5b5146100f457806369da94d8146100fc5780639b6eec7d14610104578063a00d49801461010c578063a13a801a14610114578063aaf1a0da14610114578063b963ddb41461011c578063d902f40c14610124578063e52314111461012c578063f48e595a14610134575b600080fd5b6100d261013c565b60408051918252519081900360200190f35b6100d2610142565b6100d2610148565b6100d261014d565b6100d2610153565b6100d2610159565b6100d261015f565b6100d2610164565b6100d2610169565b6100d261016f565b6100d2610174565b6100d2610179565b61a8c081565b61012c81565b600281565b61138881565b61924f81565b6101f481565b600581565b603281565b61032081565b600181565b606481565b60fa8156fea2646970667358221220e7de368c186643bb35f500cc16158c2332bc1e80e74fa8cec0e8a0e508cca5fa64736f6c634300060c0033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100c55760003560e01c806303162d2c146100ca5780630781235a146100e45780630ac39f72146100ec5780630f9fa6aa146100e457806312dd5fe4146100e4578063498dc5b5146100f457806369da94d8146100fc5780639b6eec7d14610104578063a00d49801461010c578063a13a801a14610114578063aaf1a0da14610114578063b963ddb41461011c578063d902f40c14610124578063e52314111461012c578063f48e595a14610134575b600080fd5b6100d261013c565b60408051918252519081900360200190f35b6100d2610142565b6100d2610148565b6100d261014d565b6100d2610153565b6100d2610159565b6100d261015f565b6100d2610164565b6100d2610169565b6100d261016f565b6100d2610174565b6100d2610179565b61a8c081565b61012c81565b600281565b61138881565b61924f81565b6101f481565b600581565b603281565b61032081565b600181565b606481565b60fa8156fea2646970667358221220e7de368c186643bb35f500cc16158c2332bc1e80e74fa8cec0e8a0e508cca5fa64736f6c634300060c0033",
+  "compiler": {
+    "name": "solc",
+    "version": "0.6.12+commit.27d51765.Emscripten.clang",
+    "optimizer": {
+      "enabled": true,
+      "runs": 1
+    },
+    "evmVersion": "petersburg"
+  }
+}

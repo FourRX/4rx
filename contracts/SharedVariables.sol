@@ -68,8 +68,6 @@ contract SharedVariables is Constants, StatsVars, PercentageCalculator, Interest
     uint[] public refPoolBonuses;
     uint[] public sponsorPoolBonuses;
 
-    uint[] public depositBonuses;
-
     uint public maxContractBalance;
 
     uint public poolCycle;

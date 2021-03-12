@@ -36,8 +36,8 @@ describe('FourRXFinance Registration Test', function () {
         const amount = 10000;
         await this.erc20.transfer(user1.address, 1000000);
         await this.erc20.transfer(user2.address, 1000000);
-        await this.erc20.connect(user1).approve(this.fourRXFinance.address, amount);
-        await this.erc20.connect(user2).approve(this.fourRXFinance.address, amount);
+        await this.erc20.connect(user1).approve(this.fourRXFinance.address, amount + 10000);
+        await this.erc20.connect(user2).approve(this.fourRXFinance.address, amount + 10000);
         await this.fourRXFinance.connect(user1).deposit(amount, constants.ZERO_ADDRESS, 0);
 
         await network.provider.send('evm_increaseTime', [10*86400])
@@ -62,9 +62,9 @@ describe('FourRXFinance Registration Test', function () {
         //
         await this.fourRXFinance.connect(user2).withdraw(0);
 
-        console.log((await this.erc20.balanceOf(this.fourRXFinance.address)).toString());
+        // console.log((await this.erc20.balanceOf(this.fourRXFinance.address)).toString());
 
-        console.log(user1Details, user2Details);
+        // console.log(user1Details, user2Details);
 
         // console.log((await this.fourRXFinance.getContractInfo())[0].toString());
     });
