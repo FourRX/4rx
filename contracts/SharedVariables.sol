@@ -19,25 +19,19 @@ contract SharedVariables is Constants, StatsVars, PercentageCalculator, Interest
 
     struct PoolUser {
         address user; // user's address
-        uint stakeId;
+        uint8 stakeId;
     }
 
     struct Pool {
-        uint cycle;
+        uint16 cycle;
         uint amount;
     }
 
-    struct Uplink {
-        address uplinkAddress;
-        uint uplinkStakeId;
-    }
-
     struct Stake {
-        uint id;
+        uint8 id;
         bool active;
         bool optInInsured; // Is insured ???
 
-        uint holdFrom; // Timestamp from which hold should be counted
         uint deposit; // Initial Deposit
         uint withdrawn; // Total withdrawn from this stake
         uint penalty; // Total penalty on this stale
@@ -47,10 +41,10 @@ contract SharedVariables is Constants, StatsVars, PercentageCalculator, Interest
         uint refPoolRewards; // Ref Pool Rewards
         uint sponsorPoolRewards; // Sponsor Pool Rewards
 
-        uint interestCountFrom; // TimeStamp from which interest should be counted, from the beginning
-        uint lastWithdrawalAt; // date time of last withdrawals so we don't allow more then 3% a day
+        uint32 holdFrom; // Timestamp from which hold should be counted
+        uint32 interestCountFrom; // TimeStamp from which interest should be counted, from the beginning
+        uint32 lastWithdrawalAt; // date time of last withdrawals so we don't allow more then 3% a day
 
-        Uplink uplink; // Referrer
         Pool refPool; // To store this user's last 24 hour RefPool entries
         Pool sponsorPool; // To store this user's last 24 hour Sponsor Pool entries
     }
@@ -70,8 +64,8 @@ contract SharedVariables is Constants, StatsVars, PercentageCalculator, Interest
 
     uint public maxContractBalance;
 
-    uint public poolCycle;
-    uint public poolDrewAt;
+    uint16 public poolCycle;
+    uint32 public poolDrewAt;
 
     uint public refPoolBalance;
     uint public sponsorPoolBalance;

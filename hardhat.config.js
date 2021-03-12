@@ -20,7 +20,8 @@ module.exports = {
   },
   gasReporter: {
     currency: 'USD',
-    gasPrice: 119
+    gasPrice: 119,
+    coinmarketcap: process.env.CMC_KEY
   },
   networks: {
     hardhat: {

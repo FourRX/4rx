@@ -19,7 +19,7 @@ contract Pools is SharedVariables {
 
         refPoolBalance = 0;
         sponsorPoolBalance = 0;
-        poolDrewAt = block.timestamp;
+        poolDrewAt = uint32(block.timestamp);
     }
 
     function _updateSponsorPoolUsers(User memory user, Stake memory stake) internal {
@@ -115,8 +115,7 @@ contract Pools is SharedVariables {
                 user.stakes[sponsorPoolUsers[i].stakeId].sponsorPoolRewards = user.stakes[sponsorPoolUsers[i].stakeId].sponsorPoolRewards.add(_calcPercentage(sponsorPoolBalance, sponsorPoolBonuses[i]));
             }
 
-            totalRefPoolRewards = totalRefPoolRewards.add(refPoolBalance);
-            totalSponsorPoolRewards = totalSponsorPoolRewards.add(sponsorPoolBalance);
+            emit PoolDrawn(refPoolBalance, sponsorPoolBalance);
 
             _resetPools();
         }

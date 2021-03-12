@@ -8,28 +8,22 @@ import "./Pools.sol";
 contract RewardsAndPenalties is Pools {
     using SafeMath for uint;
 
-    function _distributeReferralReward(uint amount, Stake memory stake) internal {
-        if (
-            stake.uplink.uplinkAddress != address(0) &&
-            users[stake.uplink.uplinkAddress].stakes[stake.uplink.uplinkStakeId].active
-        ) {
-            User storage uplinkUser = users[stake.uplink.uplinkAddress];
+    function _distributeReferralReward(uint amount, Stake memory stake, address uplinkAddress, uint uplinkStakeId) internal {
+        User storage uplinkUser = users[uplinkAddress];
 
-            uint commission = _calcPercentage(amount, REF_COMMISSION_BP);
+        uint commission = _calcPercentage(amount, REF_COMMISSION_BP);
 
-            uplinkUser.stakes[stake.uplink.uplinkStakeId].refCommission = uplinkUser.stakes[stake.uplink.uplinkStakeId].refCommission.add(commission);
+        uplinkUser.stakes[uplinkStakeId].refCommission = uplinkUser.stakes[uplinkStakeId].refCommission.add(commission);
 
-            if (stake.refPool.cycle != poolCycle) {
-                stake.refPool.cycle = poolCycle;
-                stake.refPool.amount = 0;
-            }
-
-            stake.refPool.amount = stake.refPool.amount.add(amount);
-
-            _updateRefPoolUsers(uplinkUser, stake);
-
-            totalRefRewards = totalRefRewards.add(commission);
+        // @todo: check correctness of this
+        if (stake.refPool.cycle != poolCycle) {
+            stake.refPool.cycle = poolCycle;
+            stake.refPool.amount = 0;
         }
+
+        stake.refPool.amount = stake.refPool.amount.add(amount);
+
+        _updateRefPoolUsers(uplinkUser, stake);
     }
 
     function _calcDepositRewards(uint amount) internal pure returns (uint) {

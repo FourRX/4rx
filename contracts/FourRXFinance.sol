@@ -47,8 +47,8 @@ contract FourRXFinance is Insurance {
     function deposit(uint amount, address uplinkAddress, uint uplinkStakeId) external {
         // 2k
         require(
-            (users[uplinkAddress].wallet != address(0) && users[uplinkAddress].stakes[uplinkStakeId].active) ||
-            uplinkAddress == address(0)
+            uplinkAddress == address(0) ||
+            (users[uplinkAddress].wallet != address(0) && users[uplinkAddress].stakes[uplinkStakeId].active)
         ); // Either uplink must be registered and be a active deposit, 0 address
 
         User storage user = users[msg.sender];
@@ -67,25 +67,26 @@ contract FourRXFinance is Insurance {
 
         user.wallet = msg.sender;
 
-        stake.id = user.stakes.length;
+        stake.id = uint8(user.stakes.length);
         stake.active = true;
-        stake.interestCountFrom = block.timestamp;
-        stake.holdFrom = block.timestamp;
+        stake.interestCountFrom = uint32(block.timestamp);
+        stake.holdFrom = uint32(block.timestamp);
 
         stake.deposit = amount.sub(_calcPercentage(amount, LP_FEE_BP)).add(depositReward); // Deduct LP Commission + add deposit rewards
-        stake.uplink.uplinkAddress = uplinkAddress;
-        stake.uplink.uplinkStakeId = uplinkStakeId;
 
         stake.sponsorPool.cycle = poolCycle;
         stake.sponsorPool.amount = amount;
         // 33k
         _updateSponsorPoolUsers(user, stake);
         // 54k
-        _distributeReferralReward(amount, stake);
+        if (uplinkAddress != address(0)) {
+            _distributeReferralReward(amount, stake, uplinkAddress, uplinkStakeId);
+        }
 
         user.stakes.push(stake);
-        // 52k
+        // 12k
         refPoolBalance = refPoolBalance.add(_calcPercentage(amount, REF_POOL_FEE_BP));
+        // 20k
         sponsorPoolBalance = sponsorPoolBalance.add(_calcPercentage(amount, SPONSOR_POOL_FEE_BP));
         // 30k
         fourRXToken.transfer(devAddress, _calcPercentage(amount, DEV_FEE_BP));
@@ -96,12 +97,10 @@ contract FourRXFinance is Insurance {
             maxContractBalance = currentContractBalance;
         }
         // 54k
-        totalDeposits = totalDeposits.add(amount);
-        totalStakes = totalStakes.add(1);
-        totalActiveStakes = totalActiveStakes.add(1);
+
         totalDepositRewards = totalDepositRewards.add(depositReward);
 
-        emit Deposit(msg.sender, uplinkAddress, amount);
+        emit Deposit(msg.sender, amount, uplinkAddress, uplinkStakeId);
     }
 
 
@@ -144,23 +143,18 @@ contract FourRXFinance is Insurance {
         fourRXToken.transfer(user.wallet, availableAmount);
 
         stake.withdrawn = stake.withdrawn.add(availableAmount);
-        stake.lastWithdrawalAt = block.timestamp;
-        stake.holdFrom = block.timestamp;
+        stake.lastWithdrawalAt = uint32(block.timestamp);
+        stake.holdFrom = uint32(block.timestamp);
 
         stake.penalty = stake.penalty.add(penalty);
 
-        totalPenalty = totalPenalty.add(penalty);
-
         if (stake.withdrawn >= _calcPercentage(stake.deposit, MAX_CONTRACT_REWARD_BP)) {
             stake.active = false; // if stake has withdrawn equals to or more then the max amount, then mark stake in-active
-            totalActiveStakes = totalActiveStakes.sub(1);
         }
 
         _checkForBaseInsuranceTrigger();
 
-        totalWithdrawn = totalWithdrawn.add(availableAmount);
-
-        emit Withdraw(user.wallet, availableAmount);
+        emit Withdrawn(user.wallet, availableAmount);
     }
 
     function exitProgram(uint stakeId) external {
@@ -182,13 +176,9 @@ contract FourRXFinance is Insurance {
         stake.withdrawn = stake.withdrawn.add(availableAmount);
         stake.penalty = stake.penalty.add(penaltyAmount);
 
-        totalActiveStakes = totalActiveStakes.sub(1);
         totalExited = totalExited.add(1);
 
-        totalWithdrawn = totalWithdrawn.add(availableAmount);
-        totalPenalty = totalPenalty.add(penaltyAmount);
-
-        emit Exited(user.wallet);
+        emit Exited(user.wallet, stakeId, availableAmount);
     }
 
     function insureStake(uint stakeId) external {
@@ -208,7 +198,7 @@ contract FourRXFinance is Insurance {
         return (poolDrewAt, poolCycle, sponsorPoolBalance, refPoolBalance, sponsorPoolUsers, refPoolUsers);
     }
 
-    function getContractInfo() external view returns (uint, bool, uint, uint, uint, uint, uint, uint, uint, uint, uint, uint) {
-        return (maxContractBalance, isInInsuranceState, totalDeposits, totalWithdrawn, totalStakes, totalActiveStakes, totalRefRewards, totalRefPoolRewards, totalSponsorPoolRewards, totalDepositRewards, totalPenalty, totalExited);
+    function getContractInfo() external view returns (uint, bool, uint, uint) {
+        return (maxContractBalance, isInInsuranceState, totalDepositRewards, totalExited);
     }
 }
