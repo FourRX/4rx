@@ -38,7 +38,7 @@ describe('FourRXFinance Registration Test', function () {
         await this.erc20.transfer(user2.address, 1000000);
         await this.erc20.connect(user1).approve(this.fourRXFinance.address, amount + 10000);
         await this.erc20.connect(user2).approve(this.fourRXFinance.address, amount + 10000);
-        await this.fourRXFinance.connect(user1).deposit(amount, constants.ZERO_ADDRESS, 0);
+        await this.fourRXFinance.connect(user1).deposit(amount, constants.ZERO_ADDRESS, 0, 0, 0, 0, 0);
 
         await network.provider.send('evm_increaseTime', [10*86400])
         // await time.increase(time.duration.days(10));
@@ -67,5 +67,26 @@ describe('FourRXFinance Registration Test', function () {
         // console.log(user1Details, user2Details);
 
         // console.log((await this.fourRXFinance.getContractInfo())[0].toString());
+    });
+
+    it('should test deposit of 13 users',  async function () {
+        this.timeout(50000);
+        const users = await ethers.getSigners();
+        const registered = [];
+        for(let i = 0; i < 13; i++) {
+            const user = users[Math.floor(Math.random() * users.length)];
+            const referrer = i === 0 ? constants.ZERO_ADDRESS : registered[Math.floor(Math.random() * registered.length)];
+            const amount = Math.round(Math.random()*10000);
+
+            await this.erc20.transfer(user.address, amount);
+            console.log("DS", user.address, referrer);
+            await this.erc20.connect(user).approve(this.fourRXFinance.address, amount);
+            console.log("AP", user.address, referrer);
+            await this.fourRXFinance.connect(user).deposit(amount, referrer, 0);
+            console.log("D2S", user.address, referrer);
+
+            registered.push(user.address);
+            await network.provider.send('evm_increaseTime', [86400])
+        }
     });
 });

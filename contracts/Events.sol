@@ -7,5 +7,5 @@ contract Events {
     event Withdrawn(address user, uint amount);
     event ReInvest(address user, uint amount);
     event Exited(address user, uint stakeId, uint amount);
-    event PoolDrawn(uint refPoolAmount, uint sponsirPoolAmount);
+    event PoolDrawn(uint refPoolAmount, uint sponsorPoolAmount);
 }

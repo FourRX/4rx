@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.6.12;
-pragma experimental ABIEncoderV2;
 
+pragma experimental ABIEncoderV2;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./Insurance.sol";
 
@@ -44,7 +44,7 @@ contract FourRXFinance is Insurance {
         poolCycle = 0;
     }
 
-    function deposit(uint amount, address uplinkAddress, uint uplinkStakeId) external {
+    function deposit(uint amount, address uplinkAddress, uint8 uplinkStakeId, uint16 sponsorPoolPrev, uint16 refPoolPrev, uint16 refPoolNewPrev, uint16 refPoolCurrent) external {
         // 2k
         require(
             uplinkAddress == address(0) ||
@@ -74,13 +74,11 @@ contract FourRXFinance is Insurance {
 
         stake.deposit = amount.sub(_calcPercentage(amount, LP_FEE_BP)).add(depositReward); // Deduct LP Commission + add deposit rewards
 
-        stake.sponsorPool.cycle = poolCycle;
-        stake.sponsorPool.amount = amount;
         // 33k
-        _updateSponsorPoolUsers(user, stake);
+        _updateSponsorPoolUsers(user, stake, sponsorPoolPrev);
         // 54k
         if (uplinkAddress != address(0)) {
-            _distributeReferralReward(amount, stake, uplinkAddress, uplinkStakeId);
+            _distributeReferralReward(amount, stake, uplinkAddress, uplinkStakeId, refPoolPrev, refPoolNewPrev, refPoolCurrent);
         }
 
         user.stakes.push(stake);
@@ -88,16 +86,17 @@ contract FourRXFinance is Insurance {
         refPoolBalance = refPoolBalance.add(_calcPercentage(amount, REF_POOL_FEE_BP));
         // 20k
         sponsorPoolBalance = sponsorPoolBalance.add(_calcPercentage(amount, SPONSOR_POOL_FEE_BP));
-        // 30k
-        fourRXToken.transfer(devAddress, _calcPercentage(amount, DEV_FEE_BP));
+
+        // 14k
+        devBalance = devBalance.add(_calcPercentage(amount, DEV_FEE_BP));
 
         uint currentContractBalance = fourRXToken.balanceOf(address(this));
 
         if (currentContractBalance > maxContractBalance) {
             maxContractBalance = currentContractBalance;
         }
-        // 54k
 
+        // 54k
         totalDepositRewards = totalDepositRewards.add(depositReward);
 
         emit Deposit(msg.sender, amount, uplinkAddress, uplinkStakeId);
@@ -194,11 +193,20 @@ contract FourRXFinance is Insurance {
         return users[userAddress];
     }
 
-    function getPoolInfo() external view returns (uint, uint, uint, uint, PoolUser[10] memory, PoolUser[12] memory) {
-        return (poolDrewAt, poolCycle, sponsorPoolBalance, refPoolBalance, sponsorPoolUsers, refPoolUsers);
-    }
 
     function getContractInfo() external view returns (uint, bool, uint, uint) {
         return (maxContractBalance, isInInsuranceState, totalDepositRewards, totalExited);
+    }
+
+    function withdrawDevFee(address withdrawingAddress, uint amount) external {
+        require(msg.sender == devAddress);
+        require(amount <= devBalance);
+        fourRXToken.transfer(withdrawingAddress, amount);
+        devBalance = devBalance.sub(amount);
+    }
+
+    function updateDevAddress(address newDevAddress) external {
+        require(msg.sender == devAddress);
+        devAddress = newDevAddress;
     }
 }

@@ -30,7 +30,7 @@ describe('FourRXFinance Withdrawal Test', function () {
         await time.increase(time.duration.days(10));
         await this.fourRXFinance.deposit(this.amount, user1, 0, {from: user2});
 
-        expect(await this.fourRXFinance.balanceOf(user1, 0)).to.be.bignumber.equals(new BN(951));
+        expect(await this.fourRXFinance.balanceOf(user1, 0)).to.be.bignumber.equals(new BN(955));
         // 36 hold rewards
         // 180 Contract rewards
         // 50 pool rewards (20 + 30)
@@ -47,7 +47,7 @@ describe('FourRXFinance Withdrawal Test', function () {
     it('should allow withdrawal with penalty', async function () {
         await time.increase(time.duration.days(10));
 
-        expect(await this.fourRXFinance.balanceOf(user1, 0)).to.be.bignumber.equals(new BN(58));
+        expect(await this.fourRXFinance.balanceOf(user1, 0)).to.be.bignumber.equals(new BN(60));
 
         const receipt = await this.fourRXFinance.withdraw(0, {from: user1});
 
@@ -60,7 +60,7 @@ describe('FourRXFinance Withdrawal Test', function () {
     it('should not allow two withdrawal same day', async function () {
         await time.increase(time.duration.days(10));
 
-        expect(await this.fourRXFinance.balanceOf(user1, 0)).to.be.bignumber.equals(new BN(58));
+        expect(await this.fourRXFinance.balanceOf(user1, 0)).to.be.bignumber.equals(new BN(60));
 
         await this.fourRXFinance.withdraw(0, {from: user1});
         await expectRevert.unspecified(this.fourRXFinance.withdraw(0, {from: user1}));
@@ -69,7 +69,7 @@ describe('FourRXFinance Withdrawal Test', function () {
     it('should not allow more then 3% withdrawal same day', async function () {
         await time.increase(time.duration.days(200));
 
-        expect(await this.fourRXFinance.balanceOf(user1, 0)).to.be.bignumber.equals(new BN(9172));
+        expect(await this.fourRXFinance.balanceOf(user1, 0)).to.be.bignumber.equals(new BN(9174));
 
         const receipt = await this.fourRXFinance.withdraw(0, {from: user1});
 

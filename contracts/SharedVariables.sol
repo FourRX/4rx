@@ -10,43 +10,25 @@ import "./Constants.sol";
 import "./StatsVars.sol";
 
 
-contract SharedVariables is Constants, StatsVars, PercentageCalculator, InterestCalculator, Events, Utils {
-    using SafeMath for uint;
-
+contract SharedVariables is Constants, StatsVars, Events, PercentageCalculator, InterestCalculator, Utils {
     IERC20 public fourRXToken;
 
     address public devAddress = 0x64B8cb4C04Ba902010856d913B4e5DF940748Bf2; // Dummy address replace it for prod/dev
-
-    struct PoolUser {
-        address user; // user's address
-        uint8 stakeId;
-    }
-
-    struct Pool {
-        uint16 cycle;
-        uint amount;
-    }
 
     struct Stake {
         uint8 id;
         bool active;
         bool optInInsured; // Is insured ???
 
-        uint deposit; // Initial Deposit
-        uint withdrawn; // Total withdrawn from this stake
-        uint penalty; // Total penalty on this stale
-
-        // Rewards
-        uint refCommission; // Ref rewards
-        uint refPoolRewards; // Ref Pool Rewards
-        uint sponsorPoolRewards; // Sponsor Pool Rewards
-
         uint32 holdFrom; // Timestamp from which hold should be counted
         uint32 interestCountFrom; // TimeStamp from which interest should be counted, from the beginning
         uint32 lastWithdrawalAt; // date time of last withdrawals so we don't allow more then 3% a day
 
-        Pool refPool; // To store this user's last 24 hour RefPool entries
-        Pool sponsorPool; // To store this user's last 24 hour Sponsor Pool entries
+        uint deposit; // Initial Deposit
+        uint withdrawn; // Total withdrawn from this stake
+        uint penalty; // Total penalty on this stale
+
+        uint rewards;
     }
 
     struct User {
@@ -55,9 +37,6 @@ contract SharedVariables is Constants, StatsVars, PercentageCalculator, Interest
     }
 
     mapping (address => User) public users;
-
-    PoolUser[12] public refPoolUsers;
-    PoolUser[10] public sponsorPoolUsers;
 
     uint[] public refPoolBonuses;
     uint[] public sponsorPoolBonuses;
@@ -69,4 +48,6 @@ contract SharedVariables is Constants, StatsVars, PercentageCalculator, Interest
 
     uint public refPoolBalance;
     uint public sponsorPoolBalance;
+
+    uint public devBalance;
 }

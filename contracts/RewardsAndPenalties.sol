@@ -8,22 +8,14 @@ import "./Pools.sol";
 contract RewardsAndPenalties is Pools {
     using SafeMath for uint;
 
-    function _distributeReferralReward(uint amount, Stake memory stake, address uplinkAddress, uint uplinkStakeId) internal {
+    function _distributeReferralReward(uint amount, Stake memory stake, address uplinkAddress, uint8 uplinkStakeId, uint16 refPoolPrev, uint16 refPoolNewPrev, uint16 refPoolCurrent) internal {
         User storage uplinkUser = users[uplinkAddress];
 
         uint commission = _calcPercentage(amount, REF_COMMISSION_BP);
 
-        uplinkUser.stakes[uplinkStakeId].refCommission = uplinkUser.stakes[uplinkStakeId].refCommission.add(commission);
+        uplinkUser.stakes[uplinkStakeId].rewards = uplinkUser.stakes[uplinkStakeId].rewards.add(commission);
 
-        // @todo: check correctness of this
-        if (stake.refPool.cycle != poolCycle) {
-            stake.refPool.cycle = poolCycle;
-            stake.refPool.amount = 0;
-        }
-
-        stake.refPool.amount = stake.refPool.amount.add(amount);
-
-        _updateRefPoolUsers(uplinkUser, stake);
+        _updateRefPoolUsers(uplinkUser, stake, uplinkStakeId, refPoolPrev, refPoolNewPrev, refPoolCurrent);
     }
 
     function _calcDepositRewards(uint amount) internal pure returns (uint) {
@@ -78,14 +70,11 @@ contract RewardsAndPenalties is Pools {
     }
 
     function _calcRewardsWithoutHoldBonus(Stake memory stake) internal view returns (uint) {
-        uint poolRewardsAmount = stake.refPoolRewards.add(stake.sponsorPoolRewards);
-        uint refCommissionAmount = stake.refCommission;
-
         uint interest = _calcPercentage(stake.deposit, _getInterestTillDays(_calcDays(stake.interestCountFrom, block.timestamp)));
 
         uint contractBonus = _calcContractBonus(stake);
 
-        uint totalRewardsWithoutHoldBonus = poolRewardsAmount.add(refCommissionAmount).add(interest).add(contractBonus);
+        uint totalRewardsWithoutHoldBonus = stake.rewards.add(interest).add(contractBonus);
 
         return totalRewardsWithoutHoldBonus;
     }

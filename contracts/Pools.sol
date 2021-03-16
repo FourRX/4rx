@@ -1,123 +1,100 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.6.12;
 
+pragma experimental ABIEncoderV2;
 import "./SharedVariables.sol";
+import "./Pools/SponsorPool.sol";
+import "./Pools/ReferralPool.sol";
+import "./libs/SortedLinkedList.sol";
 
 
-contract Pools is SharedVariables {
+contract Pools is SponsorPool, ReferralPool, SharedVariables {
+
+    uint8 public constant MAX_REF_POOL_USERS = 12;
+    uint8 public constant MAX_SPONSOR_POOL_USERS = 10;
 
     function _resetPools() internal {
-        for (uint i = 0; i < refPoolBonuses.length; i++) {
-            refPoolUsers[i].user = address(0);
-            refPoolUsers[i].stakeId = 0;
-        }
-
-        for (uint i = 0; i < sponsorPoolBonuses.length; i++) {
-            sponsorPoolUsers[i].user = address(0);
-            refPoolUsers[i].stakeId = 0;
-        }
-
-        refPoolBalance = 0;
-        sponsorPoolBalance = 0;
+        _cleanSponsorPoolUsers();
+        _cleanRefPoolUsers();
+        delete refPoolBalance;
+        delete sponsorPoolBalance;
         poolDrewAt = uint32(block.timestamp);
+        poolCycle++;
     }
 
-    function _updateSponsorPoolUsers(User memory user, Stake memory stake) internal {
-        if (
-            sponsorPoolUsers[sponsorPoolUsers.length.sub(1)].user == address(0) ||
-            stake.sponsorPool.amount > users[sponsorPoolUsers[sponsorPoolUsers.length.sub(1)].user].stakes[sponsorPoolUsers[sponsorPoolUsers.length.sub(1)].stakeId].sponsorPool.amount
-        ) { // either last user is not set or last user's sponsor balance is less then this user
-
-            PoolUser memory shiftUser;
-
-            for (uint i = 0; i < sponsorPoolUsers.length; i++) {
-
-                if (sponsorPoolUsers[i].user == address(0)) {
-                    sponsorPoolUsers[i].user = user.wallet;
-                    sponsorPoolUsers[i].stakeId = stake.id;
-                    break;
-                }
-
-                if (stake.sponsorPool.amount > users[sponsorPoolUsers[i].user].stakes[sponsorPoolUsers[i].stakeId].sponsorPool.amount) {
-                    shiftUser = sponsorPoolUsers[i];
-                    sponsorPoolUsers[i].user = user.wallet;
-                    sponsorPoolUsers[i].stakeId = stake.id;
-                    PoolUser memory nextUser;
-                    for (uint j = i; i < sponsorPoolUsers.length; j++) {
-
-                        if (shiftUser.user == address(0)) {
-                            break;
-                        }
-
-                        nextUser = sponsorPoolUsers[j];
-                        sponsorPoolUsers[j] = shiftUser;
-                        shiftUser = nextUser;
-                    }
-//                    _shiftPool(i, shiftUser, sponsorPoolUsers);
-                    break;
-                }
-            }
-        }
+    function _updateSponsorPoolUsers(User memory user, Stake memory stake, uint16 prevIndex) internal {
+        _addSponsorPoolRecord(user.wallet, stake.deposit, stake.id, prevIndex);
     }
 
     // Reorganise top ref-pool users to draw pool for
-    function _updateRefPoolUsers(User memory user, Stake memory stake) internal {
-        if (
-            refPoolUsers[refPoolUsers.length - 1].user == address(0) ||
-            stake.refPool.amount > users[refPoolUsers[refPoolUsers.length - 1].user].stakes[refPoolUsers[refPoolUsers.length - 1].stakeId].refPool.amount
-        ) { // either last user is not set or last user's ref balance is less then this user
-
-            PoolUser memory shiftUser;
-
-            for (uint i = 0; i < refPoolUsers.length; i++) {
-
-                if (refPoolUsers[i].user == address(0)) {
-                    refPoolUsers[i].user = user.wallet;
-                    refPoolUsers[i].stakeId = stake.id;
-                    break;
-                }
-
-                if (stake.refPool.amount > users[refPoolUsers[i].user].stakes[refPoolUsers[i].stakeId].refPool.amount) {
-                    shiftUser = refPoolUsers[i];
-                    refPoolUsers[i].user = user.wallet;
-                    refPoolUsers[i].stakeId = stake.id;
-                    PoolUser memory nextUser;
-                    for (uint j = i; i < refPoolUsers.length; j++) {
-
-                        if (shiftUser.user == address(0)) {
-                            break;
-                        }
-
-                        nextUser = refPoolUsers[j];
-                        refPoolUsers[j] = shiftUser;
-                        shiftUser = nextUser;
-                    }
-//                    _shiftPool(i, shiftUser, refPoolUsers);
-                    break;
-                }
-            }
-        }
+    function _updateRefPoolUsers(User memory uplinkUser , Stake memory stake, uint8 uplinkUserStakeId, uint16 prevIndex, uint16 newPrevIndex, uint16 current) internal {
+        _addRefPoolRecord(uplinkUser.wallet, stake.deposit, uplinkUserStakeId, prevIndex, newPrevIndex, current);
     }
 
     function drawPool() public {
         if (block.timestamp > poolDrewAt + 1 days) {
-            for (uint i = 0; i < refPoolUsers.length; i++) {
-                if (refPoolUsers[i].user == address(0)) break;
 
-                User storage user = users[refPoolUsers[i].user];
-                user.stakes[refPoolUsers[i].stakeId].refPoolRewards = user.stakes[refPoolUsers[i].stakeId].refPoolRewards.add(_calcPercentage(refPoolBalance, refPoolBonuses[i]));
+            SortedLinkedList.Item memory current = refPoolUsers[0];
+            uint16 i = 0;
+
+            while (i < MAX_REF_POOL_USERS && current.next != SortedLinkedList.GUARD) {
+                current = refPoolUsers[current.next];
+                users[current.user].stakes[current.id].rewards = users[current.user].stakes[current.id].rewards.add(_calcPercentage(refPoolBalance, refPoolBonuses[i]));
+                i++;
             }
 
-            for (uint i = 0; i < sponsorPoolUsers.length; i++) {
-                if (sponsorPoolUsers[i].user == address(0)) break;
+            current = sponsorPoolUsers[0];
+            i = 0;
 
-                User storage user = users[sponsorPoolUsers[i].user];
-                user.stakes[sponsorPoolUsers[i].stakeId].sponsorPoolRewards = user.stakes[sponsorPoolUsers[i].stakeId].sponsorPoolRewards.add(_calcPercentage(sponsorPoolBalance, sponsorPoolBonuses[i]));
+            while (i < MAX_SPONSOR_POOL_USERS && current.next != SortedLinkedList.GUARD) {
+                current = sponsorPoolUsers[current.next];
+                users[current.user].stakes[current.id].rewards = users[current.user].stakes[current.id].rewards.add(_calcPercentage(sponsorPoolBalance, sponsorPoolBonuses[i]));
+                i++;
             }
 
             emit PoolDrawn(refPoolBalance, sponsorPoolBalance);
 
             _resetPools();
         }
+    }
+
+    // pool info getters
+
+    function getPoolInfo() external view returns (uint32, uint16, uint, uint) {
+        return (poolDrewAt, poolCycle, sponsorPoolBalance, refPoolBalance);
+    }
+
+    function getPoolParticipants() external view returns (address[] memory, uint8[] memory, uint[] memory, address[] memory, uint8[] memory, uint[] memory) {
+        address[] memory sponsorPoolUsersAddresses = new address[](MAX_SPONSOR_POOL_USERS);
+        uint8[] memory sponsorPoolUsersStakeIds = new uint8[](MAX_SPONSOR_POOL_USERS);
+        uint[] memory sponsorPoolUsersAmounts = new uint[](MAX_SPONSOR_POOL_USERS);
+
+        address[] memory refPoolUsersAddresses = new address[](MAX_REF_POOL_USERS);
+        uint8[] memory refPoolUsersStakeIds = new uint8[](MAX_REF_POOL_USERS);
+        uint[] memory refPoolUsersAmounts = new uint[](MAX_REF_POOL_USERS);
+
+        uint16 i = 0;
+        SortedLinkedList.Item memory current = sponsorPoolUsers[i];
+
+        while (i < MAX_SPONSOR_POOL_USERS && current.next != SortedLinkedList.GUARD) {
+            current = sponsorPoolUsers[current.next];
+            sponsorPoolUsersAddresses[i] = current.user;
+            sponsorPoolUsersStakeIds[i] = current.id;
+            sponsorPoolUsersAmounts[i] = current.score;
+            i++;
+        }
+
+        i = 0;
+        current = refPoolUsers[i];
+
+        while (i < MAX_REF_POOL_USERS && current.next != SortedLinkedList.GUARD) {
+            current = refPoolUsers[current.next];
+            refPoolUsersAddresses[i] = current.user;
+            refPoolUsersStakeIds[i] = current.id;
+            refPoolUsersAmounts[i] = current.score;
+            i++;
+        }
+
+        return (sponsorPoolUsersAddresses, sponsorPoolUsersStakeIds, sponsorPoolUsersAmounts, refPoolUsersAddresses, refPoolUsersStakeIds, refPoolUsersAmounts);
     }
 }

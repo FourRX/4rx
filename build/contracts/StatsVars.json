@@ -3,8 +3,8 @@
   "contractName": "StatsVars",
   "source": "// SPDX-License-Identifier: MIT\npragma solidity ^0.6.12;\n\n\ncontract StatsVars {\n    // Stats\n    uint public totalDepositRewards;\n    uint public totalExited;\n}\n",
   "sourcePath": "contracts/StatsVars.sol",
-  "sourceMap": "59:101:19:-:0;;;;;;;;;;;;;;;;;;;",
-  "deployedSourceMap": "59:101:19:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;97:31;;;:::i;:::-;;;;;;;;;;;;;;;;134:23;;;:::i;97:31::-;;;;:::o;134:23::-;;;;:::o",
+  "sourceMap": "59:101:21:-:0;;;;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "59:101:21:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;97:31;;;:::i;:::-;;;;;;;;;;;;;;;;134:23;;;:::i;97:31::-;;;;:::o;134:23::-;;;;:::o",
   "abi": [
     {
       "inputs": [],
@@ -37,15 +37,15 @@
     "absolutePath": "contracts/StatsVars.sol",
     "exportedSymbols": {
       "StatsVars": [
-        7341
+        7925
       ]
     },
-    "id": 7342,
+    "id": 7926,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 7336,
+        "id": 7920,
         "literals": [
           "solidity",
           "^",
@@ -53,7 +53,7 @@
           ".12"
         ],
         "nodeType": "PragmaDirective",
-        "src": "32:24:19"
+        "src": "32:24:21"
       },
       {
         "abstract": false,
@@ -62,9 +62,9 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 7341,
+        "id": 7925,
         "linearizedBaseContracts": [
-          7341
+          7925
         ],
         "name": "StatsVars",
         "nodeType": "ContractDefinition",
@@ -72,13 +72,13 @@
           {
             "constant": false,
             "functionSelector": "7247b2b9",
-            "id": 7338,
+            "id": 7922,
             "mutability": "mutable",
             "name": "totalDepositRewards",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 7341,
-            "src": "97:31:19",
+            "scope": 7925,
+            "src": "97:31:21",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -86,10 +86,10 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 7337,
+              "id": 7921,
               "name": "uint",
               "nodeType": "ElementaryTypeName",
-              "src": "97:4:19",
+              "src": "97:4:21",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -101,13 +101,13 @@
           {
             "constant": false,
             "functionSelector": "91994b2c",
-            "id": 7340,
+            "id": 7924,
             "mutability": "mutable",
             "name": "totalExited",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 7341,
-            "src": "134:23:19",
+            "scope": 7925,
+            "src": "134:23:21",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -115,10 +115,10 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 7339,
+              "id": 7923,
               "name": "uint",
               "nodeType": "ElementaryTypeName",
-              "src": "134:4:19",
+              "src": "134:4:21",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -128,11 +128,11 @@
             "visibility": "public"
           }
         ],
-        "scope": 7342,
-        "src": "59:101:19"
+        "scope": 7926,
+        "src": "59:101:21"
       }
     ],
-    "src": "32:129:19"
+    "src": "32:129:21"
   },
   "bytecode": "0x6080604052348015600f57600080fd5b5060978061001e6000396000f3fe6080604052348015600f57600080fd5b506004361060325760003560e01c80637247b2b914603757806391994b2c14604f575b600080fd5b603d6055565b60408051918252519081900360200190f35b603d605b565b60005481565b6001548156fea2646970667358221220e228d5196cead2e407e267c97e168d069cc12065de7139b1e2c9b59341cf0cdb64736f6c634300060c0033",
   "deployedBytecode": "0x6080604052348015600f57600080fd5b506004361060325760003560e01c80637247b2b914603757806391994b2c14604f575b600080fd5b603d6055565b60408051918252519081900360200190f35b603d605b565b60005481565b6001548156fea2646970667358221220e228d5196cead2e407e267c97e168d069cc12065de7139b1e2c9b59341cf0cdb64736f6c634300060c0033",
