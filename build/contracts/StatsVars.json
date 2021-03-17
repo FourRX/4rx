@@ -37,15 +37,15 @@
     "absolutePath": "contracts/StatsVars.sol",
     "exportedSymbols": {
       "StatsVars": [
-        7925
+        7210
       ]
     },
-    "id": 7926,
+    "id": 7211,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 7920,
+        "id": 7205,
         "literals": [
           "solidity",
           "^",
@@ -62,9 +62,9 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 7925,
+        "id": 7210,
         "linearizedBaseContracts": [
-          7925
+          7210
         ],
         "name": "StatsVars",
         "nodeType": "ContractDefinition",
@@ -72,12 +72,12 @@
           {
             "constant": false,
             "functionSelector": "7247b2b9",
-            "id": 7922,
+            "id": 7207,
             "mutability": "mutable",
             "name": "totalDepositRewards",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 7925,
+            "scope": 7210,
             "src": "97:31:21",
             "stateVariable": true,
             "storageLocation": "default",
@@ -86,7 +86,7 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 7921,
+              "id": 7206,
               "name": "uint",
               "nodeType": "ElementaryTypeName",
               "src": "97:4:21",
@@ -101,12 +101,12 @@
           {
             "constant": false,
             "functionSelector": "91994b2c",
-            "id": 7924,
+            "id": 7209,
             "mutability": "mutable",
             "name": "totalExited",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 7925,
+            "scope": 7210,
             "src": "134:23:21",
             "stateVariable": true,
             "storageLocation": "default",
@@ -115,7 +115,7 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 7923,
+              "id": 7208,
               "name": "uint",
               "nodeType": "ElementaryTypeName",
               "src": "134:4:21",
@@ -128,7 +128,7 @@
             "visibility": "public"
           }
         ],
-        "scope": 7926,
+        "scope": 7211,
         "src": "59:101:21"
       }
     ],

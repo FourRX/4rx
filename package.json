@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "compile": "npx oz compile",
-    "test": "npx oz compile && mocha --exit --timeout 10000 --recursive test",
+    "test": "npx oz compile && mocha --exit --timeout 10000 --recursive test --exclude **/*-hh.test.js",
     "coverage": "node coverage.js",
     "docs": "solidity-docgen"
   },

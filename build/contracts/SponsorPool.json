@@ -1,0 +1,531 @@
+{
+  "fileName": "SponsorPool.sol",
+  "contractName": "SponsorPool",
+  "source": "// SPDX-License-Identifier: MIT\npragma solidity ^0.6.12;\n\nimport \"../libs/SortedLinkedList.sol\";\n\ncontract SponsorPool {\n    SortedLinkedList.Item[] public sponsorPoolUsers;\n\n    function _addSponsorPoolRecord(address user, uint amount, uint8 stakeId) internal {\n        SortedLinkedList.addNode(sponsorPoolUsers, user, amount, stakeId);\n    }\n\n    function _cleanSponsorPoolUsers() internal {\n        delete sponsorPoolUsers;\n        SortedLinkedList.initNodes(sponsorPoolUsers);\n    }\n}\n",
+  "sourcePath": "contracts/Pools/SponsorPool.sol",
+  "sourceMap": "98:390:18:-:0;;;;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "98:390:18:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;125:47;;;;;;;;;;;;;;;;-1:-1:-1;125:47:18;;:::i;:::-;;;;-1:-1:-1;;;;;125:47:18;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;125:47:18;;;-1:-1:-1;;;;125:47:18;;;;;-1:-1:-1;;;125:47:18;;;;;;:::o",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "sponsorPoolUsers",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "internalType": "uint16",
+          "name": "next",
+          "type": "uint16"
+        },
+        {
+          "internalType": "uint8",
+          "name": "id",
+          "type": "uint8"
+        },
+        {
+          "internalType": "uint256",
+          "name": "score",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "ast": {
+    "absolutePath": "contracts/Pools/SponsorPool.sol",
+    "exportedSymbols": {
+      "SponsorPool": [
+        6738
+      ]
+    },
+    "id": 6739,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 6701,
+        "literals": [
+          "solidity",
+          "^",
+          "0.6",
+          ".12"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "32:24:18"
+      },
+      {
+        "absolutePath": "contracts/libs/SortedLinkedList.sol",
+        "file": "../libs/SortedLinkedList.sol",
+        "id": 6702,
+        "nodeType": "ImportDirective",
+        "scope": 6739,
+        "sourceUnit": 7589,
+        "src": "58:38:18",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 6738,
+        "linearizedBaseContracts": [
+          6738
+        ],
+        "name": "SponsorPool",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "functionSelector": "9c236aa8",
+            "id": 6705,
+            "mutability": "mutable",
+            "name": "sponsorPoolUsers",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 6738,
+            "src": "125:47:18",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_array$_t_struct$_Item_$7225_storage_$dyn_storage",
+              "typeString": "struct SortedLinkedList.Item[]"
+            },
+            "typeName": {
+              "baseType": {
+                "contractScope": null,
+                "id": 6703,
+                "name": "SortedLinkedList.Item",
+                "nodeType": "UserDefinedTypeName",
+                "referencedDeclaration": 7225,
+                "src": "125:21:18",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_Item_$7225_storage_ptr",
+                  "typeString": "struct SortedLinkedList.Item"
+                }
+              },
+              "id": 6704,
+              "length": null,
+              "nodeType": "ArrayTypeName",
+              "src": "125:23:18",
+              "typeDescriptions": {
+                "typeIdentifier": "t_array$_t_struct$_Item_$7225_storage_$dyn_storage_ptr",
+                "typeString": "struct SortedLinkedList.Item[]"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 6723,
+              "nodeType": "Block",
+              "src": "261:82:18",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 6717,
+                        "name": "sponsorPoolUsers",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 6705,
+                        "src": "296:16:18",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_struct$_Item_$7225_storage_$dyn_storage",
+                          "typeString": "struct SortedLinkedList.Item storage ref[] storage ref"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "id": 6718,
+                        "name": "user",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 6707,
+                        "src": "314:4:18",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "id": 6719,
+                        "name": "amount",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 6709,
+                        "src": "320:6:18",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "id": 6720,
+                        "name": "stakeId",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 6711,
+                        "src": "328:7:18",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint8",
+                          "typeString": "uint8"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_array$_t_struct$_Item_$7225_storage_$dyn_storage",
+                          "typeString": "struct SortedLinkedList.Item storage ref[] storage ref"
+                        },
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        },
+                        {
+                          "typeIdentifier": "t_uint8",
+                          "typeString": "uint8"
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": null,
+                        "id": 6714,
+                        "name": "SortedLinkedList",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 7588,
+                        "src": "271:16:18",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_type$_t_contract$_SortedLinkedList_$7588_$",
+                          "typeString": "type(library SortedLinkedList)"
+                        }
+                      },
+                      "id": 6716,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "addNode",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 7284,
+                      "src": "271:24:18",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_nonpayable$_t_array$_t_struct$_Item_$7225_storage_$dyn_storage_ptr_$_t_address_$_t_uint256_$_t_uint8_$returns$__$",
+                        "typeString": "function (struct SortedLinkedList.Item storage ref[] storage pointer,address,uint256,uint8)"
+                      }
+                    },
+                    "id": 6721,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "271:65:18",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 6722,
+                  "nodeType": "ExpressionStatement",
+                  "src": "271:65:18"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 6724,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "_addSponsorPoolRecord",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 6712,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 6707,
+                  "mutability": "mutable",
+                  "name": "user",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 6724,
+                  "src": "210:12:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 6706,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "210:7:18",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 6709,
+                  "mutability": "mutable",
+                  "name": "amount",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 6724,
+                  "src": "224:11:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 6708,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "224:4:18",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 6711,
+                  "mutability": "mutable",
+                  "name": "stakeId",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 6724,
+                  "src": "237:13:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint8",
+                    "typeString": "uint8"
+                  },
+                  "typeName": {
+                    "id": 6710,
+                    "name": "uint8",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "237:5:18",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint8",
+                      "typeString": "uint8"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "209:42:18"
+            },
+            "returnParameters": {
+              "id": 6713,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "261:0:18"
+            },
+            "scope": 6738,
+            "src": "179:164:18",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 6736,
+              "nodeType": "Block",
+              "src": "392:94:18",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 6728,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "nodeType": "UnaryOperation",
+                    "operator": "delete",
+                    "prefix": true,
+                    "src": "402:23:18",
+                    "subExpression": {
+                      "argumentTypes": null,
+                      "id": 6727,
+                      "name": "sponsorPoolUsers",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 6705,
+                      "src": "409:16:18",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_array$_t_struct$_Item_$7225_storage_$dyn_storage",
+                        "typeString": "struct SortedLinkedList.Item storage ref[] storage ref"
+                      }
+                    },
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 6729,
+                  "nodeType": "ExpressionStatement",
+                  "src": "402:23:18"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 6733,
+                        "name": "sponsorPoolUsers",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 6705,
+                        "src": "462:16:18",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_struct$_Item_$7225_storage_$dyn_storage",
+                          "typeString": "struct SortedLinkedList.Item storage ref[] storage ref"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_array$_t_struct$_Item_$7225_storage_$dyn_storage",
+                          "typeString": "struct SortedLinkedList.Item storage ref[] storage ref"
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": null,
+                        "id": 6730,
+                        "name": "SortedLinkedList",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 7588,
+                        "src": "435:16:18",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_type$_t_contract$_SortedLinkedList_$7588_$",
+                          "typeString": "type(library SortedLinkedList)"
+                        }
+                      },
+                      "id": 6732,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "initNodes",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 7382,
+                      "src": "435:26:18",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_nonpayable$_t_array$_t_struct$_Item_$7225_storage_$dyn_storage_ptr_$returns$__$",
+                        "typeString": "function (struct SortedLinkedList.Item storage ref[] storage pointer)"
+                      }
+                    },
+                    "id": 6734,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "435:44:18",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 6735,
+                  "nodeType": "ExpressionStatement",
+                  "src": "435:44:18"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 6737,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "_cleanSponsorPoolUsers",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 6725,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "380:2:18"
+            },
+            "returnParameters": {
+              "id": 6726,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "392:0:18"
+            },
+            "scope": 6738,
+            "src": "349:137:18",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "internal"
+          }
+        ],
+        "scope": 6739,
+        "src": "98:390:18"
+      }
+    ],
+    "src": "32:457:18"
+  },
+  "bytecode": "0x608060405234801561001057600080fd5b5060fc8061001f6000396000f3fe6080604052348015600f57600080fd5b506004361060285760003560e01c80639c236aa814602d575b600080fd5b604760048036036020811015604157600080fd5b5035607c565b604080516001600160a01b03909516855261ffff909316602085015260ff909116838301526060830152519081900360800190f35b60008181548110608857fe5b6000918252602090912060029091020180546001909101546001600160a01b0382169250600160a01b820461ffff1691600160b01b900460ff16908456fea2646970667358221220b5b444af995cad542782d5e53be2c863868419a2ee57bb82a32e510d4be190f164736f6c634300060c0033",
+  "deployedBytecode": "0x6080604052348015600f57600080fd5b506004361060285760003560e01c80639c236aa814602d575b600080fd5b604760048036036020811015604157600080fd5b5035607c565b604080516001600160a01b03909516855261ffff909316602085015260ff909116838301526060830152519081900360800190f35b60008181548110608857fe5b6000918252602090912060029091020180546001909101546001600160a01b0382169250600160a01b820461ffff1691600160b01b900460ff16908456fea2646970667358221220b5b444af995cad542782d5e53be2c863868419a2ee57bb82a32e510d4be190f164736f6c634300060c0033",
+  "compiler": {
+    "name": "solc",
+    "version": "0.6.12+commit.27d51765.Emscripten.clang",
+    "optimizer": {
+      "enabled": true,
+      "runs": 1
+    },
+    "evmVersion": "petersburg"
+  }
+}

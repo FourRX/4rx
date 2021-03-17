@@ -1,7 +1,7 @@
 {
   "fileName": "Events.sol",
   "contractName": "Events",
-  "source": "// SPDX-License-Identifier: MIT\npragma solidity ^0.6.12;\n\n\ncontract Events {\n    event Deposit(address user, uint amount, address uplinkAddress, uint uplinkStakeId);\n    event Withdrawn(address user, uint amount);\n    event ReInvest(address user, uint amount);\n    event Exited(address user, uint stakeId, uint amount);\n    event PoolDrawn(uint refPoolAmount, uint sponsirPoolAmount);\n}\n",
+  "source": "// SPDX-License-Identifier: MIT\npragma solidity ^0.6.12;\n\n\ncontract Events {\n    event Deposit(address user, uint amount, address uplinkAddress, uint uplinkStakeId);\n    event Withdrawn(address user, uint amount);\n    event ReInvest(address user, uint amount);\n    event Exited(address user, uint stakeId, uint amount);\n    event PoolDrawn(uint refPoolAmount, uint sponsorPoolAmount);\n}\n",
   "sourcePath": "contracts/Events.sol",
   "sourceMap": "59:327:10:-:0;;;;;;;;;;;;;;;;;;;",
   "deployedSourceMap": "59:327:10:-:0;;;;;",
@@ -74,7 +74,7 @@
         {
           "indexed": false,
           "internalType": "uint256",
-          "name": "sponsirPoolAmount",
+          "name": "sponsorPoolAmount",
           "type": "uint256"
         }
       ],
@@ -584,7 +584,7 @@
                   "id": 1958,
                   "indexed": false,
                   "mutability": "mutable",
-                  "name": "sponsirPoolAmount",
+                  "name": "sponsorPoolAmount",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
                   "scope": 1960,
@@ -620,8 +620,8 @@
     ],
     "src": "32:355:10"
   },
-  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea26469706673582212202e041f9374f94c7f647c79149c92596308a2c539aaf8e03bbfd01cbf960db13e64736f6c634300060c0033",
-  "deployedBytecode": "0x6080604052600080fdfea26469706673582212202e041f9374f94c7f647c79149c92596308a2c539aaf8e03bbfd01cbf960db13e64736f6c634300060c0033",
+  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea2646970667358221220f1a33e01eaac9b9062ff0cc41b1d40b8b681ecd11894923834baa9ab20762c9664736f6c634300060c0033",
+  "deployedBytecode": "0x6080604052600080fdfea2646970667358221220f1a33e01eaac9b9062ff0cc41b1d40b8b681ecd11894923834baa9ab20762c9664736f6c634300060c0033",
   "compiler": {
     "name": "solc",
     "version": "0.6.12+commit.27d51765.Emscripten.clang",

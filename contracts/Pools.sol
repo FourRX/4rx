@@ -22,13 +22,13 @@ contract Pools is SponsorPool, ReferralPool, SharedVariables {
         poolCycle++;
     }
 
-    function _updateSponsorPoolUsers(User memory user, Stake memory stake, uint16 prevIndex) internal {
-        _addSponsorPoolRecord(user.wallet, stake.deposit, stake.id, prevIndex);
+    function _updateSponsorPoolUsers(User memory user, Stake memory stake) internal {
+        _addSponsorPoolRecord(user.wallet, stake.deposit, stake.id);
     }
 
     // Reorganise top ref-pool users to draw pool for
-    function _updateRefPoolUsers(User memory uplinkUser , Stake memory stake, uint8 uplinkUserStakeId, uint16 prevIndex, uint16 newPrevIndex, uint16 current) internal {
-        _addRefPoolRecord(uplinkUser.wallet, stake.deposit, uplinkUserStakeId, prevIndex, newPrevIndex, current);
+    function _updateRefPoolUsers(User memory uplinkUser , Stake memory stake, uint8 uplinkUserStakeId) internal {
+        _addRefPoolRecord(uplinkUser.wallet, stake.deposit, uplinkUserStakeId);
     }
 
     function drawPool() public {

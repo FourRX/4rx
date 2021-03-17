@@ -44,7 +44,7 @@ contract FourRXFinance is Insurance {
         poolCycle = 0;
     }
 
-    function deposit(uint amount, address uplinkAddress, uint8 uplinkStakeId, uint16 sponsorPoolPrev, uint16 refPoolPrev, uint16 refPoolNewPrev, uint16 refPoolCurrent) external {
+    function deposit(uint amount, address uplinkAddress, uint8 uplinkStakeId) external {
         // 2k
         require(
             uplinkAddress == address(0) ||
@@ -75,10 +75,10 @@ contract FourRXFinance is Insurance {
         stake.deposit = amount.sub(_calcPercentage(amount, LP_FEE_BP)).add(depositReward); // Deduct LP Commission + add deposit rewards
 
         // 33k
-        _updateSponsorPoolUsers(user, stake, sponsorPoolPrev);
+        _updateSponsorPoolUsers(user, stake);
         // 54k
         if (uplinkAddress != address(0)) {
-            _distributeReferralReward(amount, stake, uplinkAddress, uplinkStakeId, refPoolPrev, refPoolNewPrev, refPoolCurrent);
+            _distributeReferralReward(amount, stake, uplinkAddress, uplinkStakeId);
         }
 
         user.stakes.push(stake);
@@ -192,7 +192,6 @@ contract FourRXFinance is Insurance {
     function getUser(address userAddress) external view returns (User memory) {
         return users[userAddress];
     }
-
 
     function getContractInfo() external view returns (uint, bool, uint, uint) {
         return (maxContractBalance, isInInsuranceState, totalDepositRewards, totalExited);

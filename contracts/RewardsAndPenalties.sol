@@ -8,14 +8,14 @@ import "./Pools.sol";
 contract RewardsAndPenalties is Pools {
     using SafeMath for uint;
 
-    function _distributeReferralReward(uint amount, Stake memory stake, address uplinkAddress, uint8 uplinkStakeId, uint16 refPoolPrev, uint16 refPoolNewPrev, uint16 refPoolCurrent) internal {
+    function _distributeReferralReward(uint amount, Stake memory stake, address uplinkAddress, uint8 uplinkStakeId) internal {
         User storage uplinkUser = users[uplinkAddress];
 
         uint commission = _calcPercentage(amount, REF_COMMISSION_BP);
 
         uplinkUser.stakes[uplinkStakeId].rewards = uplinkUser.stakes[uplinkStakeId].rewards.add(commission);
 
-        _updateRefPoolUsers(uplinkUser, stake, uplinkStakeId, refPoolPrev, refPoolNewPrev, refPoolCurrent);
+        _updateRefPoolUsers(uplinkUser, stake, uplinkStakeId);
     }
 
     function _calcDepositRewards(uint amount) internal pure returns (uint) {

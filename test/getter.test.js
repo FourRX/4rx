@@ -43,6 +43,6 @@ describe('FourRXFinance Getter Test', function () {
         await time.increase(time.duration.days(10));
         await this.fourRXFinance.deposit(this.amount, user1, 0, {from: user2});
 
-        expect((await this.fourRXFinance.getContractInfo())[4]).to.be.bignumber.equals(new BN(2));
+        expect((await this.fourRXFinance.getContractInfo())[1]).to.be.equals(false);
     });
 });

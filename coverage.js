@@ -7,7 +7,7 @@ async function main () {
   await runCoverage(
     ['ERC20/FRX.sol', 'Farm/MasterChef.sol'],
     'npx oz compile',
-    './node_modules/.bin/mocha --exit --timeout 10000 --recursive'.split(' '),
+    './node_modules/.bin/mocha --exit --timeout 10000 --recursive --exclude **/*-hh.test.js'.split(' '),
   );
 
   if (process.env.CI) {

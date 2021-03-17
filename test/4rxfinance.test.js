@@ -43,7 +43,7 @@ describe('FourRXFinance Registration Test', function () {
             user: user1,
             amount: new BN(amount),
             uplinkAddress: constants.ZERO_ADDRESS,
-            uplinkStakeId: 0
+            uplinkStakeId: new BN(0)
         })
     });
 });

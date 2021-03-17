@@ -37,10 +37,10 @@ describe('FourRXFinance Deposit Tests', function () {
             user: user2,
             amount: new BN(this.amount),
             uplinkAddress: user1,
-            uplinkStakeId: 0
+            uplinkStakeId: new BN(0)
         })
 
-        expect(await this.fourRXFinance.balanceOf(user1, 0)).to.be.bignumber.equals(new BN(876)); // Ref Bonus 700 + 90 Contract Rewards (1% of user's balance after removing lp commissions)
+        expect(await this.fourRXFinance.balanceOf(user1, 0)).to.be.bignumber.equals(new BN(880)); // Ref Bonus 700 + 90 Contract Rewards (1% of user's balance after removing lp commissions)
     });
 
     it('should give user rewards in 10 days', async function () {

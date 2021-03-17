@@ -15,6 +15,7 @@ const ERC20 = contract.fromArtifact('FRX');
 
 describe('FourRXFinance Withdrawal Test', function () {
     beforeEach(async function() {
+        this.timeout(50000);
         this.amount = 10000;
         this.erc20 = await ERC20.new({ from: owner });
         this.fourRXFinance = await FourRXFinance.new(this.erc20.address, { from: owner });
@@ -38,7 +39,7 @@ describe('FourRXFinance Withdrawal Test', function () {
         // 45 percentage rewards
         const receipt = await this.fourRXFinance.withdraw(0, {from: user1});
 
-        expectEvent(receipt, 'Withdraw', {
+        expectEvent(receipt, 'Withdrawn', {
             user: user1,
             amount: new BN(301)
         })
@@ -51,7 +52,7 @@ describe('FourRXFinance Withdrawal Test', function () {
 
         const receipt = await this.fourRXFinance.withdraw(0, {from: user1});
 
-        expectEvent(receipt, 'Withdraw', {
+        expectEvent(receipt, 'Withdrawn', {
             user: user1, // @todo: these comments are messed up now
             amount: new BN(12) // with about 66% penalty
         })
@@ -73,7 +74,7 @@ describe('FourRXFinance Withdrawal Test', function () {
 
         const receipt = await this.fourRXFinance.withdraw(0, {from: user1});
 
-        expectEvent(receipt, 'Withdraw', {
+        expectEvent(receipt, 'Withdrawn', {
             user: user1,
             amount: new BN(301) // with 0% penalty and only 3% of initial investment of 9000
         })
