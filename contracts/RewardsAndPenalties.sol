@@ -8,55 +8,41 @@ import "./Pools.sol";
 contract RewardsAndPenalties is Pools {
     using SafeMath for uint;
 
-    function _distributeReferralReward(uint amount, Stake memory stake) internal {
-        if (
-            stake.uplink.uplinkAddress != address(0) &&
-            users[stake.uplink.uplinkAddress].stakes[stake.uplink.uplinkStakeId].active
-        ) {
-            User storage uplinkUser = users[stake.uplink.uplinkAddress];
+    function _distributeReferralReward(uint amount, Stake memory stake, address uplinkAddress, uint8 uplinkStakeId) internal {
+        User storage uplinkUser = users[uplinkAddress];
 
-            uint commission = _calcPercentage(amount, REF_COMMISSION_BP);
+        uint commission = _calcPercentage(amount, REF_COMMISSION_BP);
 
-            uplinkUser.stakes[stake.uplink.uplinkStakeId].refCommission = uplinkUser.stakes[stake.uplink.uplinkStakeId].refCommission.add(commission);
+        uplinkUser.stakes[uplinkStakeId].rewards = uplinkUser.stakes[uplinkStakeId].rewards.add(commission);
 
-            if (stake.refPool.cycle != poolCycle) {
-                stake.refPool.cycle = poolCycle;
-                stake.refPool.amount = 0;
-            }
-
-            stake.refPool.amount = stake.refPool.amount.add(amount);
-
-            _updateRefPoolUsers(uplinkUser, stake);
-
-            totalRefRewards = totalRefRewards.add(commission);
-        }
+        _updateRefPoolUsers(uplinkUser, stake, uplinkStakeId);
     }
 
     function _calcDepositRewards(uint amount) internal pure returns (uint) {
         uint rewardPercent = 0;
 
-        if (amount > 5000000) {
-            rewardPercent = 50;
-        } else if (amount > 1000000) {
-            rewardPercent = 40;
-        } else if (amount > 800000) {
-            rewardPercent = 35;
-        } else if (amount > 500000) {
-            rewardPercent = 30;
-        } else if (amount > 250000) {
-            rewardPercent = 25;
-        } else if (amount > 100000) {
-            rewardPercent = 20;
-        } else if (amount > 50000) {
-            rewardPercent = 15;
-        } else if (amount > 25000) {
-            rewardPercent = 10;
-        } else if (amount > 10000) {
-            rewardPercent = 5;
-        } else if (amount > 5000) {
-            rewardPercent = 2;
-        } else if (amount > 2000) {
-            rewardPercent = 1;
+        if (amount > 175) {
+            rewardPercent = 50; // 0.5%
+        } else if (amount > 150) {
+            rewardPercent = 40; // 0.4%
+        } else if (amount > 135) {
+            rewardPercent = 35; // 0.35%
+        } else if (amount > 119) {
+            rewardPercent = 30; // 0.3%
+        } else if (amount > 100) {
+            rewardPercent = 25; // 0.25%
+        } else if (amount > 89) {
+            rewardPercent = 20; // 0.2%
+        } else if (amount > 75) {
+            rewardPercent = 15; // 0.15%
+        } else if (amount > 59) {
+            rewardPercent = 10; // 0.1%
+        } else if (amount > 45) {
+            rewardPercent = 5; // 0.05%
+        } else if (amount > 20) {
+            rewardPercent = 2; // 0.02%
+        } else if (amount > 9) {
+            rewardPercent = 1; // 0.01%
         }
 
         return _calcPercentage(amount, rewardPercent);
@@ -84,14 +70,11 @@ contract RewardsAndPenalties is Pools {
     }
 
     function _calcRewardsWithoutHoldBonus(Stake memory stake) internal view returns (uint) {
-        uint poolRewardsAmount = stake.refPoolRewards.add(stake.sponsorPoolRewards);
-        uint refCommissionAmount = stake.refCommission;
-
         uint interest = _calcPercentage(stake.deposit, _getInterestTillDays(_calcDays(stake.interestCountFrom, block.timestamp)));
 
         uint contractBonus = _calcContractBonus(stake);
 
-        uint totalRewardsWithoutHoldBonus = poolRewardsAmount.add(refCommissionAmount).add(interest).add(contractBonus);
+        uint totalRewardsWithoutHoldBonus = stake.rewards.add(interest).add(contractBonus);
 
         return totalRewardsWithoutHoldBonus;
     }
@@ -114,7 +97,7 @@ contract RewardsAndPenalties is Pools {
 
     function _calcPenalty(Stake memory stake, uint withdrawalAmount) internal pure returns (uint) {
         uint basisPoints = _calcBasisPoints(stake.deposit, withdrawalAmount);
-        // If user's rewards are more then 3% -- No penalty
+        // If user's rewards are more then REWARD_THRESHOLD_BP -- No penalty
         if (basisPoints >= REWARD_THRESHOLD_BP) {
             return 0;
         }

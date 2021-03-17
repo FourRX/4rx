@@ -15,6 +15,7 @@ const ERC20 = contract.fromArtifact('FRX');
 
 describe('FourRXFinance Withdrawal Test', function () {
     beforeEach(async function() {
+        this.timeout(50000);
         this.amount = 10000;
         this.erc20 = await ERC20.new({ from: owner });
         this.fourRXFinance = await FourRXFinance.new(this.erc20.address, { from: owner });
@@ -30,7 +31,7 @@ describe('FourRXFinance Withdrawal Test', function () {
         await time.increase(time.duration.days(10));
         await this.fourRXFinance.deposit(this.amount, user1, 0, {from: user2});
 
-        expect(await this.fourRXFinance.balanceOf(user1, 0)).to.be.bignumber.equals(new BN(967));
+        expect(await this.fourRXFinance.balanceOf(user1, 0)).to.be.bignumber.equals(new BN(955));
         // 36 hold rewards
         // 180 Contract rewards
         // 50 pool rewards (20 + 30)
@@ -38,29 +39,29 @@ describe('FourRXFinance Withdrawal Test', function () {
         // 45 percentage rewards
         const receipt = await this.fourRXFinance.withdraw(0, {from: user1});
 
-        expectEvent(receipt, 'Withdraw', {
+        expectEvent(receipt, 'Withdrawn', {
             user: user1,
-            amount: new BN(270)
+            amount: new BN(301)
         })
     });
 
     it('should allow withdrawal with penalty', async function () {
         await time.increase(time.duration.days(10));
 
-        expect(await this.fourRXFinance.balanceOf(user1, 0)).to.be.bignumber.equals(new BN(130));
+        expect(await this.fourRXFinance.balanceOf(user1, 0)).to.be.bignumber.equals(new BN(60));
 
         const receipt = await this.fourRXFinance.withdraw(0, {from: user1});
 
-        expectEvent(receipt, 'Withdraw', {
+        expectEvent(receipt, 'Withdrawn', {
             user: user1, // @todo: these comments are messed up now
-            amount: new BN(63) // with about 66% penalty
+            amount: new BN(12) // with about 66% penalty
         })
     });
 
     it('should not allow two withdrawal same day', async function () {
         await time.increase(time.duration.days(10));
 
-        expect(await this.fourRXFinance.balanceOf(user1, 0)).to.be.bignumber.equals(new BN(130));
+        expect(await this.fourRXFinance.balanceOf(user1, 0)).to.be.bignumber.equals(new BN(60));
 
         await this.fourRXFinance.withdraw(0, {from: user1});
         await expectRevert.unspecified(this.fourRXFinance.withdraw(0, {from: user1}));
@@ -69,13 +70,13 @@ describe('FourRXFinance Withdrawal Test', function () {
     it('should not allow more then 3% withdrawal same day', async function () {
         await time.increase(time.duration.days(200));
 
-        expect(await this.fourRXFinance.balanceOf(user1, 0)).to.be.bignumber.equals(new BN(27006));
+        expect(await this.fourRXFinance.balanceOf(user1, 0)).to.be.bignumber.equals(new BN(9174));
 
         const receipt = await this.fourRXFinance.withdraw(0, {from: user1});
 
-        expectEvent(receipt, 'Withdraw', {
+        expectEvent(receipt, 'Withdrawn', {
             user: user1,
-            amount: new BN(270) // with 0% penalty and only 3% of initial investment of 9000
+            amount: new BN(301) // with 0% penalty and only 3% of initial investment of 9000
         })
     });
 });

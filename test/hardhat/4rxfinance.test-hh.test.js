@@ -19,16 +19,7 @@ describe('FourRXFinance Registration Test', function () {
         const FourRX = await ethers.getContractFactory("FourRXFinance");
 
         this.fourRXFinance = await FourRX.deploy(this.erc20.address);
-
-        console.log(this.fourRXFinance.address);
     })
-
-    /*it('should revert since user has not approve any deposit to contract', async function () {
-        await expectRevert(
-            this.fourRXFinance.deposit(1000, constants.ZERO_ADDRESS, 0),
-            'ERC20: transfer amount exceeds balance.'
-        );
-    });*/
 
     it('should allow user to register and make a deposit successfully', async function () {
         this.timeout(50000);
@@ -36,8 +27,8 @@ describe('FourRXFinance Registration Test', function () {
         const amount = 10000;
         await this.erc20.transfer(user1.address, 1000000);
         await this.erc20.transfer(user2.address, 1000000);
-        await this.erc20.connect(user1).approve(this.fourRXFinance.address, amount);
-        await this.erc20.connect(user2).approve(this.fourRXFinance.address, amount);
+        await this.erc20.connect(user1).approve(this.fourRXFinance.address, amount + 10000);
+        await this.erc20.connect(user2).approve(this.fourRXFinance.address, amount + 10000);
         await this.fourRXFinance.connect(user1).deposit(amount, constants.ZERO_ADDRESS, 0);
 
         await network.provider.send('evm_increaseTime', [10*86400])
@@ -62,10 +53,31 @@ describe('FourRXFinance Registration Test', function () {
         //
         await this.fourRXFinance.connect(user2).withdraw(0);
 
-        console.log((await this.erc20.balanceOf(this.fourRXFinance.address)).toString());
+        // console.log((await this.erc20.balanceOf(this.fourRXFinance.address)).toString());
 
-        console.log(user1Details, user2Details);
+        // console.log(user1Details, user2Details);
 
         // console.log((await this.fourRXFinance.getContractInfo())[0].toString());
+    });
+
+    it('should test deposit of 13 users',  async function () {
+        this.timeout(50000);
+        const users = await ethers.getSigners();
+        const registered = [];
+        for(let i = 0; i < 13; i++) {
+            const user = users[i];
+            const referrer = i === 0 ? constants.ZERO_ADDRESS : registered[Math.floor(Math.random() * registered.length)];
+            const amount = Math.round(Math.random()*10000);
+
+            await this.erc20.transfer(user.address, amount);
+            // console.log("DS", user.address, referrer);
+            await this.erc20.connect(user).approve(this.fourRXFinance.address, amount);
+            // console.log("AP", user.address, referrer);
+            await this.fourRXFinance.connect(user).deposit(amount, referrer, 0);
+            // console.log("D2S", user.address, referrer);
+
+            registered.push(user.address);
+            await network.provider.send('evm_increaseTime', [86400])
+        }
     });
 });

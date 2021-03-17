@@ -33,8 +33,8 @@ describe('FourRXFinance Exit Tests', function () {
             user: user1
         });
 
-        expect((await this.fourRXFinance.getUser(user1))['stakes'][0]['penalty']).to.be.bignumber.equals(new BN(4501));
+        expect((await this.fourRXFinance.getUser(user1))['stakes'][0]['penalty']).to.be.bignumber.equals(new BN(5022));
 
-        expect(await this.erc20.balanceOf(user1)).to.be.bignumber.equals(new BN(994501));
+        expect(await this.erc20.balanceOf(user1)).to.be.bignumber.equals(new BN(995023));
     });
 });

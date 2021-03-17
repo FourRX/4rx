@@ -41,8 +41,9 @@ describe('FourRXFinance Registration Test', function () {
 
         expectEvent(receipt, 'Deposit', {
             user: user1,
-            uplink: constants.ZERO_ADDRESS,
-            amount: new BN(amount)
+            amount: new BN(amount),
+            uplinkAddress: constants.ZERO_ADDRESS,
+            uplinkStakeId: new BN(0)
         })
     });
 });

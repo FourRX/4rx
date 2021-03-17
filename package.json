@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "compile": "npx oz compile",
-    "test": "mocha --exit --timeout 10000 --recursive test",
+    "test": "npx oz compile && mocha --exit --timeout 10000 --recursive test --exclude **/*-hh.test.js",
     "coverage": "node coverage.js",
     "docs": "solidity-docgen"
   },
@@ -30,6 +30,7 @@
     "ganache-cli": "^6.10.1",
     "hardhat": "^2.1.1",
     "hardhat-deploy": "^0.7.0-beta.46",
+    "hardhat-gas-reporter": "^1.0.4",
     "mocha": "^8.1.3",
     "solidity-coverage": "^0.7.10",
     "solidity-docgen": "^0.5.7",

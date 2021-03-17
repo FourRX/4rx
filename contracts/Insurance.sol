@@ -39,10 +39,10 @@ contract Insurance is RewardsAndPenalties {
         return availableAmount;
     }
 
-    function _insureStake(Stake storage stake) internal {
+    function _insureStake(address user, Stake storage stake) internal {
         require(!stake.optInInsured && stake.active);
+        require(fourRXToken.transferFrom(user, address(this), _calcPercentage(stake.deposit, OPT_IN_INSURANCE_FEE_BP)));
 
-        stake.deposit = stake.deposit.sub(_calcPercentage(stake.deposit, OPT_IN_INSURANCE_FEE_BP));
         stake.optInInsured = true;
     }
 }

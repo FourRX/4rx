@@ -1,0 +1,148 @@
+{
+  "fileName": "StatsVars.sol",
+  "contractName": "StatsVars",
+  "source": "// SPDX-License-Identifier: MIT\npragma solidity ^0.6.12;\n\n\ncontract StatsVars {\n    // Stats\n    uint public totalDepositRewards;\n    uint public totalExited;\n}\n",
+  "sourcePath": "contracts/StatsVars.sol",
+  "sourceMap": "59:101:21:-:0;;;;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "59:101:21:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;97:31;;;:::i;:::-;;;;;;;;;;;;;;;;134:23;;;:::i;97:31::-;;;;:::o;134:23::-;;;;:::o",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "totalDepositRewards",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "totalExited",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "ast": {
+    "absolutePath": "contracts/StatsVars.sol",
+    "exportedSymbols": {
+      "StatsVars": [
+        7210
+      ]
+    },
+    "id": 7211,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 7205,
+        "literals": [
+          "solidity",
+          "^",
+          "0.6",
+          ".12"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "32:24:21"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 7210,
+        "linearizedBaseContracts": [
+          7210
+        ],
+        "name": "StatsVars",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "functionSelector": "7247b2b9",
+            "id": 7207,
+            "mutability": "mutable",
+            "name": "totalDepositRewards",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 7210,
+            "src": "97:31:21",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 7206,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "97:4:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "functionSelector": "91994b2c",
+            "id": 7209,
+            "mutability": "mutable",
+            "name": "totalExited",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 7210,
+            "src": "134:23:21",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 7208,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "134:4:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 7211,
+        "src": "59:101:21"
+      }
+    ],
+    "src": "32:129:21"
+  },
+  "bytecode": "0x6080604052348015600f57600080fd5b5060978061001e6000396000f3fe6080604052348015600f57600080fd5b506004361060325760003560e01c80637247b2b914603757806391994b2c14604f575b600080fd5b603d6055565b60408051918252519081900360200190f35b603d605b565b60005481565b6001548156fea2646970667358221220e228d5196cead2e407e267c97e168d069cc12065de7139b1e2c9b59341cf0cdb64736f6c634300060c0033",
+  "deployedBytecode": "0x6080604052348015600f57600080fd5b506004361060325760003560e01c80637247b2b914603757806391994b2c14604f575b600080fd5b603d6055565b60408051918252519081900360200190f35b603d605b565b60005481565b6001548156fea2646970667358221220e228d5196cead2e407e267c97e168d069cc12065de7139b1e2c9b59341cf0cdb64736f6c634300060c0033",
+  "compiler": {
+    "name": "solc",
+    "version": "0.6.12+commit.27d51765.Emscripten.clang",
+    "optimizer": {
+      "enabled": true,
+      "runs": 1
+    },
+    "evmVersion": "petersburg"
+  }
+}

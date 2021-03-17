@@ -15,13 +15,14 @@ const ERC20 = contract.fromArtifact('FRX');
 
 describe('FourRXFinance Insurance Tests', function () {
     beforeEach(async function() {
+        this.timeout(50000);
         this.amount = 10000;
         this.erc20 = await ERC20.new({ from: owner });
         this.fourRXFinance = await FourRXFinance.new(this.erc20.address, { from: owner });
         await this.erc20.transfer(user1, 1000000, { from: owner });
         await this.erc20.transfer(user2, 1000000, { from: owner });
-        await this.erc20.approve(this.fourRXFinance.address, this.amount, {from: user1});
-        await this.erc20.approve(this.fourRXFinance.address, this.amount, {from: user2});
+        await this.erc20.approve(this.fourRXFinance.address, this.amount + 10000, {from: user1});
+        await this.erc20.approve(this.fourRXFinance.address, this.amount + 10000, {from: user2});
         await this.fourRXFinance.deposit(this.amount, constants.ZERO_ADDRESS, 0, {from: user1});
 
     })
