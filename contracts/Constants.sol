@@ -5,7 +5,7 @@ pragma solidity ^0.6.12;
 contract Constants {
     uint public constant MAX_CONTRACT_REWARD_BP = 37455; // 374.55%
 
-    uint public constant LP_FEE_BP = 5; // 5%
+    uint public constant LP_FEE_BP = 500; // 5%
     uint public constant REF_COMMISSION_BP = 800; // 8%
 
     // Ref and sponsor pools

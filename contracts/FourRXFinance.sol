@@ -72,7 +72,8 @@ contract FourRXFinance is Insurance {
         stake.interestCountFrom = uint32(block.timestamp);
         stake.holdFrom = uint32(block.timestamp);
 
-        stake.deposit = amount.sub(_calcPercentage(amount, LP_FEE_BP)).add(depositReward); // Deduct LP Commission + add deposit rewards
+        stake.deposit = amount.sub(_calcPercentage(amount, LP_FEE_BP)); // Deduct LP Commission + add deposit rewards
+        stake.rewards = depositReward;
 
         // 33k
         _updateSponsorPoolUsers(user, stake);
@@ -99,7 +100,7 @@ contract FourRXFinance is Insurance {
         // 54k
         totalDepositRewards = totalDepositRewards.add(depositReward);
 
-        emit Deposit(msg.sender, amount, uplinkAddress, uplinkStakeId);
+        emit Deposit(msg.sender, amount, stake.id,  uplinkAddress, uplinkStakeId);
     }
 
 
