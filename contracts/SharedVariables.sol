@@ -12,6 +12,7 @@ import "./StatsVars.sol";
 
 contract SharedVariables is Constants, StatsVars, Events, PercentageCalculator, InterestCalculator, Utils {
     IERC20 public fourRXToken;
+    uint public fourRXTokenDecimals;
 
     address public devAddress = 0x64B8cb4C04Ba902010856d913B4e5DF940748Bf2; // Dummy address replace it for prod/dev
 

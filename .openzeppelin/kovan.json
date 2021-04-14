@@ -44,6 +44,26 @@
         "address": "0xc6bD5ac0D12C204556187B38E22Bf8C667A3DB3f",
         "kind": "NonProxy",
         "bytecodeHash": "e1f3668aa817a9feb948691398b7c7735979023cec273d9e5f588cbe39fe5eb5"
+      },
+      {
+        "address": "0x1B685D4840f76600139dFAC6A70E8151dd3D9C0A",
+        "kind": "NonProxy",
+        "bytecodeHash": "895e56aa88f76c82d226d42b532e66692a68dee34d19a093c34ed447367801ed"
+      },
+      {
+        "address": "0x3023Eb4Cb4c25900D5CE579756f1c29eFba7d91F",
+        "kind": "NonProxy",
+        "bytecodeHash": "ed09b74718293f6a4469239236c2a8152b5d2a994a7cc045412f07dc25b17021"
+      },
+      {
+        "address": "0x240DcD374D72CAC335299F1cbc9Ab6A96554c52B",
+        "kind": "NonProxy",
+        "bytecodeHash": "4fcb0b5f94a4507db31210e3641a228bad0c6ed3f7e0297a70226456fc2ad8c8"
+      },
+      {
+        "address": "0xdf95F9e97CC08C80ec4296484c42342b70812C52",
+        "kind": "NonProxy",
+        "bytecodeHash": "4d85a1be0512aff4bc55213649eb4cdb4291dfe2948eb2b2f31f9c1396ab2f95"
       }
     ],
     "4RXFinance/FRX": [
