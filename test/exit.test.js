@@ -16,7 +16,7 @@ describe('FourRXFinance Exit Tests', function () {
     beforeEach(async function() {
         this.amount = 10000;
         this.erc20 = await ERC20.new({ from: owner });
-        this.fourRXFinance = await FourRXFinance.new(this.erc20.address, { from: owner });
+        this.fourRXFinance = await FourRXFinance.new(this.erc20.address, 8, { from: owner });
         await this.erc20.transfer(user1, 1000000, { from: owner });
         await this.erc20.transfer(user2, 1000000, { from: owner });
         await this.erc20.approve(this.fourRXFinance.address, this.amount, {from: user1});
@@ -33,8 +33,8 @@ describe('FourRXFinance Exit Tests', function () {
             user: user1
         });
 
-        expect((await this.fourRXFinance.getUser(user1))['stakes'][0]['penalty']).to.be.bignumber.equals(new BN(5022));
+        expect((await this.fourRXFinance.getUser(user1))['stakes'][0]['penalty']).to.be.bignumber.equals(new BN(4750));
 
-        expect(await this.erc20.balanceOf(user1)).to.be.bignumber.equals(new BN(995023));
+        expect(await this.erc20.balanceOf(user1)).to.be.bignumber.equals(new BN(994750));
     });
 });

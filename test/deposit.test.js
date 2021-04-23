@@ -22,7 +22,7 @@ describe('FourRXFinance Deposit Tests', function () {
         await this.erc20.transfer(user2, 1000000, { from: owner });
         await this.erc20.transfer(user3, 1000000, { from: owner });
 
-        this.fourRXFinance = await FourRXFinance.new(this.erc20.address, { from: owner });
+        this.fourRXFinance = await FourRXFinance.new(this.erc20.address, 8, { from: owner });
         await this.erc20.approve(this.fourRXFinance.address, this.amount, {from: user1});
         await this.erc20.approve(this.fourRXFinance.address, this.amount, {from: user2});
         await this.erc20.approve(this.fourRXFinance.address, this.amount, {from: user3});
@@ -40,13 +40,13 @@ describe('FourRXFinance Deposit Tests', function () {
             uplinkStakeId: new BN(0)
         })
 
-        expect(await this.fourRXFinance.balanceOf(user1, 0)).to.be.bignumber.equals(new BN(880)); // Ref Bonus 700 + 90 Contract Rewards (1% of user's balance after removing lp commissions)
+        expect(await this.fourRXFinance.balanceOf(user1, 0)).to.be.bignumber.equals(new BN(800)); // Ref Bonus 700 + 90 Contract Rewards (1% of user's balance after removing lp commissions)
     });
 
     it('should give user rewards in 10 days', async function () {
         await time.increase(time.duration.days(10));
 
-        expect(await this.fourRXFinance.balanceOf(user1, 0)).to.be.bignumber.equals(new BN(60));
+        expect(await this.fourRXFinance.balanceOf(user1, 0)).to.be.bignumber.equals(new BN(19));
         // @todo: these comments are messed up now
         // 90 contract rewards
         // 45 percentage rewards
@@ -56,7 +56,7 @@ describe('FourRXFinance Deposit Tests', function () {
         await time.increase(time.duration.days(10));
         await this.fourRXFinance.deposit(this.amount, user1, 0, {from: user2});
 
-        expect(await this.fourRXFinance.balanceOf(user1, 0)).to.be.bignumber.equals(new BN(955));
+        expect(await this.fourRXFinance.balanceOf(user1, 0)).to.be.bignumber.equals(new BN(872));
         // @todo: these comments are messed up now
         // 36 hold rewards
         // 180 Contract rewards
