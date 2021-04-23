@@ -16,7 +16,7 @@ const ERC20 = contract.fromArtifact('FRX');
 describe('FourRXFinance Registration Test', function () {
     beforeEach(async function() {
         this.erc20 = await ERC20.new({ from: owner });
-        this.fourRXFinance = await FourRXFinance.new(this.erc20.address, { from: owner });
+        this.fourRXFinance = await FourRXFinance.new(this.erc20.address, 8, { from: owner });
         await this.erc20.transfer(user1, 1000000, { from: owner });
     })
 

@@ -15,7 +15,7 @@ describe('FourRXFinance Getter Test', function () {
     beforeEach(async function() {
         this.amount = 10000;
         this.erc20 = await ERC20.new({ from: owner });
-        this.fourRXFinance = await FourRXFinance.new(this.erc20.address, { from: owner });
+        this.fourRXFinance = await FourRXFinance.new(this.erc20.address, 8, { from: owner });
         await this.erc20.transfer(user1, 1000000, { from: owner });
         await this.erc20.transfer(user2, 1000000, { from: owner });
         await this.erc20.approve(this.fourRXFinance.address, this.amount, {from: user1});

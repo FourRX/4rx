@@ -18,7 +18,7 @@ describe('FourRXFinance Insurance Tests', function () {
         this.timeout(50000);
         this.amount = 10000;
         this.erc20 = await ERC20.new({ from: owner });
-        this.fourRXFinance = await FourRXFinance.new(this.erc20.address, { from: owner });
+        this.fourRXFinance = await FourRXFinance.new(this.erc20.address, 8, { from: owner });
         await this.erc20.transfer(user1, 1000000, { from: owner });
         await this.erc20.transfer(user2, 1000000, { from: owner });
         await this.erc20.approve(this.fourRXFinance.address, this.amount + 10000, {from: user1});
@@ -40,6 +40,8 @@ describe('FourRXFinance Insurance Tests', function () {
                 await this.fourRXFinance.withdraw(0, {from: user2});
             }
         }
+
+        await time.increase(time.duration.days(5));
 
         expect((await this.fourRXFinance.getContractInfo())[1]).to.be.equals(true);
         await expectRevert.unspecified(this.fourRXFinance.withdraw(0, {from: user1}));
