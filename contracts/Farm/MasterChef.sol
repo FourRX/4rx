@@ -8,39 +8,12 @@ import "@openzeppelin/contracts/utils/EnumerableSet.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
-import "./../ERC20/FRX.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "./IStrategy.sol";
 
 // Mint
 abstract contract FRXToken is ERC20 {
     function mint(address _to, uint256 _amount) public virtual;
-}
-
-// For interacting with our own strategy
-interface IStrategy {
-    // Total want tokens managed by strategy
-    function wantLockedTotal() external view returns (uint256);
-
-    // Sum of all shares of users to wantLockedTotal
-    function sharesTotal() external view returns (uint256);
-
-    // Main want token compounding function
-    function earn() external;
-
-    // Transfer want tokens autoFarm -> strategy
-    function deposit(address _userAddress, uint256 _wantAmt)
-    external
-    returns (uint256);
-
-    // Transfer want tokens strategy -> autoFarm
-    function withdraw(address _userAddress, uint256 _wantAmt)
-    external
-    returns (uint256);
-
-    function inCaseTokensGetStuck(
-        address _token,
-        uint256 _amount,
-        address _to
-    ) external;
 }
 
 contract FrxFarm is Ownable, ReentrancyGuard {
@@ -51,6 +24,8 @@ contract FrxFarm is Ownable, ReentrancyGuard {
     struct UserInfo {
         uint256 shares; // How many LP tokens the user has provided.
         uint256 rewardDebt; // Reward debt. See explanation below.
+
+        uint256 distributionDebt;
 
         // We do some fancy math here. Basically, any point in time, the amount of AUTO
         // entitled to a user but is pending to be distributed is:
@@ -70,6 +45,7 @@ contract FrxFarm is Ownable, ReentrancyGuard {
         uint256 allocPoint; // How many allocation points assigned to this pool. FRX to distribute per block.
         uint256 lastRewardBlock; // Last block number that FRX distribution occurs.
         uint256 accFRXPerShare; // Accumulated FRX per share, times 1e12. See below.
+        uint256 distributionDebt;
         address strat; // Strategy address that will auto compound want tokens
     }
 
@@ -83,6 +59,8 @@ contract FrxFarm is Ownable, ReentrancyGuard {
     uint256 public FRXPerBlock = 9e17; // FRX tokens created per block
     // Approx 30/4/2021
     uint256 public startBlock = 6996000; // https://bscscan.com/block/countdown/6996000
+
+    uint256 public distributionBP = 100; // 1% distribute to all investor in same farm
 
     PoolInfo[] public poolInfo; // Info of each pool.
     mapping(uint256 => mapping(address => UserInfo)) public userInfo; // Info of each user that stakes LP tokens.
@@ -119,6 +97,7 @@ contract FrxFarm is Ownable, ReentrancyGuard {
                 allocPoint : _allocPoint,
                 lastRewardBlock : lastRewardBlock,
                 accFRXPerShare : 0,
+                distributionDebt: 0,
                 strat : _strat
             })
         );
@@ -207,9 +186,17 @@ contract FrxFarm is Ownable, ReentrancyGuard {
         pool.lastRewardBlock = block.number;
     }
 
+    function syncUser(address _user, uint256 _pid) internal {
+        PoolInfo storage pool = poolInfo[_pid];
+        UserInfo storage user = userInfo[_pid][_user];
+        user.shares = user.shares.add(pool.distributionDebt.sub(user.distributionDebt).mul(user.shares.div(1e12)));
+        user.distributionDebt = pool.distributionDebt;
+    }
+
     // Want tokens moved from user -> AUTOFarm (AUTO allocation) -> Strat (compounding)
     function deposit(uint256 _pid, uint256 _wantAmt) public nonReentrant {
         updatePool(_pid);
+        syncUser(msg.sender, _pid);
         PoolInfo storage pool = poolInfo[_pid];
         UserInfo storage user = userInfo[_pid][msg.sender];
 
@@ -222,9 +209,13 @@ contract FrxFarm is Ownable, ReentrancyGuard {
         }
         if (_wantAmt > 0) {
             pool.want.safeTransferFrom(address(msg.sender), address(this), _wantAmt);
+            IStrategy strat = IStrategy(poolInfo[_pid].strat);
+            uint256 distributionAmount = _wantAmt.mul(distributionBP).div(10000);
+            pool.distributionDebt = pool.distributionDebt.add(distributionAmount.div(strat.sharesTotal().div(1e12)));
 
+            _wantAmt = _wantAmt.sub(distributionAmount);
             pool.want.safeIncreaseAllowance(pool.strat, _wantAmt);
-            uint256 sharesAdded = IStrategy(poolInfo[_pid].strat).deposit(msg.sender, _wantAmt);
+            uint256 sharesAdded = strat.deposit(msg.sender, _wantAmt);
             user.shares = user.shares.add(sharesAdded);
         }
 
@@ -235,7 +226,7 @@ contract FrxFarm is Ownable, ReentrancyGuard {
     // Withdraw LP tokens from MasterChef.
     function withdraw(uint256 _pid, uint256 _wantAmt) public nonReentrant {
         updatePool(_pid);
-
+        syncUser(msg.sender, _pid);
         PoolInfo storage pool = poolInfo[_pid];
         UserInfo storage user = userInfo[_pid][msg.sender];
 
