@@ -71,6 +71,25 @@
         "address": "0xC4671Cc3A4cC89c9F5040cfE20eC0e10f895d728",
         "kind": "NonProxy",
         "bytecodeHash": "5922512bf6c36d4eaac6e9b5a47843b25ecd3ed4febcc8a28900cca05ff5b88c"
+      },
+      {
+        "address": "0x30C980d9bb2bE78181C56f6A4a8577cA343036E4",
+        "kind": "NonProxy",
+        "bytecodeHash": "1f53b14e5c5a3c92ac3d672865a23b9817294b996a16df2e7a4f2c7d494c7117"
+      }
+    ],
+    "4RXFinance/FrxFarm": [
+      {
+        "address": "0x2c642b7f050e6859135c434DDC42d58dE234993f",
+        "kind": "NonProxy",
+        "bytecodeHash": "a1d948a100a2058d7b5dfcaef0fd405288b4f8125f3ed478428b53fc869c022b"
+      }
+    ],
+    "4RXFinance/StrategyFrx": [
+      {
+        "address": "0x7515e2875EC7414613da49D50398724632c73EaC",
+        "kind": "NonProxy",
+        "bytecodeHash": "5abee9fd3991deb2bd69503e6aca3a18f6046bd2fae9c9e35cc204c6ed56c233"
       }
     ]
   },

@@ -50,7 +50,7 @@ contract FrxFarm is Ownable, ReentrancyGuard {
     }
 
     // Token address
-    address public FRX = 0xc5A49b4CBe004b6FD55B30Ba1dE6AC360FF9765d;
+    address public FRX = 0x30C980d9bb2bE78181C56f6A4a8577cA343036E4;
     // Owner reward per block: 10%
     uint256 public ownerFRXReward = 1000;
     // Frx total supply: 200 mil = 200000000e18

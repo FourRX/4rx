@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@chainlink/contracts": "^0.1.7",
     "@openzeppelin/cli": "^2.8.2",
     "@openzeppelin/contract-loader": "^0.6.2",
     "@openzeppelin/contracts": "^3.3.0",
