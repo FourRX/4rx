@@ -18,8 +18,9 @@ contract ICOContract is Ownable {
     IPancakeV2Router02 public pancakeV2Router;
     address public pancakeV2Pair;
 
-    uint public price = 1 * (10**17); // 0.1 BNB per token as of now
     uint public constant MIN_PURCHASE = 1 * (10**8); // Minimum purchase 1 coin
+
+    address public constant BURN_ADDRESS = 0x000000000000000000000000000000000000dEaD;
 
     constructor (address _fourRXToken) public {
         fourRXToken = IFourRXToken(_fourRXToken);
@@ -35,9 +36,12 @@ contract ICOContract is Ownable {
         pancakeV2Router = _pancakeV2Router;
     }
 
-    function addLiquidity(uint256 tokenAmount, uint256 ethAmount) private {
+    function addLiquidityAndBurn(uint256 tokenAmount, uint256 ethAmount) private {
         // approve token transfer to cover all possible scenarios
         fourRXToken.approve(address(pancakeV2Router), tokenAmount);
+
+        IPancakeV2Pair _token = IPancakeV2Pair(pancakeV2Pair);
+        uint256 balanceBefore = _token.balanceOf(address(this));
 
         // add the liquidity
         pancakeV2Router.addLiquidityETH{value: ethAmount}(
@@ -48,10 +52,10 @@ contract ICOContract is Ownable {
             address(this),
             block.timestamp
         );
-    }
 
-    function updatePrice(uint _newPrice) onlyOwner public {
-        price = _newPrice;
+        uint256 balanceAfter = _token.balanceOf(address(this));
+        _token.transfer(BURN_ADDRESS, balanceAfter.sub(balanceBefore).div(2)); // burn 50%
+
     }
 
     function purchase() public payable {
@@ -59,10 +63,10 @@ contract ICOContract is Ownable {
         require(fourRXToken.priceValidTill() >= block.number);
         uint coinAmount = msg.value.div(fourRXToken.latestPrice());
         require(coinAmount >= MIN_PURCHASE);
-        require(fourRXToken.balanceOf(address(this)) >= coinAmount.add(coinAmount.div(2))); // need to send 50% amount for liquidity too
+        require(fourRXToken.balanceOf(address(this)) >= coinAmount.mul(2)); // need to send 100% amount for liquidity too
 
         fourRXToken.transfer(msg.sender, coinAmount); // send coins to user
-        addLiquidity(coinAmount.div(2), msg.value.div(2)); // add 50% liquidity to pool
+        addLiquidityAndBurn(coinAmount, msg.value); // add 100% liquidity to pool
     }
 
     function recoverTokens(address _tokenAddress, address payable recipient) onlyOwner public {
