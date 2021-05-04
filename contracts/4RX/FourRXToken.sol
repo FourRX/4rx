@@ -21,12 +21,12 @@ contract FourRXToken is ERC20, ChainlinkClient  {
 
     string private API_URL = "http://node4279.myfcloud.com:60699/indexPrice4RXUrl";
 
-    constructor() public ERC20("4RX", "4RX") {
+    constructor(address _oracle) public ERC20("4RX", "4RX") {
         _mint(msg.sender, TOTAL_SUPPLY*(10**uint(DECIMAL)));
         _setupDecimals(DECIMAL);
 
         setPublicChainlinkToken();
-        oracle = 0x2f90A6D021db21e1B2A077c5a37B3C7E75D15b7e;
+        oracle = _oracle; // 0x2f90A6D021db21e1B2A077c5a37B3C7E75D15b7e // kovan testnet chainlink oracle
         jobId = "29fa9aa13bf1468788b7cc4a500a45b8";
         fee = 0.1 * 10 ** 18;
     }
@@ -55,10 +55,4 @@ contract FourRXToken is ERC20, ChainlinkClient  {
         priceSnaps[block.number] = _price;
         snapBlocks.push(block.number);
     }
-
-    function withdrawLink() external {
-        LinkTokenInterface linkToken = LinkTokenInterface(chainlinkTokenAddress());
-        require(linkToken.transfer(msg.sender, linkToken.balanceOf(address(this))), "Unable to transfer");
-    }
-
 }
