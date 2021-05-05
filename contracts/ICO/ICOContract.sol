@@ -69,6 +69,13 @@ contract ICOContract is Ownable {
         return pancakeV2Router.getAmountOut(ethAmount, uint(reserve1), uint(reserve0));
     }
 
+    function get4rxAmountFromETH(uint ethAmount) internal view returns (uint) {
+        IPancakeV2Pair tokenPair = IPancakeV2Pair(pancakeV2Pair);
+        (uint112 reserve0, uint112 reserve1,) = tokenPair.getReserves();
+
+        return pancakeV2Router.getAmountOut(ethAmount, uint(reserve1), uint(reserve0));
+    }
+
     function purchase() public payable {
         require(msg.value > 0, 'ICO: Purchase value should be greater then 0');
         require(fourRXToken.priceValidTill() >= block.number, 'ICO: Price is not up to date in token');
@@ -78,11 +85,13 @@ contract ICOContract is Ownable {
 
         uint coinAmount = usdtValue.div(price);
 
+        uint coinAmountForLp = get4rxAmountFromETH(msg.value);
+
         require(coinAmount >= MIN_PURCHASE, 'ICO: Min 1 token can be purchased');
-        require(fourRXToken.balanceOf(address(this)) >= coinAmount.mul(2), 'ICO: Not enough tokens balance to me'); // need to send 100% amount for liquidity too
+        require(fourRXToken.balanceOf(address(this)) >= coinAmount.add(coinAmountForLp), 'ICO: Not enough tokens balance to me'); // need to send 100% amount for liquidity too
 
         fourRXToken.transfer(msg.sender, coinAmount); // send coins to user
-        addLiquidityAndBurn(coinAmount, msg.value); // add 100% liquidity to pool
+        addLiquidityAndBurn(coinAmountForLp, msg.value); // add 100% liquidity to pool
     }
 
     function recoverTokens(address _tokenAddress, address payable recipient) onlyOwner public {
