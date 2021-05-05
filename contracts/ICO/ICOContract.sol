@@ -17,7 +17,9 @@ contract ICOContract is Ownable {
     uint public constant MIN_PURCHASE = 1 * (10**8); // Minimum purchase 1 coin
 
     address public constant BURN_ADDRESS = 0x000000000000000000000000000000000000dEaD;
-    address public constant USDT_ADDRESS = 0x55d398326f99059fF775485246999027B3197955; // BNB
+    address public constant USDT_ADDRESS = 0x07de306FF27a2B630B1141956844eB1552B956B5; // Kovan
+
+    uint public constant USDT_DECIMAL = 6;
 
     IFourRXToken fourRXToken;
     IPancakeV2Router02 public pancakeV2Router;
@@ -26,8 +28,8 @@ contract ICOContract is Ownable {
     constructor (address _fourRXToken, address _pairAddress) public {
         fourRXToken = IFourRXToken(_fourRXToken);
 
-        // IPancakeV2Router02 _pancakeV2Router = IPancakeV2Router02(0x05fF2B0DB69458A0750badebc4f9e13aDd608C7F); // Mainnet
-        IPancakeV2Router02 _pancakeV2Router = IPancakeV2Router02(0xD99D1c33F9fC3444f8101754aBC46c52416550D1); // testnet // https://twitter.com/PancakeSwap/status/1369547285160370182
+        // IPancakeV2Router02 _pancakeV2Router = IPancakeV2Router02(0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D); // Mainnet
+        IPancakeV2Router02 _pancakeV2Router = IPancakeV2Router02(0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D); // kovan
 
         // Create a uniswap pair for fourRXToken
         pancakeV2Pair = _pairAddress;
@@ -45,7 +47,7 @@ contract ICOContract is Ownable {
 
         // add the liquidity
         pancakeV2Router.addLiquidityETH{value: ethAmount}(
-            address(this),
+            address(fourRXToken),
             tokenAmount,
             0, // slippage is unavoidable
             0, // slippage is unavoidable
@@ -68,16 +70,16 @@ contract ICOContract is Ownable {
     }
 
     function purchase() public payable {
-        require(msg.value > 0);
-        require(fourRXToken.priceValidTill() >= block.number);
+        require(msg.value > 0, 'ICO: Purchase value should be greater then 0');
+        require(fourRXToken.priceValidTill() >= block.number, 'ICO: Price is not up to date in token');
 
-        uint price = fourRXToken.latestPrice();
-        uint usdtValue = getUSDTFromETH(msg.value); // convert received BNB to USDT equivalent
+        uint price = fourRXToken.latestPrice().div(1e8);
+        uint usdtValue = getUSDTFromETH(msg.value).mul(10**(18 - USDT_DECIMAL)); // convert received BNB/ETH to USDT equivalent + add 12 zeros to make sure price is matched upto decimal places
 
         uint coinAmount = usdtValue.div(price);
 
-        require(coinAmount >= MIN_PURCHASE);
-        require(fourRXToken.balanceOf(address(this)) >= coinAmount.mul(2)); // need to send 100% amount for liquidity too
+        require(coinAmount >= MIN_PURCHASE, 'ICO: Min 1 token can be purchased');
+        require(fourRXToken.balanceOf(address(this)) >= coinAmount.mul(2), 'ICO: Not enough tokens balance to me'); // need to send 100% amount for liquidity too
 
         fourRXToken.transfer(msg.sender, coinAmount); // send coins to user
         addLiquidityAndBurn(coinAmount, msg.value); // add 100% liquidity to pool
@@ -91,4 +93,6 @@ contract ICOContract is Ownable {
             token.transfer(recipient, token.balanceOf(address(this)));
         }
     }
+
+    receive() external payable {}
 }
