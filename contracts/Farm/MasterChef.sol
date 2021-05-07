@@ -44,7 +44,7 @@ contract FrxFarm is Ownable, ReentrancyGuard {
         IERC20 want; // Address of the want token.
         uint256 allocPoint; // How many allocation points assigned to this pool. FRX to distribute per block.
         uint256 lastRewardBlock; // Last block number that FRX distribution occurs.
-        uint256 accFRXPerShare; // Accumulated FRX per share, times 1e12. See below.
+        uint256 accFRXPerShare; // Accumulated FRX per share, times 1e8. See below.
         uint256 distributionDebt;
         address strat; // Strategy address that will auto compound want tokens
     }
@@ -135,9 +135,9 @@ contract FrxFarm is Ownable, ReentrancyGuard {
         if (block.number > pool.lastRewardBlock && sharesTotal != 0) {
             uint256 multiplier = getMultiplier(pool.lastRewardBlock, block.number);
             uint256 FRXReward = multiplier.mul(FRXPerBlock).mul(pool.allocPoint).div(totalAllocPoint);
-            accFRXPerShare = accFRXPerShare.add(FRXReward.mul(1e12).div(sharesTotal));
+            accFRXPerShare = accFRXPerShare.add(FRXReward.mul(1e8).div(sharesTotal));
         }
-        return user.shares.mul(accFRXPerShare).div(1e12).sub(user.rewardDebt);
+        return user.shares.mul(accFRXPerShare).div(1e8).sub(user.rewardDebt);
     }
 
     // View function to see staked Want tokens on frontend.
@@ -182,14 +182,14 @@ contract FrxFarm is Ownable, ReentrancyGuard {
         FRXToken(FRX).mint(owner(), FRXReward.mul(ownerFRXReward).div(10000));
         FRXToken(FRX).mint(address(this), FRXReward);
 
-        pool.accFRXPerShare = pool.accFRXPerShare.add(FRXReward.mul(1e12).div(sharesTotal));
+        pool.accFRXPerShare = pool.accFRXPerShare.add(FRXReward.mul(1e8).div(sharesTotal));
         pool.lastRewardBlock = block.number;
     }
 
     function syncUser(address _user, uint256 _pid) internal {
         PoolInfo storage pool = poolInfo[_pid];
         UserInfo storage user = userInfo[_pid][_user];
-        user.shares = user.shares.add(pool.distributionDebt.sub(user.distributionDebt).mul(user.shares.div(1e12)));
+        user.shares = user.shares.add(pool.distributionDebt.sub(user.distributionDebt).mul(user.shares.div(1e8)));
         user.distributionDebt = pool.distributionDebt;
     }
 
@@ -201,7 +201,7 @@ contract FrxFarm is Ownable, ReentrancyGuard {
         UserInfo storage user = userInfo[_pid][msg.sender];
 
         if (user.shares > 0) {
-            uint256 pending = user.shares.mul(pool.accFRXPerShare).div(1e12).sub(user.rewardDebt);
+            uint256 pending = user.shares.mul(pool.accFRXPerShare).div(1e8).sub(user.rewardDebt);
 
             if (pending > 0) {
                 safeFRXTransfer(msg.sender, pending);
@@ -213,7 +213,7 @@ contract FrxFarm is Ownable, ReentrancyGuard {
 
             if (strat.sharesTotal() > 0 ) {
                 uint256 distributionAmount = _wantAmt.mul(distributionBP).div(10000);
-                pool.distributionDebt = pool.distributionDebt.add(distributionAmount.div(strat.sharesTotal().div(1e12)));
+                pool.distributionDebt = pool.distributionDebt.add(distributionAmount.div(strat.sharesTotal().div(1e8)));
                 _wantAmt = _wantAmt.sub(distributionAmount);
             }
 
@@ -222,7 +222,7 @@ contract FrxFarm is Ownable, ReentrancyGuard {
             user.shares = user.shares.add(sharesAdded);
         }
 
-        user.rewardDebt = user.shares.mul(pool.accFRXPerShare).div(1e12);
+        user.rewardDebt = user.shares.mul(pool.accFRXPerShare).div(1e8);
         emit Deposit(msg.sender, _pid, _wantAmt);
     }
 
@@ -240,7 +240,7 @@ contract FrxFarm is Ownable, ReentrancyGuard {
         require(sharesTotal > 0, "sharesTotal is 0");
 
         // Withdraw pending AUTO
-        uint256 pending = user.shares.mul(pool.accFRXPerShare).div(1e12).sub(user.rewardDebt);
+        uint256 pending = user.shares.mul(pool.accFRXPerShare).div(1e8).sub(user.rewardDebt);
 
         if (pending > 0) {
             safeFRXTransfer(msg.sender, pending);
@@ -268,7 +268,7 @@ contract FrxFarm is Ownable, ReentrancyGuard {
             pool.want.safeTransfer(address(msg.sender), _wantAmt);
         }
 
-        user.rewardDebt = user.shares.mul(pool.accFRXPerShare).div(1e12);
+        user.rewardDebt = user.shares.mul(pool.accFRXPerShare).div(1e8);
         emit Withdraw(msg.sender, _pid, _wantAmt);
     }
 
