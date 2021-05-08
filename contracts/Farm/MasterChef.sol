@@ -53,10 +53,10 @@ contract FrxFarm is Ownable, ReentrancyGuard {
     address public FRX = 0x30C980d9bb2bE78181C56f6A4a8577cA343036E4;
     // Owner reward per block: 10%
     uint256 public ownerFRXReward = 1000;
-    // Frx total supply: 200 mil = 200000000e18
-    uint256 public FRXMaxSupply = 200000000e18;
+    // Frx total supply: 200 mil = 200000000e8
+    uint256 public FRXMaxSupply = 200000000e8;
     // Frxs per block: (1e18 - owner 10%)
-    uint256 public FRXPerBlock = 9e17; // FRX tokens created per block
+    uint256 public FRXPerBlock = 9e8; // FRX tokens created per block
     // Approx 30/4/2021
     uint256 public startBlock = 6996000; // https://bscscan.com/block/countdown/6996000
 
