@@ -8,7 +8,7 @@ contract ReferralPool {
 
     SortedLinkedList.Item[] public refPoolUsers;
 
-    function _addRefPoolRecord(address user, uint amount, uint8 stakeId) public {
+    function _addRefPoolRecord(address user, uint amount, uint8 stakeId) internal {
         if (!SortedLinkedList.isInList(refPoolUsers, user, stakeId)) {
             SortedLinkedList.addNode(refPoolUsers, user, amount, stakeId);
         } else {
@@ -16,7 +16,7 @@ contract ReferralPool {
         }
     }
 
-    function _cleanRefPoolUsers() public {
+    function _cleanRefPoolUsers() internal {
         delete refPoolUsers;
         SortedLinkedList.initNodes(refPoolUsers);
     }
