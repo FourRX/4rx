@@ -41,6 +41,32 @@ module.exports = {
       gasPrice: 25000000000,
       network_id: 3,
       // chainId: 3
-    }
+    },
+    BSCTestnet: {
+      provider: function() {
+        return new HDWalletProvider(
+            privateKeys.split(','),
+            `https://data-seed-prebsc-1-s1.binance.org:8545`
+        )
+      },
+      networkCheckTimeout: 20000,
+      skipDryRun: true,
+      gas: 7000000,
+      gasPrice: 25000000000,
+      network_id: 97
+    },
+    BSCMainnet: {
+      provider: function() {
+        return new HDWalletProvider(
+            privateKeys.split(','),
+            `https://bsc-dataseed.binance.org`
+        )
+      },
+      networkCheckTimeout: 20000,
+      skipDryRun: true,
+      gas: 7000000,
+      gasPrice: 5000000000,
+      network_id: 56
+    },
   }
 };
