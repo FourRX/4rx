@@ -15,7 +15,7 @@ contract Pools is SponsorPool, ReferralPool, SharedVariables {
 
     function _resetPools() internal {
         _cleanSponsorPoolUsers();
-        _cleanRefPoolUsers();
+        _cleanReferralPoolUsers();
         delete refPoolBalance;
         delete sponsorPoolBalance;
         poolDrewAt = uint32(block.timestamp);
@@ -28,7 +28,7 @@ contract Pools is SponsorPool, ReferralPool, SharedVariables {
 
     // Reorganise top ref-pool users to draw pool for
     function _updateRefPoolUsers(User memory uplinkUser , Stake memory stake, uint8 uplinkUserStakeId) internal {
-        _addRefPoolRecord(uplinkUser.wallet, stake.deposit, uplinkUserStakeId);
+        _addReferralPoolRecord(uplinkUser.wallet, stake.deposit, uplinkUserStakeId);
     }
 
     function drawPool() public {

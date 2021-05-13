@@ -18,7 +18,7 @@ contract RewardsAndPenalties is Pools {
         _updateRefPoolUsers(uplinkUser, stake, uplinkStakeId);
     }
 
-    function _calcDepositRewards(uint amount) internal view returns (uint) {
+    function _calcDepositRewards(uint amount) internal pure returns (uint) {
         uint rewardPercent = 0;
 
         if (amount > 175 * (10**fourRXTokenDecimals)) {
@@ -49,7 +49,7 @@ contract RewardsAndPenalties is Pools {
     }
 
     function _calcContractBonus(Stake memory stake) internal view returns (uint) {
-        uint contractBonusPercent = fourRXToken.balanceOf(address(this)).div(10**fourRXTokenDecimals).mul(CONTRACT_BONUS_PER_UNIT_BP).div(CONTRACT_BONUS_UNIT);
+        uint contractBonusPercent = fourRXToken.balanceOf(address(this)).mul(CONTRACT_BONUS_PER_UNIT_BP).div(CONTRACT_BONUS_UNIT).div(10**fourRXTokenDecimals);
 
         if (contractBonusPercent > MAX_CONTRACT_BONUS_BP) {
             contractBonusPercent = MAX_CONTRACT_BONUS_BP;
@@ -59,8 +59,7 @@ contract RewardsAndPenalties is Pools {
     }
 
     function _calcHoldRewards(Stake memory stake) internal view returns (uint) {
-        uint holdPeriods = (block.timestamp).sub(stake.holdFrom).div(HOLD_BONUS_UNIT);
-        uint holdBonusPercent = holdPeriods.mul(HOLD_BONUS_PER_UNIT_BP);
+        uint holdBonusPercent = (block.timestamp).sub(stake.holdFrom).mul(HOLD_BONUS_PER_UNIT_BP).div(HOLD_BONUS_UNIT);
 
         if (holdBonusPercent > MAX_HOLD_BONUS_BP) {
             holdBonusPercent = MAX_HOLD_BONUS_BP;

@@ -10,9 +10,9 @@ import "./Insurance.sol";
 /// @dev
 contract FourRXFinance is Insurance {
 
-    constructor(address fourRXTokenAddress, uint _fourRXTokenDecimals) public {
+    constructor(address _devAddress, address fourRXTokenAddress) public {
+        devAddress = _devAddress;
         fourRXToken = IERC20(fourRXTokenAddress);
-        fourRXTokenDecimals = _fourRXTokenDecimals;
 
         // Ref Bonus // 12 Max Participants
         refPoolBonuses.push(2000); // 20%
@@ -141,8 +141,6 @@ contract FourRXFinance is Insurance {
 
         availableAmount = availableAmount.sub(penalty);
 
-        fourRXToken.transfer(user.wallet, availableAmount);
-
         stake.withdrawn = stake.withdrawn.add(availableAmount);
         stake.lastWithdrawalAt = uint32(block.timestamp);
         stake.holdFrom = uint32(block.timestamp);
@@ -154,6 +152,8 @@ contract FourRXFinance is Insurance {
         }
 
         _checkForBaseInsuranceTrigger();
+
+        fourRXToken.transfer(user.wallet, availableAmount);
 
         emit Withdrawn(user.wallet, availableAmount);
     }
@@ -202,8 +202,8 @@ contract FourRXFinance is Insurance {
     function withdrawDevFee(address withdrawingAddress, uint amount) external {
         require(msg.sender == devAddress);
         require(amount <= devBalance);
-        fourRXToken.transfer(withdrawingAddress, amount);
         devBalance = devBalance.sub(amount);
+        fourRXToken.transfer(withdrawingAddress, amount);
     }
 
     function updateDevAddress(address newDevAddress) external {

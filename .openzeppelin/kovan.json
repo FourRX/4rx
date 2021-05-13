@@ -88,6 +88,11 @@
         "address": "0x9d783eAe0447E7963436F9585bD14e3a5a676387",
         "kind": "NonProxy",
         "bytecodeHash": "485be7513209fa021f54b5dca7b1289f2ec65ec2077fcd3e06b4a37cf1409f1a"
+      },
+      {
+        "address": "0xe1406e7bc05a8611D80f5D8334ac56587B49e2ab",
+        "kind": "NonProxy",
+        "bytecodeHash": "bd250b829949f9169e07ac6d90bb2a659b891efffe12a95094289736052142fe"
       }
     ],
     "4RXFinance/StrategyFrx": [
@@ -98,6 +103,11 @@
       },
       {
         "address": "0xE9bB64fbC33420e279c12CD134324C64CE183Ee0",
+        "kind": "NonProxy",
+        "bytecodeHash": "68671478663a23a1ff91544c00c004dd7307ade4d45a8830ba5e18b0046710ee"
+      },
+      {
+        "address": "0x07d8487A32bbF0Cb7a1b154Dd69e243D9daf3823",
         "kind": "NonProxy",
         "bytecodeHash": "68671478663a23a1ff91544c00c004dd7307ade4d45a8830ba5e18b0046710ee"
       }
