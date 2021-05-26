@@ -26,6 +26,8 @@ contract ICOContract is Ownable {
     address public pancakeV2Pair;
 
     constructor (address _fourRXToken, address _pairAddress) public {
+        require(_fourRXToken != address(0), 'ICOContract: Token address cannot be 0');
+        require(_pairAddress != address(0), 'ICOContract: Pair address cannot be 0');
         fourRXToken = IFourRXToken(_fourRXToken);
 
         // IPancakeV2Router02 _pancakeV2Router = IPancakeV2Router02(0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D); // Mainnet
@@ -76,7 +78,7 @@ contract ICOContract is Ownable {
         return pancakeV2Router.getAmountOut(ethAmount, uint(reserve1), uint(reserve0));
     }
 
-    function purchase() public payable {
+    function purchase() external payable {
         require(msg.value > 0, 'ICO: Purchase value should be greater then 0');
         require(fourRXToken.priceValidTill() >= block.number, 'ICO: Price is not up to date in token');
 
@@ -94,7 +96,7 @@ contract ICOContract is Ownable {
         addLiquidityAndBurn(coinAmountForLp, msg.value); // add 100% liquidity to pool
     }
 
-    function recoverTokens(address _tokenAddress, address payable recipient) onlyOwner public {
+    function recoverTokens(address _tokenAddress, address payable recipient) onlyOwner external {
         if (_tokenAddress == address(0)) {
             recipient.transfer(address(this).balance);
         } else {

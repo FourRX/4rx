@@ -50,17 +50,17 @@ contract FrxFarm is Ownable, ReentrancyGuard {
     }
 
     // Token address
-    address public FRX = 0x30C980d9bb2bE78181C56f6A4a8577cA343036E4;
+    address public constant FRX = 0x30C980d9bb2bE78181C56f6A4a8577cA343036E4;
     // Owner reward per block: 10%
-    uint256 public ownerFRXReward = 1000;
+    uint256 public constant ownerFRXReward = 1000;
     // Frx total supply: 200 mil = 200000000e8
-    uint256 public FRXMaxSupply = 200000000e8;
+    uint256 public constant FRXMaxSupply = 200000000e8;
     // Frxs per block: (1e18 - owner 10%)
-    uint256 public FRXPerBlock = 9e8; // FRX tokens created per block
+    uint256 public constant FRXPerBlock = 9e8; // FRX tokens created per block
     // Approx 30/4/2021
-    uint256 public startBlock = 6996000; // https://bscscan.com/block/countdown/6996000
+    uint256 public constant startBlock = 6996000; // https://bscscan.com/block/countdown/6996000
 
-    uint256 public distributionBP = 100; // 1% distribute to all investor in same farm
+    uint256 public constant distributionBP = 100; // 1% distribute to all investor in same farm
 
     PoolInfo[] public poolInfo; // Info of each pool.
     mapping(uint256 => mapping(address => UserInfo)) public userInfo; // Info of each user that stakes LP tokens.
@@ -86,9 +86,6 @@ contract FrxFarm is Ownable, ReentrancyGuard {
         bool _withUpdate,
         address _strat
     ) public onlyOwner {
-        if (_withUpdate) {
-            massUpdatePools();
-        }
         uint256 lastRewardBlock = block.number > startBlock ? block.number : startBlock;
         totalAllocPoint = totalAllocPoint.add(_allocPoint);
         poolInfo.push(
@@ -101,6 +98,10 @@ contract FrxFarm is Ownable, ReentrancyGuard {
                 strat : _strat
             })
         );
+
+        if (_withUpdate) {
+            massUpdatePools();
+        }
     }
 
     // Update the given pool's FRX allocation point. Can only be called by the owner.
@@ -119,7 +120,7 @@ contract FrxFarm is Ownable, ReentrancyGuard {
     }
 
     // Return reward multiplier over the given _from to _to block.
-    function getMultiplier(uint256 _from, uint256 _to) public view returns (uint256) {
+    function getMultiplier(uint256 _from, uint256 _to) internal view returns (uint256) {
         if (IERC20(FRX).totalSupply() >= FRXMaxSupply) {
             return 0;
         }
@@ -179,11 +180,11 @@ contract FrxFarm is Ownable, ReentrancyGuard {
         }
         uint256 FRXReward = multiplier.mul(FRXPerBlock).mul(pool.allocPoint).div(totalAllocPoint);
 
-        FRXToken(FRX).mint(owner(), FRXReward.mul(ownerFRXReward).div(10000));
-        FRXToken(FRX).mint(address(this), FRXReward);
-
         pool.accFRXPerShare = pool.accFRXPerShare.add(FRXReward.mul(1e8).div(sharesTotal));
         pool.lastRewardBlock = block.number;
+
+        FRXToken(FRX).mint(owner(), FRXReward.mul(ownerFRXReward).div(10000));
+        FRXToken(FRX).mint(address(this), FRXReward);
     }
 
     function syncUser(address _user, uint256 _pid) internal {
@@ -208,18 +209,19 @@ contract FrxFarm is Ownable, ReentrancyGuard {
             }
         }
         if (_wantAmt > 0) {
-            pool.want.safeTransferFrom(address(msg.sender), address(this), _wantAmt);
             IStrategy strat = IStrategy(poolInfo[_pid].strat);
+            uint _finalWantAmt = _wantAmt;
 
             if (strat.sharesTotal() > 0 ) {
                 uint256 distributionAmount = _wantAmt.mul(distributionBP).div(10000);
                 pool.distributionDebt = pool.distributionDebt.add(distributionAmount.div(strat.sharesTotal().div(1e8)));
-                _wantAmt = _wantAmt.sub(distributionAmount);
+                _finalWantAmt = _wantAmt.sub(distributionAmount);
             }
 
-            pool.want.safeIncreaseAllowance(pool.strat, _wantAmt);
-            uint256 sharesAdded = strat.deposit(msg.sender, _wantAmt);
+            pool.want.safeIncreaseAllowance(pool.strat, _finalWantAmt);
+            uint256 sharesAdded = strat.deposit(msg.sender, _finalWantAmt);
             user.shares = user.shares.add(sharesAdded);
+            pool.want.safeTransferFrom(address(msg.sender), address(this), _wantAmt);
         }
 
         user.rewardDebt = user.shares.mul(pool.accFRXPerShare).div(1e8);
@@ -241,10 +243,6 @@ contract FrxFarm is Ownable, ReentrancyGuard {
 
         // Withdraw pending AUTO
         uint256 pending = user.shares.mul(pool.accFRXPerShare).div(1e8).sub(user.rewardDebt);
-
-        if (pending > 0) {
-            safeFRXTransfer(msg.sender, pending);
-        }
 
         // Withdraw want tokens
         uint256 amount = user.shares.mul(wantLockedTotal).div(sharesTotal);
@@ -269,6 +267,11 @@ contract FrxFarm is Ownable, ReentrancyGuard {
         }
 
         user.rewardDebt = user.shares.mul(pool.accFRXPerShare).div(1e8);
+
+        if (pending > 0) {
+            safeFRXTransfer(msg.sender, pending);
+        }
+
         emit Withdraw(msg.sender, _pid, _wantAmt);
     }
 
