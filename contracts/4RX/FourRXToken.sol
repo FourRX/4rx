@@ -19,9 +19,12 @@ contract FourRXToken is ERC20, ChainlinkClient  {
     bytes32 private jobId;
     uint256 private fee;
 
-    string private API_URL = "http://node4279.myfcloud.com:60699/indexPrice4RXUrl";
+    string private constant API_URL = "http://node4279.myfcloud.com:60699/indexPrice4RXUrl";
 
     constructor(address _oracle, address _linkToken) public ERC20("4RX", "4RX") {
+        require(_oracle != address(0), 'FourRXToken: Oracle cannot be 0 address');
+        require(_linkToken != address(0), 'FourRXToken: LinkToken cannot be 0 address');
+
         _mint(msg.sender, TOTAL_SUPPLY*(10**uint(DECIMAL)));
         _setupDecimals(DECIMAL);
 
