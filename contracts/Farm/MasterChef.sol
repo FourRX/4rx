@@ -135,8 +135,7 @@ contract FrxFarm is Ownable, ReentrancyGuard {
         uint256 sharesTotal = IStrategy(pool.strat).sharesTotal();
         if (block.number > pool.lastRewardBlock && sharesTotal != 0) {
             uint256 multiplier = getMultiplier(pool.lastRewardBlock, block.number);
-            uint256 FRXReward = multiplier.mul(FRXPerBlock).mul(pool.allocPoint).div(totalAllocPoint);
-            accFRXPerShare = accFRXPerShare.add(FRXReward.mul(1e8).div(sharesTotal));
+            accFRXPerShare = accFRXPerShare.add(multiplier.mul(FRXPerBlock).mul(pool.allocPoint).mul(1e8).div(totalAllocPoint).div(sharesTotal));
         }
         return user.shares.mul(accFRXPerShare).div(1e8).sub(user.rewardDebt);
     }
@@ -178,19 +177,19 @@ contract FrxFarm is Ownable, ReentrancyGuard {
         if (multiplier <= 0) {
             return;
         }
-        uint256 FRXReward = multiplier.mul(FRXPerBlock).mul(pool.allocPoint).div(totalAllocPoint);
+        uint256 FRXReward = multiplier.mul(FRXPerBlock).mul(pool.allocPoint);
 
-        pool.accFRXPerShare = pool.accFRXPerShare.add(FRXReward.mul(1e8).div(sharesTotal));
+        pool.accFRXPerShare = pool.accFRXPerShare.add(FRXReward.mul(1e8).div(totalAllocPoint).div(sharesTotal));
         pool.lastRewardBlock = block.number;
 
-        FRXToken(FRX).mint(owner(), FRXReward.mul(ownerFRXReward).div(10000));
-        FRXToken(FRX).mint(address(this), FRXReward);
+        FRXToken(FRX).mint(owner(), FRXReward.mul(ownerFRXReward).div(totalAllocPoint).div(10000));
+        FRXToken(FRX).mint(address(this), FRXReward.div(totalAllocPoint));
     }
 
     function syncUser(address _user, uint256 _pid) internal {
         PoolInfo storage pool = poolInfo[_pid];
         UserInfo storage user = userInfo[_pid][_user];
-        user.shares = user.shares.add(pool.distributionDebt.sub(user.distributionDebt).mul(user.shares.div(1e8)));
+        user.shares = user.shares.add(pool.distributionDebt.sub(user.distributionDebt).mul(user.shares).div(1e8));
         user.distributionDebt = pool.distributionDebt;
     }
 
