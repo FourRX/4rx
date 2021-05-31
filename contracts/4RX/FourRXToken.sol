@@ -7,7 +7,7 @@ import "@chainlink/contracts/src/v0.6/ChainlinkClient.sol";
 
 contract FourRXToken is ERC20, ChainlinkClient  {
 
-    uint private constant TOTAL_SUPPLY = 200*(10**6); // 200M
+    uint private constant TOTAL_SUPPLY = 100*(10**3); // 100K
     uint8 private constant DECIMAL = 8;
 
     uint public latestPrice;
