@@ -46,20 +46,19 @@ contract FourRXFinance is Insurance {
     }
 
     function deposit(uint amount, address uplinkAddress, uint8 uplinkStakeId) external {
-        // 2k
         require(
             uplinkAddress == address(0) ||
             (users[uplinkAddress].wallet != address(0) && users[uplinkAddress].stakes[uplinkStakeId].active)
-        ); // Either uplink must be registered and be a active deposit, 0 address
+        ); // Either uplink must be registered and be a active deposit or 0 address
 
         User storage user = users[msg.sender];
-        // 1k
+
         if (users[msg.sender].stakes.length > 0) {
             require(amount >= users[msg.sender].stakes[user.stakes.length - 1].deposit.mul(2)); // deposit amount must be greater 2x then last deposit
         }
-        // 30k
+
         require(fourRXToken.transferFrom(msg.sender, address(this), amount));
-        // 66k
+
         drawPool(); // Draw old pool if qualified, and we're pretty sure that this stake is going to be created
 
         uint depositReward = _calcDepositRewards(amount);
@@ -68,6 +67,7 @@ contract FourRXFinance is Insurance {
 
         user.wallet = msg.sender;
 
+        stake.origDeposit = amount;
         stake.id = uint8(user.stakes.length);
         stake.active = true;
         stake.interestCountFrom = uint32(block.timestamp);
@@ -76,20 +76,18 @@ contract FourRXFinance is Insurance {
         stake.deposit = amount.sub(_calcPercentage(amount, LP_FEE_BP)); // Deduct LP Commission
         stake.rewards = depositReward;
 
-        // 33k
         _updateSponsorPoolUsers(user, stake);
-        // 54k
+
         if (uplinkAddress != address(0)) {
             _distributeReferralReward(amount, stake, uplinkAddress, uplinkStakeId);
         }
 
         user.stakes.push(stake);
-        // 12k
+
         refPoolBalance = refPoolBalance.add(_calcPercentage(amount, REF_POOL_FEE_BP));
-        // 20k
+
         sponsorPoolBalance = sponsorPoolBalance.add(_calcPercentage(amount, SPONSOR_POOL_FEE_BP));
 
-        // 14k
         devBalance = devBalance.add(_calcPercentage(amount, DEV_FEE_BP));
 
         uint currentContractBalance = fourRXToken.balanceOf(address(this));
@@ -98,14 +96,13 @@ contract FourRXFinance is Insurance {
             maxContractBalance = currentContractBalance;
         }
 
-        // 54k
         totalDepositRewards = totalDepositRewards.add(depositReward);
 
         emit Deposit(msg.sender, amount, stake.id,  uplinkAddress, uplinkStakeId);
     }
 
 
-    function balanceOf(address _userAddress, uint stakeId) external view returns (uint) {
+    function balanceOf(address _userAddress, uint stakeId) public view returns (uint) {
         require(users[_userAddress].wallet == _userAddress);
         User memory user = users[_userAddress];
 
@@ -162,24 +159,22 @@ contract FourRXFinance is Insurance {
         User storage user = users[msg.sender];
         require(user.wallet == msg.sender);
         Stake storage stake = user.stakes[stakeId];
-        uint availableAmount = stake.deposit;
-        uint penaltyAmount = _calcPercentage(stake.deposit, EXIT_PENALTY_BP);
+        uint penaltyAmount = _calcPercentage(stake.origDeposit, EXIT_PENALTY_BP);
+        uint balance = balanceOf(msg.sender, stakeId);
 
-        availableAmount = availableAmount.sub(penaltyAmount);
+        uint availableAmount = stake.origDeposit + balance - penaltyAmount; // (deposit + (rewards - withdrawn) - penalty)
 
-        uint withdrawn = stake.withdrawn.add(stake.penalty);
-        require(withdrawn <= availableAmount);
-        availableAmount = availableAmount.sub(withdrawn);
-
-        fourRXToken.transfer(user.wallet, availableAmount);
+        if (availableAmount > 0) {
+            fourRXToken.transfer(user.wallet, availableAmount);
+            stake.withdrawn = stake.withdrawn.add(availableAmount);
+        }
 
         stake.active = false;
-        stake.withdrawn = stake.withdrawn.add(availableAmount);
         stake.penalty = stake.penalty.add(penaltyAmount);
 
         totalExited = totalExited.add(1);
 
-        emit Exited(user.wallet, stakeId, availableAmount);
+        emit Exited(user.wallet, stakeId, availableAmount > 0 ? availableAmount : 0);
     }
 
     function insureStake(uint stakeId) external {

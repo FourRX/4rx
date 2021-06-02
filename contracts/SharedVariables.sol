@@ -25,6 +25,7 @@ contract SharedVariables is Constants, StatsVars, Events, PercentageCalculator, 
         uint32 interestCountFrom; // TimeStamp from which interest should be counted, from the beginning
         uint32 lastWithdrawalAt; // date time of last withdrawals so we don't allow more then 3% a day
 
+        uint origDeposit;
         uint deposit; // Initial Deposit
         uint withdrawn; // Total withdrawn from this stake
         uint penalty; // Total penalty on this stale
