@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.6.12;
 
-import "@openzeppelin/contracts/math/SafeMath.sol";
+import "@openzeppelin/contracts-ethereum-package/contracts/math/SafeMath.sol";
 
 
 library SortedLinkedList {
@@ -44,7 +44,7 @@ library SortedLinkedList {
     function findSortedIndex(Item[] storage items, uint score) internal view returns(uint16) {
         Item memory current = items[GUARD];
         uint16 index = GUARD;
-        while(current.next != GUARD && items[current.next].score > score) {
+        while(current.next != GUARD && items[current.next].score >= score) {
             index = current.next;
             current = items[current.next];
         }

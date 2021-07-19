@@ -9,7 +9,7 @@ const {
 } = require('@openzeppelin/test-helpers');
 
 
-describe('FourRXFinance Registration Test', function () {
+describe('FourRXFinance Registration HH Test', function () {
     beforeEach(async function() {
         /*this.erc20 = await ERC20.new({ from: owner });
         this.fourRXFinance = await FourRXFinance.new(this.erc20.address, { from: owner });
@@ -18,18 +18,24 @@ describe('FourRXFinance Registration Test', function () {
         this.erc20 = await Token.deploy();
         const FourRX = await ethers.getContractFactory("FourRXFinance");
 
-        this.fourRXFinance = await FourRX.deploy(this.erc20.address);
+        this.fourRXFinance = await FourRX.deploy(this.erc20.address, this.erc20.address);
     })
 
     it('should allow user to register and make a deposit successfully', async function () {
         this.timeout(50000);
         const [user1, user2] = await ethers.getSigners();
-        const amount = 10000;
+        const amount = 100;
         await this.erc20.transfer(user1.address, 1000000);
         await this.erc20.transfer(user2.address, 1000000);
         await this.erc20.connect(user1).approve(this.fourRXFinance.address, amount + 10000);
         await this.erc20.connect(user2).approve(this.fourRXFinance.address, amount + 10000);
         await this.fourRXFinance.connect(user1).deposit(amount, constants.ZERO_ADDRESS, 0);
+        await this.fourRXFinance.connect(user1).insureStake(0);
+        await this.fourRXFinance.connect(user1).deposit(amount*2, constants.ZERO_ADDRESS, 0);
+        await this.fourRXFinance.connect(user1).insureStake(1);
+        await this.fourRXFinance.connect(user1).deposit(amount*4, constants.ZERO_ADDRESS, 0);
+
+        console.log(await this.fourRXFinance.connect(user1).getUser(user1.address));
 
         await network.provider.send('evm_increaseTime', [10*86400])
         // await time.increase(time.duration.days(10));

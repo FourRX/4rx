@@ -5,7 +5,6 @@ import "../libs/SortedLinkedList.sol";
 
 
 contract ReferralPool {
-
     SortedLinkedList.Item[] public refPoolUsers;
 
     function _addReferralPoolRecord(address user, uint amount, uint8 stakeId) internal {

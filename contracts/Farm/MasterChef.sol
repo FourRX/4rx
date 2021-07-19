@@ -217,10 +217,10 @@ contract FrxFarm is Ownable, ReentrancyGuard {
                 _finalWantAmt = _wantAmt.sub(distributionAmount);
             }
 
+            pool.want.safeTransferFrom(address(msg.sender), address(this), _wantAmt);
             pool.want.safeIncreaseAllowance(pool.strat, _finalWantAmt);
             uint256 sharesAdded = strat.deposit(msg.sender, _finalWantAmt);
             user.shares = user.shares.add(sharesAdded);
-            pool.want.safeTransferFrom(address(msg.sender), address(this), _wantAmt);
         }
 
         user.rewardDebt = user.shares.mul(pool.accFRXPerShare).div(1e8);

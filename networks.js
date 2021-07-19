@@ -42,6 +42,18 @@ module.exports = {
       network_id: 3,
       // chainId: 3
     },
+    mainnet: {
+      provider: function(){
+        return new HDWalletProvider(
+            privateKeys.split(','),
+            `https://mainnet.infura.io/v3/${process.env.INFURA_API_KEY}`
+        )
+      },
+      gas: 7000000,
+      gasPrice: 35000000000,
+      network_id: 1,
+      // chainId: 3
+    },
     BSCTestnet: {
       provider: function() {
         return new HDWalletProvider(
@@ -51,7 +63,7 @@ module.exports = {
       },
       networkCheckTimeout: 20000,
       skipDryRun: true,
-      gas: 7000000,
+      gas: 10000000,
       gasPrice: 25000000000,
       network_id: 97
     },

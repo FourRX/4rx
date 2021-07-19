@@ -3,7 +3,8 @@
   "contracts": {
     "FRX": "FRX",
     "FourRxFinance": "FourRxFinance",
-    "FrxFarm": "FrxFarm"
+    "FrxFarm": "FrxFarm",
+    "FourRXFinance": "FourRXFinance"
   },
   "dependencies": {},
   "name": "4RXFinance",

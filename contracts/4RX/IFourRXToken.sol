@@ -2,9 +2,9 @@
 pragma solidity ^0.6.12;
 
 interface IFourRXToken {
-    function latestPrice() external returns(uint);
-    function priceValidTill() external returns(uint);
-    function priceSnaps(uint blockNumber) external returns(uint);
+    function latestPrice() external view returns(uint);
+    function priceValidTill() external view returns(uint);
+    function priceSnaps(uint blockNumber) external view returns(uint);
     function requestPrice() external returns(bytes32);
 
     /**

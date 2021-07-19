@@ -1,16 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.6.12;
 
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/IERC20.sol";
 import "./InterestCalculator.sol";
 import "./Events.sol";
 import "./PercentageCalculator.sol";
 import "./utils/Utils.sol";
 import "./Constants.sol";
-import "./StatsVars.sol";
 
-
-contract SharedVariables is Constants, StatsVars, Events, PercentageCalculator, InterestCalculator, Utils {
+contract SharedVariables is Constants, Events, PercentageCalculator, InterestCalculator, Utils {
 
     uint public constant fourRXTokenDecimals = 8;
     IERC20 public fourRXToken;
@@ -40,9 +38,6 @@ contract SharedVariables is Constants, StatsVars, Events, PercentageCalculator, 
 
     mapping (address => User) public users;
 
-    uint[] public refPoolBonuses;
-    uint[] public sponsorPoolBonuses;
-
     uint public maxContractBalance;
 
     uint16 public poolCycle;
@@ -52,4 +47,7 @@ contract SharedVariables is Constants, StatsVars, Events, PercentageCalculator, 
     uint public sponsorPoolBalance;
 
     uint public devBalance;
+
+    uint[12] public refPoolBonuses;
+    uint[10] public sponsorPoolBonuses;
 }

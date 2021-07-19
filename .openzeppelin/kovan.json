@@ -64,6 +64,36 @@
         "address": "0xdf95F9e97CC08C80ec4296484c42342b70812C52",
         "kind": "NonProxy",
         "bytecodeHash": "4d85a1be0512aff4bc55213649eb4cdb4291dfe2948eb2b2f31f9c1396ab2f95"
+      },
+      {
+        "address": "0x91a74cFD32073d2B062Db46e8Bbd8F54d2568D05",
+        "kind": "NonProxy",
+        "bytecodeHash": "23063852a3f1e7ff13e291d7320c6477211af7ddbfb1deb6ae4df9d5308e374d"
+      },
+      {
+        "address": "0xaBc77dFdDb9EFCAFb943979fB20318656009F704",
+        "kind": "NonProxy",
+        "bytecodeHash": "1954e12ec974c06ceac791fa015bf37950b92fe98e8181c1d3a797addb772feb"
+      },
+      {
+        "address": "0xD329a931Ea06C428aC735BC3ba6b0EbC867149dC",
+        "kind": "NonProxy",
+        "bytecodeHash": "1a9a8ee571b901f74425effa674fc46e8f253f0662c535d1996c128d6fb5a605"
+      },
+      {
+        "address": "0xE48FB4c382bcf001265A92e7650Cc3AE2Fe12fb5",
+        "kind": "NonProxy",
+        "bytecodeHash": "05d12b1e017ad45749877bcb94444faac240fc22a3a566eaa7da15221c8074aa"
+      },
+      {
+        "address": "0x8e1768e83aC3dec7686620Dc591bB80B2A380c11",
+        "kind": "NonProxy",
+        "bytecodeHash": "1aaaeab73424ede096995d67e636ced4a3db4c1b1a78d9293cadb5c411645fd0"
+      },
+      {
+        "address": "0x31eB05E4Fd845b7a9A755816Fe97b0aB6235EB9f",
+        "kind": "NonProxy",
+        "bytecodeHash": "1aaaeab73424ede096995d67e636ced4a3db4c1b1a78d9293cadb5c411645fd0"
       }
     ],
     "4RXFinance/FRX": [
@@ -110,6 +140,16 @@
         "address": "0x07d8487A32bbF0Cb7a1b154Dd69e243D9daf3823",
         "kind": "NonProxy",
         "bytecodeHash": "68671478663a23a1ff91544c00c004dd7307ade4d45a8830ba5e18b0046710ee"
+      },
+      {
+        "address": "0xef257417Df79D2EFdadff760E2068fE50d687eC2",
+        "kind": "NonProxy",
+        "bytecodeHash": "d624540632f10770c13ce33c5495ee4b5620aa308e03dbe297eaf42c2648ea76"
+      },
+      {
+        "address": "0x8CbaAcE715AA65B4b0523BC95F1C6c919f182A72",
+        "kind": "NonProxy",
+        "bytecodeHash": "d624540632f10770c13ce33c5495ee4b5620aa308e03dbe297eaf42c2648ea76"
       }
     ],
     "4RXFinance/FourRXToken": [
@@ -117,6 +157,21 @@
         "address": "0xcAd0F3dc96CA320120E79AC9492ECDE8570Fe611",
         "kind": "NonProxy",
         "bytecodeHash": "921f2f74c92c444e4e5a22b5869723c489f0c39d4f924736e9b7c807495f8295"
+      },
+      {
+        "address": "0x26EF0bf3231869c9d1D551CEBc5B70E903c667fe",
+        "kind": "NonProxy",
+        "bytecodeHash": "a3c56e65f878888e2a615573c39e9cf453f155462fee0483be61ab9e46d67b2f"
+      },
+      {
+        "address": "0xa37ED16C8B447B405c0b124C5B0C3e453E8dcbD8",
+        "kind": "NonProxy",
+        "bytecodeHash": "8f07d9acfcab4c597d06aab457f776c85055140c415e37f6091d435feb85567e"
+      },
+      {
+        "address": "0xaEedD1a0CFa56b4a7dE7C6b6F9923c781a2d7659",
+        "kind": "NonProxy",
+        "bytecodeHash": "e3977cbc3881c2a34fb6ff062739459fe244f2594d9466284618139513856141"
       }
     ],
     "4RXFinance/ICOContract": [
@@ -164,6 +219,41 @@
         "address": "0x6aeeBA3076efdfe95365D1d9FA6cbD9Ad7549936",
         "kind": "NonProxy",
         "bytecodeHash": "24aeba49278e81dbdcd8a325508ef36a73e616aa3f3adb53a3238935baed6612"
+      },
+      {
+        "address": "0x80530A0A8f1E5519093483Dc1b08f78A20828BaB",
+        "kind": "NonProxy",
+        "bytecodeHash": "884f1cf982b1f7c9b5dcfdf419201559c03924c84d4357ce99fe579a8fc2db22"
+      },
+      {
+        "address": "0x112153F61014B4dD504b02C2682873ffbb72BA9a",
+        "kind": "NonProxy",
+        "bytecodeHash": "920a13cbe707e690d622ba30f604c2bcf962df36372849fcc0686cc136d81e73"
+      },
+      {
+        "address": "0x95352a8C69650f811f43B8B071fF3ACb198d25BA",
+        "kind": "NonProxy",
+        "bytecodeHash": "8494d46341663b9d1a695c6bd5b47c225f38f81c98532437cb007020a4d47ed1"
+      },
+      {
+        "address": "0xC62170cd91690A5ff10b074F495B1c8e70cd7Ee3",
+        "kind": "NonProxy",
+        "bytecodeHash": "8e11bce93a09501b6d5363f0120a0934bbbf0a61010915466abade13cde2433c"
+      },
+      {
+        "address": "0x400FC3103b5c49B02B95c9650e0C804a8cbaadDd",
+        "kind": "NonProxy",
+        "bytecodeHash": "bb82e2ac37e57a55b3dec71faeca7becdbec7f9b04e2b34e39b39c6afaf31208"
+      },
+      {
+        "address": "0x7b6C7D378664Ad4a14C0ec8A5cD7248f2d26d629",
+        "kind": "NonProxy",
+        "bytecodeHash": "b010b38082132e54ffbf15451e3d65feaa8853f345cb24a982f07fe5da686f46"
+      },
+      {
+        "address": "0xC5A03Df9EF4CFf8F4B7Af938C7ddD1589A638997",
+        "kind": "NonProxy",
+        "bytecodeHash": "44f0798c76a0d4cf3cdb09ff32f2d24f4d8840e9f3a654442b2704683b0f03f8"
       }
     ]
   },

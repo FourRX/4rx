@@ -9,7 +9,7 @@ contract Insurance is RewardsAndPenalties {
     uint private constant OPT_IN_INSURANCE_FEE_BP = 1000; // 10%
     uint private constant OPT_IN_INSURANCE_FOR_BP = 10000; // 100%
 
-    bool public isInInsuranceState = false; // if contract is only allowing insured money this becomes true;
+    bool public isInInsuranceState; // if contract is only allowing insured money this becomes true;
 
     function _checkForBaseInsuranceTrigger() internal {
         if (fourRXToken.balanceOf(address(this)) <= _calcPercentage(maxContractBalance, BASE_INSURANCE_FOR_BP)) {

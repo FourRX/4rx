@@ -24,19 +24,24 @@ contract FourRXToken is ERC20, ChainlinkClient, AccessControl {
 
     string private constant API_URL = "https://chart-api.4rx.finance/indexPrice4RXUrl";
 
-    constructor(address _oracle, address _linkToken) public ERC20("BRX", "BRX") {
+    constructor(address _oracle, address _linkToken) public ERC20("4RX", "4RX") {
         require(_oracle != address(0), 'FourRXToken: Oracle cannot be 0 address');
         require(_linkToken != address(0), 'FourRXToken: LinkToken cannot be 0 address');
 
+        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _setupRole(MINTER_ROLE, msg.sender);
+
         _mint(msg.sender, INITIAL_SUPPLY*(10**uint(DECIMAL)));
         _setupDecimals(DECIMAL);
+        oracle = _oracle; // 0x2f90A6D021db21e1B2A077c5a37B3C7E75D15b7e // kovan testnet chainlink oracle
 
 //        setPublicChainlinkToken();
         setChainlinkToken(_linkToken);
-        oracle = _oracle; // 0x2f90A6D021db21e1B2A077c5a37B3C7E75D15b7e // kovan testnet chainlink oracle
+
 //        jobId = "29fa9aa13bf1468788b7cc4a500a45b8"; // ETH Kovan
 //        jobId = "aa40e3752a35486791690344fb0e6588"; // BSC Testnet
         jobId = "c734c40b377544f08a7324f36bda4940"; // BSC MainNet // https://market.link/jobs/5ddd8a96-8840-4b55-9163-f07674c8c004?network=56
+//        jobId = "1bc4f827ff5942eaaa7540b7dd1e20b9"; // ETH MainNet // https://market.link/jobs/c17a49d6-8d88-4ff9-b27a-bd3d46d7efb9?network=1
         fee = 0.02 * 10 ** 18;
     }
 

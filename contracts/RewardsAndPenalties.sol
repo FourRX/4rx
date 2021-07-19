@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.6.12;
 
-import "@openzeppelin/contracts/math/SafeMath.sol";
+import "@openzeppelin/contracts-ethereum-package/contracts/math/SafeMath.sol";
 import "./Pools.sol";
 
 
@@ -59,7 +59,7 @@ contract RewardsAndPenalties is Pools {
     }
 
     function _calcHoldRewards(Stake memory stake) internal view returns (uint) {
-        uint holdBonusPercent = (block.timestamp).sub(stake.holdFrom).mul(HOLD_BONUS_PER_UNIT_BP).div(HOLD_BONUS_UNIT);
+        uint holdBonusPercent = (block.timestamp).sub(stake.holdFrom).div(HOLD_BONUS_UNIT).mul(HOLD_BONUS_PER_UNIT_BP);
 
         if (holdBonusPercent > MAX_HOLD_BONUS_BP) {
             holdBonusPercent = MAX_HOLD_BONUS_BP;
