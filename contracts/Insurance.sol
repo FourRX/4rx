@@ -30,7 +30,7 @@ contract Insurance is RewardsAndPenalties {
 
         uint maxWithdrawalAllowed = _calcPercentage(stake.deposit, insuredFor);
 
-        require(maxWithdrawalAllowed >= stake.withdrawn.add(stake.penalty)); // if contract is in insurance trigger, do not allow withdrawals for the users who already have withdrawn more then 35%
+        require(maxWithdrawalAllowed >= stake.withdrawn.add(stake.penalty), 'FF: 1114'); // if contract is in insurance trigger, do not allow withdrawals for the users who already have withdrawn more then 35%
 
         if (stake.withdrawn.add(availableAmount).add(stake.penalty) > maxWithdrawalAllowed) {
             availableAmount = maxWithdrawalAllowed.sub(stake.withdrawn).sub(stake.penalty);
@@ -40,8 +40,8 @@ contract Insurance is RewardsAndPenalties {
     }
 
     function _insureStake(address user, Stake storage stake) internal {
-        require(!stake.optInInsured && stake.active);
-        require(fourRXToken.transferFrom(user, address(this), _calcPercentage(stake.deposit, OPT_IN_INSURANCE_FEE_BP)));
+        require(!stake.optInInsured && stake.active, 'FF: 1115');
+        require(fourRXToken.transferFrom(user, address(this), _calcPercentage(stake.deposit, OPT_IN_INSURANCE_FEE_BP)), 'FF: 1116');
 
         stake.optInInsured = true;
     }

@@ -3,14 +3,13 @@ pragma solidity ^0.6.12;
 
 pragma experimental ABIEncoderV2;
 import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/Initializable.sol";
 import "./Insurance.sol";
 
 /// @title 4RX Finance Staking DAPP Contract
 /// @notice Available functionality: Deposit, Withdraw, ExitProgram, Insure Stake
-contract FourRXFinance is Insurance, Initializable {
+contract FourRXFinance is Insurance {
 
-    function initialize(address _devAddress, address fourRXTokenAddress) public initializer {
+    constructor(address _devAddress, address fourRXTokenAddress) public {
         devAddress = _devAddress;
         fourRXToken = IERC20(fourRXTokenAddress);
 
@@ -28,15 +27,15 @@ contract FourRXFinance is Insurance, Initializable {
         require(
             uplinkAddress == address(0) ||
             (users[uplinkAddress].wallet != address(0) && users[uplinkAddress].stakes[uplinkStakeId].active)
-        ); // Either uplink must be registered and be a active deposit or 0 address
+        , 'FF: 1100'); // Either uplink must be registered and be a active deposit or 0 address
 
         User storage user = users[msg.sender];
 
         if (users[msg.sender].stakes.length > 0) {
-            require(amount >= users[msg.sender].stakes[user.stakes.length - 1].deposit.mul(2)); // deposit amount must be greater 2x then last deposit
+            require(amount >= users[msg.sender].stakes[user.stakes.length - 1].deposit.mul(2), 'FF: 1101'); // deposit amount must be greater 2x then last deposit
         }
 
-        require(fourRXToken.transferFrom(msg.sender, address(this), amount));
+        require(fourRXToken.transferFrom(msg.sender, address(this), amount), 'FF: 1102');
 
         drawPool(); // Draw old pool if qualified, and we're pretty sure that this stake is going to be created
 
@@ -82,7 +81,7 @@ contract FourRXFinance is Insurance, Initializable {
 
 
     function balanceOf(address _userAddress, uint stakeId) public view returns (uint) {
-        require(users[_userAddress].wallet == _userAddress);
+        require(users[_userAddress].wallet == _userAddress, 'FF: 1103');
         User memory user = users[_userAddress];
 
         return _calcRewards(user.stakes[stakeId]).sub(user.stakes[stakeId].withdrawn);
@@ -91,13 +90,13 @@ contract FourRXFinance is Insurance, Initializable {
     function withdraw(uint stakeId) external {
         User storage user = users[msg.sender];
         Stake storage stake = user.stakes[stakeId];
-        require(user.wallet == msg.sender && stake.active); // stake should be active
+        require(user.wallet == msg.sender && stake.active, 'FF: 1104'); // stake should be active
 
-        require(stake.lastWithdrawalAt + 1 days < block.timestamp); // we only allow one withdrawal each day
+        require(stake.lastWithdrawalAt + 1 days < block.timestamp, 'FF: 1105'); // we only allow one withdrawal each day
 
         uint availableAmount = _calcRewards(stake).sub(stake.withdrawn).sub(stake.penalty);
 
-        require(availableAmount > 0);
+        require(availableAmount > 0, 'FF: 1106');
 
         uint penalty = _calcPenalty(stake, availableAmount);
 
@@ -136,11 +135,11 @@ contract FourRXFinance is Insurance, Initializable {
 
     function exitProgram(uint stakeId) external {
         User storage user = users[msg.sender];
-        require(user.wallet == msg.sender);
+        require(user.wallet == msg.sender, 'FF: 1107');
         Stake storage stake = user.stakes[stakeId];
 
-        require(stake.active);
-        require(_calcDays(stake.interestCountFrom, block.timestamp) <= 150); // No exit after 150 days
+        require(stake.active, 'FF: 1108');
+        require(_calcDays(stake.interestCountFrom, block.timestamp) <= 150, 'FF: 1109'); // No exit after 150 days
 
         uint penaltyAmount = _calcPercentage(stake.origDeposit, EXIT_PENALTY_BP);
         uint balance = balanceOf(msg.sender, stakeId);
@@ -162,7 +161,7 @@ contract FourRXFinance is Insurance, Initializable {
 
     function insureStake(uint stakeId) external {
         User storage user = users[msg.sender];
-        require(user.wallet == msg.sender);
+        require(user.wallet == msg.sender, 'FF: 1110');
         Stake storage stake = user.stakes[stakeId];
         _insureStake(user.wallet, stake);
     }
@@ -178,14 +177,14 @@ contract FourRXFinance is Insurance, Initializable {
     }
 
     function withdrawDevFee(address withdrawingAddress, uint amount) external {
-        require(msg.sender == devAddress);
-        require(amount <= devBalance);
+        require(msg.sender == devAddress, 'FF: 1111');
+        require(amount <= devBalance, 'FF: 1112');
         devBalance = devBalance.sub(amount);
         fourRXToken.transfer(withdrawingAddress, amount);
     }
 
     function updateDevAddress(address newDevAddress) external {
-        require(msg.sender == devAddress);
+        require(msg.sender == devAddress, 'FF: 1113');
         devAddress = newDevAddress;
     }
 }

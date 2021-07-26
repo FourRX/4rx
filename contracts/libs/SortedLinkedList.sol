@@ -18,16 +18,16 @@ library SortedLinkedList {
 
     function addNode(Item[] storage items, address user, uint score, uint8 id) internal {
         uint16 prev = findSortedIndex(items, score);
-        require(_verifyIndex(items, score, prev));
+        require(_verifyIndex(items, score, prev), 'SLL: 1100');
         items.push(Item(user, items[prev].next, id, score));
         items[prev].next = uint16(items.length.sub(1));
     }
 
     function updateNode(Item[] storage items, address user, uint score, uint8 id) internal {
         (uint16 current, uint16 oldPrev) = findCurrentAndPrevIndex(items, user, id);
-        require(items[oldPrev].next == current);
-        require(items[current].user == user);
-        require(items[current].id == id);
+        require(items[oldPrev].next == current, 'SLL: 1101');
+        require(items[current].user == user, 'SLL: 1102');
+        require(items[current].id == id, 'SLL: 1103');
         score = score.add(items[current].score);
         items[oldPrev].next = items[current].next;
         addNode(items, user, score, id);

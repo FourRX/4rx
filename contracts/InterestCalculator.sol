@@ -34,7 +34,7 @@ contract InterestCalculator {
     }
 
     function _getInterestTillDays(uint _day) internal pure returns(uint) {
-        require(_day <= MAX_DAYS);
+        require(_day <= MAX_DAYS, 'FF: 1118');
 
         return _initCumulativeInterestForDays()[_day];
     }

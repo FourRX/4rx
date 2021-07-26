@@ -10,7 +10,7 @@ contract PercentageCalculator {
     uint public constant PERCENT_MULTIPLIER = 10000;
 
     function _calcPercentage(uint amount, uint basisPoints) internal pure returns (uint) {
-        require(basisPoints >= 0);
+        require(basisPoints >= 0, 'FF: 1117');
         return amount.mul(basisPoints).div(PERCENT_MULTIPLIER);
     }
 

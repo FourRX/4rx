@@ -64,7 +64,7 @@ module.exports = {
       networkCheckTimeout: 20000,
       skipDryRun: true,
       gas: 10000000,
-      gasPrice: 25000000000,
+      gasPrice: 10000000000,
       network_id: 97
     },
     BSCMainnet: {
@@ -76,7 +76,7 @@ module.exports = {
       },
       networkCheckTimeout: 20000,
       skipDryRun: true,
-      gas: 7000000,
+      gas: 10000000,
       gasPrice: 5000000000,
       network_id: 56
     },
